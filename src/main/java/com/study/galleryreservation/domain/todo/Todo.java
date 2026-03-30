@@ -10,4 +10,9 @@ import java.time.LocalDateTime;
 @Table(name = "todo")
 @Getter @Builder @AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Todo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 }

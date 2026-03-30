@@ -12,4 +12,9 @@ import java.time.LocalTime;
 @Table(name = "reservation")
 @Getter @Builder @AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reservation {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
 }
