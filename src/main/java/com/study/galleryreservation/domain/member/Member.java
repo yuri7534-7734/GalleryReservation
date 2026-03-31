@@ -31,11 +31,11 @@ public class Member {
     public MemberRole role;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
-        this.created_at = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
         if (this.role == null) this.role = MemberRole.ROLE_USER;
     }
 
