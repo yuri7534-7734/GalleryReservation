@@ -1,12 +1,14 @@
 package com.study.galleryreservation.dto.gallery;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 @Builder
 public class GalleryResponseDto {
     private final Long id;
