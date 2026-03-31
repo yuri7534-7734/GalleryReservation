@@ -22,24 +22,24 @@ public class Todo {
     @Column(name="title", nullable = false,length = 200)
     private String title;
 
-    @Column(name="text")
-    private String text;
+    @Column(name="content")
+    private String content;
 
     @Column(name="is_done",nullable = false)
-    private boolean is_done;
+    private boolean isDone;
 
 
 
     @Column(name = "due_date", updatable = false)
-    private LocalDate due_date;
+    private LocalDate dueDate;
 
     @CreatedDate //생성시간 자동처리
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime create_at;
+    @Column(name = "created_at", updatable = false,nullable = false)
+    private LocalDateTime createdAt;
 
     @LastModifiedDate //수정시간만 자동처리
-    @Column(name = "updated_at", )
-    private LocalDateTime updated_at;
+    @Column(name = "updated_at",nullable = false )
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id",nullable = false)

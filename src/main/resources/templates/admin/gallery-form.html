@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>갤러리 등록 - 관리자</title>
+  <style>
+    /* inline shared style for standalone preview */
+:root{
+      --bg0:#070A14;
+      --bg1:#0B1020;
+      --surface:rgba(255,255,255,.06);
+      --surface2:rgba(255,255,255,.09);
+      --stroke:rgba(255,255,255,.12);
+      --text:#EAF0FF;
+      --muted:rgba(234,240,255,.72);
+      --accent:#D6B25E;
+      --accent2:#6DD6FF;
+      --danger:#FF5C7A;
+      --ok:#36E8A1;
+      --shadow:0 18px 60px rgba(0,0,0,.40);
+      --radius:18px;
+      --radius-sm:12px;
+      --ring:0 0 0 4px rgba(214,178,94,.22);
+      --container:1120px;
+    }
+    html[data-theme="light"]{
+      --bg0:#F7F8FF;
+      --bg1:#EEF1FF;
+      --surface:rgba(9,15,33,.05);
+      --surface2:rgba(9,15,33,.08);
+      --stroke:rgba(9,15,33,.12);
+      --text:#0B1020;
+      --muted:rgba(11,16,32,.70);
+      --shadow:0 18px 60px rgba(11,16,32,.14);
+    }
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+      background:
+        radial-gradient(1200px 600px at 18% -10%, rgba(214,178,94,.25), transparent 60%),
+        radial-gradient(900px 520px at 90% 10%, rgba(109,214,255,.20), transparent 55%),
+        radial-gradient(700px 420px at 40% 95%, rgba(54,232,161,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      min-height:100vh;
+    }
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+    .appShell{ min-height:100vh; display:flex; flex-direction:column; }
+    main{ flex:1; }
+    .container{ max-width:var(--container); margin:0 auto; padding:0 20px; }
+
+    /* Focus */
+    :focus-visible{
+      outline:none;
+      box-shadow: var(--ring);
+      border-color: rgba(214,178,94,.65) !important;
+    }
+
+    /* Typography */
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border-radius:999px;
+      color:var(--muted);
+      font-weight:650;
+      letter-spacing:.2px;
+      font-size:13px;
+    }
+    .title{
+      margin:12px 0 8px;
+      font-size: clamp(26px, 3vw, 38px);
+      letter-spacing:-.8px;
+      line-height:1.1;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.6;
+      max-width:70ch;
+    }
+    .hero{
+      padding:44px 0 26px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      left:-260px; top:-260px;
+      width:560px; height:560px;
+      background: radial-gradient(circle at 30% 30%, rgba(214,178,94,.35), transparent 62%);
+      filter: blur(6px);
+      pointer-events:none;
+      opacity:.95;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      right:-260px; top:-180px;
+      width:560px; height:560px;
+      background: radial-gradient(circle at 50% 30%, rgba(109,214,255,.28), transparent 60%);
+      filter: blur(7px);
+      pointer-events:none;
+      opacity:.8;
+    }
+
+    /* Components */
+    .card{
+      background:var(--surface);
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .cardPad{ padding:18px; }
+    .row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .stack{ display:flex; flex-direction:column; gap:12px; }
+    .grid{ display:grid; gap:16px; }
+    .grid-2{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 920px){
+      .grid-2, .grid-3{ grid-template-columns: 1fr; }
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:11px 14px;
+      border-radius: 12px;
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      color:var(--text);
+      font-weight:700;
+      letter-spacing:.15px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(214,178,94,.55); }
+    .btn:active{ transform: translateY(0px); }
+    .btn-primary{
+      border-color: rgba(214,178,94,.55);
+      background:
+        radial-gradient(120% 180% at 20% 0%, rgba(214,178,94,.45), transparent 60%),
+        linear-gradient(180deg, rgba(214,178,94,.30), rgba(214,178,94,.12));
+    }
+    .btn-ghost{
+      background: transparent;
+      border-color: rgba(255,255,255,.18);
+    }
+    .btn-danger{
+      border-color: rgba(255,92,122,.45);
+      background: linear-gradient(180deg, rgba(255,92,122,.22), rgba(255,92,122,.08));
+    }
+    .btn-small{ padding:8px 10px; border-radius:10px; font-size:13px; font-weight:750; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-weight:750;
+      font-size:12.5px;
+      letter-spacing:.2px;
+      white-space:nowrap;
+    }
+    .badge-ok{ border-color: rgba(54,232,161,.45); color: rgba(54,232,161,.95); background: rgba(54,232,161,.10); }
+    .badge-warn{ border-color: rgba(214,178,94,.55); color: rgba(214,178,94,.98); background: rgba(214,178,94,.10); }
+    .badge-danger{ border-color: rgba(255,92,122,.45); color: rgba(255,92,122,.98); background: rgba(255,92,122,.10); }
+    .badge-info{ border-color: rgba(109,214,255,.45); color: rgba(109,214,255,.98); background: rgba(109,214,255,.10); }
+
+    /* Navbar */
+    .navbar{
+      position: sticky;
+      top:0;
+      z-index:60;
+      backdrop-filter: blur(14px);
+      background: rgba(7,10,20,.55);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    html[data-theme="light"] .navbar{
+      background: rgba(247,248,255,.74);
+      border-bottom: 1px solid rgba(11,16,32,.10);
+    }
+    .navbarInner{
+      max-width:var(--container);
+      margin:0 auto;
+      padding:12px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      letter-spacing:-.4px;
+    }
+    .brandMark{
+      width:36px; height:36px;
+      border-radius:12px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(214,178,94,.95), rgba(214,178,94,.15) 55%, transparent 62%),
+        radial-gradient(circle at 70% 60%, rgba(109,214,255,.85), rgba(109,214,255,.10) 58%, transparent 63%),
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 12px 40px rgba(214,178,94,.18);
+    }
+    .navLinks{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .navLink{
+      padding:9px 12px;
+      border-radius:12px;
+      border:1px solid transparent;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13.5px;
+      transition: border-color .12s ease, color .12s ease, background .12s ease;
+    }
+    .navLink:hover{
+      border-color: rgba(214,178,94,.45);
+      color:var(--text);
+      background: rgba(255,255,255,.04);
+      text-decoration:none;
+    }
+    .navActions{ display:flex; align-items:center; gap:10px; }
+    .hamburger{
+      display:none;
+      width:44px; height:44px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:900;
+    }
+    @media (max-width: 920px){
+      .navLinks{ display:none; }
+      .hamburger{ display:inline-flex; align-items:center; justify-content:center; }
+    }
+    #mobileMenu{
+      display:none;
+      border-top: 1px solid rgba(255,255,255,.10);
+    }
+    #mobileMenu[data-open="true"]{ display:block; }
+    .mobileMenuInner{
+      max-width:var(--container);
+      margin:0 auto;
+      padding:10px 20px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .mobileMenuInner .navLink{ width:100%; border-color: rgba(255,255,255,.10); background: rgba(255,255,255,.03); }
+
+    /* Forms */
+    label{ display:block; font-weight:850; font-size:13px; color:var(--muted); margin-bottom:7px; }
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      outline: none;
+      transition: border-color .12s ease, background .12s ease;
+      font-size:14.5px;
+    }
+    textarea{ min-height:120px; resize: vertical; }
+    input::placeholder, textarea::placeholder{ color: rgba(234,240,255,.45); }
+    html[data-theme="light"] input::placeholder,
+    html[data-theme="light"] textarea::placeholder{ color: rgba(11,16,32,.38); }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(214,178,94,.55);
+      background: rgba(255,255,255,.06);
+    }
+    .helpText{ color: var(--muted); font-size:12.5px; line-height:1.5; margin-top:8px; }
+    .formGrid{
+      display:grid;
+      gap:16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @media (max-width: 920px){ .formGrid{ grid-template-columns: 1fr; } }
+
+    /* Tables */
+    .tableWrap{
+      overflow:auto;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+    }
+    table{
+      width:100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 720px;
+    }
+    thead th{
+      position: sticky;
+      top:0;
+      background: rgba(255,255,255,.04);
+      z-index:1;
+      text-align:left;
+      padding:14px 14px;
+      font-size:12.5px;
+      letter-spacing:.3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    tbody td{
+      padding:14px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      color: rgba(234,240,255,.92);
+      vertical-align: middle;
+    }
+    tbody tr:hover td{
+      background: rgba(255,255,255,.03);
+    }
+    html[data-theme="light"] tbody td{ color: rgba(11,16,32,.92); }
+    html[data-theme="light"] tbody tr:hover td{ background: rgba(11,16,32,.03); }
+
+    /* Thumb */
+    .thumb{
+      height: 160px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(120% 80% at 20% 0%, rgba(214,178,94,.40), transparent 60%),
+        radial-gradient(100% 70% at 80% 20%, rgba(109,214,255,.30), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+      overflow:hidden;
+      position:relative;
+    }
+    .thumb::after{
+      content:"";
+      position:absolute;
+      inset:-30px -30px auto -30px;
+      height:120px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      transform: rotate(-10deg);
+      opacity:.9;
+    }
+    .thumbLabel{
+      position:absolute;
+      left:14px;
+      bottom:14px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .thumbTitle{
+      font-weight:950;
+      letter-spacing:-.4px;
+      font-size:18px;
+    }
+    .thumbMeta{
+      color:var(--muted);
+      font-weight:800;
+      font-size:12.5px;
+    }
+
+    /* Footer */
+    footer{
+      border-top: 1px solid rgba(255,255,255,.10);
+      padding:22px 0;
+      color: var(--muted);
+    }
+    .footerInner{
+      max-width: var(--container);
+      margin:0 auto;
+      padding:0 20px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .footerLinks{ display:flex; gap:14px; flex-wrap:wrap; }
+
+    /* Toast */
+    #grToast{
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 9999;
+      min-width: 260px;
+      max-width: 380px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(7,10,20,.72);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      color: var(--text);
+      display:none;
+    }
+    html[data-theme="light"] #grToast{
+      background: rgba(247,248,255,.86);
+      border: 1px solid rgba(11,16,32,.14);
+    }
+    #grToast[data-show="true"]{ display:block; }
+    #grToast strong{ display:block; margin-bottom:2px; }
+    #grToast .toastText{ color: var(--muted); line-height:1.45; font-weight:700; font-size:13.5px; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important; }
+      .btn:hover{ transform:none; }
+    }
+  </style>
+  </head>
+  <body>
+    <div class="appShell">
+  <nav class="navbar">
+    <div class="navbarInner">
+      <a class="brand" th:href="@{/}">
+        <span class="brandMark"></span>
+        <span>Gallery</span>
+      </a>
+      <div class="navLinks">
+        <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
+        <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/reservation/list}">내 예약</a>
+        <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/todo/list}">할 일</a>
+        <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/gallery/list}">관리자</a>
+      </div>
+      <div class="navActions">
+        <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px;">
+          <a class="btn btn-ghost btn-small" th:href="@{/member/login}">로그인</a>
+          <a class="btn btn-primary btn-small" th:href="@{/member/join}">회원가입</a>
+        </div>
+        <div sec:authorize="isAuthenticated()" style="display:flex;gap:8px;">
+          <form th:action="@{/member/logout}" method="post" style="margin:0;">
+            <button type="submit" class="btn btn-ghost btn-small">로그아웃</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+      <main class="container">
+        <section class="hero">
+          <div class="kicker">ADMIN</div>
+          <h1 class="title">갤러리 등록</h1>
+          <p class="subtitle">
+            전시 공간을 새로 추가하고, 예약 운영 정보를 한 번에 관리하세요.
+            입력값은 미리보기에 즉시 반영됩니다.
+          </p>
+        </section>
+
+        <section class="grid grid-2">
+          <div class="card cardPad">
+            <form
+              id="galleryForm"
+              th:action="${gallery != null} ? @{/admin/gallery/edit/{id}(id=${gallery.id})} : @{/admin/gallery/form}"
+              th:object="${galleryCreateRequestDto}"
+              method="post"
+              class="stack"
+            >
+              <div>
+                <div class="row">
+                  <h2
+                    style="margin: 0; font-size: 18px; letter-spacing: -0.3px"
+                  >
+                    기본 정보
+                  </h2>
+                  <a
+                    class="btn btn-ghost btn-small"
+                    href="#"
+                    th:href="@{/admin/gallery/list}"
+                    >목록으로</a
+                  >
+                </div>
+                <p class="helpText">
+                  갤러리명 · 위치 · 수용 인원은 예약 카드에 표시됩니다.
+                </p>
+              </div>
+
+              <div class="formGrid">
+                <div>
+                  <label for="gName">갤러리명</label>
+                  <input
+                    id="gName"
+                    th:field="*{name}"
+                    type="text"
+                    placeholder="예: Monochrome Hall"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="gLocation">위치</label>
+                  <input
+                    id="gLocation"
+                    th:field="*{location}"
+                    type="text"
+                    placeholder="예: 2층, West Wing"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="gCapacity">수용 인원</label>
+                  <input
+                    id="gCapacity"
+                    th:field="*{capacity}"
+                    type="number"
+                    min="1"
+                    step="1"
+                    placeholder="예: 35"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="gStatus">상태</label>
+                  <select id="gStatus" th:field="*{status}" required>
+                    <option value="ACTIVE" selected>운영중</option>
+                    <option value="PAUSED">일시중지</option>
+                    <option value="SOLD_OUT">마감</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label for="gHours">운영 시간</label>
+                <input
+                  id="gHours"
+                  th:field="*{hours}"
+                  type="text"
+                  placeholder="예: 10:00 - 18:00"
+                />
+              </div>
+
+              <div>
+                <label for="gCover">커버 이미지 URL (선택)</label>
+                <input
+                  id="gCover"
+                  th:field="*{coverUrl}"
+                  type="url"
+                  placeholder="https://example.com/cover.jpg"
+                />
+                <div class="helpText">
+                  이미지가 없으면 기본 배경이 적용됩니다.
+                </div>
+              </div>
+
+              <div>
+                <label for="gDesc">전시 소개</label>
+                <textarea
+                  id="gDesc"
+                  th:field="*{description}"
+                  placeholder="전시 공간의 분위기와 관람 포인트를 간단히 적어주세요."
+                ></textarea>
+              </div>
+
+              <div
+                class="row"
+                style="justify-content: flex-end; flex-wrap: wrap"
+              >
+                <button class="btn btn-ghost" type="button">임시 저장</button>
+                <button class="btn btn-primary" type="submit">등록하기</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="stack">
+            <div class="card cardPad">
+              <div class="row">
+                <h2 style="margin: 0; font-size: 18px; letter-spacing: -0.3px">
+                  실시간 미리보기
+                </h2>
+                <span id="previewBadge" class="badge badge-ok">운영중</span>
+              </div>
+              <div style="height: 14px"></div>
+
+              <div id="galleryPreview" class="thumb" style="height: 220px">
+                <div class="thumbLabel">
+                  <div id="pName" class="thumbTitle">갤러리명</div>
+                  <div id="pMeta" class="thumbMeta">위치 · 수용 인원</div>
+                </div>
+              </div>
+
+              <div style="height: 14px"></div>
+              <div class="grid" style="gap: 10px">
+                <div
+                  class="card"
+                  style="
+                    box-shadow: none;
+                    padding: 14px;
+                    background: rgba(255, 255, 255, 0.03);
+                  "
+                >
+                  <div class="row" style="align-items: flex-start">
+                    <div>
+                      <div style="font-weight: 950; letter-spacing: -0.3px">
+                        운영 정보
+                      </div>
+                      <div
+                        id="pHours"
+                        style="
+                          color: var(--muted);
+                          margin-top: 6px;
+                          line-height: 1.6;
+                          font-weight: 750;
+                        "
+                      >
+                        10:00 - 18:00
+                      </div>
+                    </div>
+                    <div class="badge" id="pCapacity">인원 0</div>
+                  </div>
+                </div>
+                <div class="helpText" style="margin-top: 2px" id="pDesc">
+                  소개가 여기에 표시됩니다.
+                </div>
+              </div>
+            </div>
+
+            <div class="card cardPad">
+              <h2
+                style="
+                  margin: 0 0 10px;
+                  font-size: 16.5px;
+                  letter-spacing: -0.3px;
+                "
+              >
+                작성 가이드
+              </h2>
+              <div class="helpText" style="margin: 0; line-height: 1.8">
+                관람자가 "어떤 분위기인지" 한 줄로 이해하도록 문장을 짧게
+                유지하면 예약 전환율이 높아집니다.<br />
+                예: "빛이 부드럽게 스며드는 단색 전시 공간에서 30분 동안 천천히
+                감상하세요."
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        const form = document.getElementById("galleryForm");
+        const preview = document.getElementById("galleryPreview");
+        const badge = document.getElementById("previewBadge");
+        const pName = document.getElementById("pName");
+        const pMeta = document.getElementById("pMeta");
+        const pHours = document.getElementById("pHours");
+        const pDesc = document.getElementById("pDesc");
+        const pCapacity = document.getElementById("pCapacity");
+        if (!form || !preview) return;
+
+        const ids = [
+          "gName",
+          "gLocation",
+          "gCapacity",
+          "gHours",
+          "gDesc",
+          "gStatus",
+          "gCover",
+        ];
+        const el = {};
+        ids.forEach((id) => (el[id] = document.getElementById(id)));
+
+        function applyBadge() {
+          const s =
+            el.gStatus && el.gStatus.value ? el.gStatus.value : "ACTIVE";
+          badge.className = "badge";
+          if (s === "ACTIVE") {
+            badge.textContent = "운영중";
+            badge.classList.add("badge-ok");
+          } else if (s === "PAUSED") {
+            badge.textContent = "일시중지";
+            badge.classList.add("badge-warn");
+          } else {
+            badge.textContent = "마감";
+            badge.classList.add("badge-danger");
+          }
+        }
+
+        function applyPreview() {
+          const name = el.gName?.value?.trim() || "갤러리명";
+          const loc = el.gLocation?.value?.trim() || "위치";
+          const cap = el.gCapacity?.value?.trim() || "0";
+          const hours = el.gHours?.value?.trim() || "10:00 - 18:00";
+          const desc = el.gDesc?.value?.trim() || "소개가 여기에 표시됩니다.";
+          const cover = el.gCover?.value?.trim();
+
+          pName.textContent = name;
+          pMeta.textContent = `${loc} · 수용 ${cap}명`;
+          pHours.textContent = hours;
+          pDesc.textContent = desc;
+          pCapacity.textContent = `인원 ${cap}`;
+
+          applyBadge();
+
+          if (cover && cover.startsWith("http")) {
+            preview.style.backgroundImage = `url("${cover}"), radial-gradient(120% 80% at 20% 0%, rgba(214,178,94,.40), transparent 60%), radial-gradient(100% 70% at 80% 20%, rgba(109,214,255,.30), transparent 55%), linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03))`;
+            preview.style.backgroundSize = "cover, auto";
+            preview.style.backgroundPosition =
+              "center, left top, left top, center";
+          } else {
+            preview.style.backgroundImage = "";
+            preview.style.backgroundSize = "";
+          }
+        }
+
+        ["input", "change"].forEach((evt) => {
+          ids.forEach(
+            (id) => el[id] && el[id].addEventListener(evt, applyPreview),
+          );
+        });
+        applyPreview();
+      })();
+    </script>
+  </body>
+</html>

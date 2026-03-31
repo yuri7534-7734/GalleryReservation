@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>예약 관리 - 관리자</title>
+  <style>
+    /* inline shared style for standalone preview */
+:root{
+      --bg0:#070A14;
+      --bg1:#0B1020;
+      --surface:rgba(255,255,255,.06);
+      --surface2:rgba(255,255,255,.09);
+      --stroke:rgba(255,255,255,.12);
+      --text:#EAF0FF;
+      --muted:rgba(234,240,255,.72);
+      --accent:#D6B25E;
+      --accent2:#6DD6FF;
+      --danger:#FF5C7A;
+      --ok:#36E8A1;
+      --shadow:0 18px 60px rgba(0,0,0,.40);
+      --radius:18px;
+      --radius-sm:12px;
+      --ring:0 0 0 4px rgba(214,178,94,.22);
+      --container:1120px;
+    }
+    html[data-theme="light"]{
+      --bg0:#F7F8FF;
+      --bg1:#EEF1FF;
+      --surface:rgba(9,15,33,.05);
+      --surface2:rgba(9,15,33,.08);
+      --stroke:rgba(9,15,33,.12);
+      --text:#0B1020;
+      --muted:rgba(11,16,32,.70);
+      --shadow:0 18px 60px rgba(11,16,32,.14);
+    }
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+      background:
+        radial-gradient(1200px 600px at 18% -10%, rgba(214,178,94,.25), transparent 60%),
+        radial-gradient(900px 520px at 90% 10%, rgba(109,214,255,.20), transparent 55%),
+        radial-gradient(700px 420px at 40% 95%, rgba(54,232,161,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      min-height:100vh;
+    }
+    a{ color:inherit; text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+    .appShell{ min-height:100vh; display:flex; flex-direction:column; }
+    main{ flex:1; }
+    .container{ max-width:var(--container); margin:0 auto; padding:0 20px; }
+
+    /* Focus */
+    :focus-visible{
+      outline:none;
+      box-shadow: var(--ring);
+      border-color: rgba(214,178,94,.65) !important;
+    }
+
+    /* Typography */
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border-radius:999px;
+      color:var(--muted);
+      font-weight:650;
+      letter-spacing:.2px;
+      font-size:13px;
+    }
+    .title{
+      margin:12px 0 8px;
+      font-size: clamp(26px, 3vw, 38px);
+      letter-spacing:-.8px;
+      line-height:1.1;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.6;
+      max-width:70ch;
+    }
+    .hero{
+      padding:44px 0 26px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      left:-260px; top:-260px;
+      width:560px; height:560px;
+      background: radial-gradient(circle at 30% 30%, rgba(214,178,94,.35), transparent 62%);
+      filter: blur(6px);
+      pointer-events:none;
+      opacity:.95;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      right:-260px; top:-180px;
+      width:560px; height:560px;
+      background: radial-gradient(circle at 50% 30%, rgba(109,214,255,.28), transparent 60%);
+      filter: blur(7px);
+      pointer-events:none;
+      opacity:.8;
+    }
+
+    /* Components */
+    .card{
+      background:var(--surface);
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .cardPad{ padding:18px; }
+    .row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .stack{ display:flex; flex-direction:column; gap:12px; }
+    .grid{ display:grid; gap:16px; }
+    .grid-2{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 920px){
+      .grid-2, .grid-3{ grid-template-columns: 1fr; }
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:11px 14px;
+      border-radius: 12px;
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      color:var(--text);
+      font-weight:700;
+      letter-spacing:.15px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(214,178,94,.55); }
+    .btn:active{ transform: translateY(0px); }
+    .btn-primary{
+      border-color: rgba(214,178,94,.55);
+      background:
+        radial-gradient(120% 180% at 20% 0%, rgba(214,178,94,.45), transparent 60%),
+        linear-gradient(180deg, rgba(214,178,94,.30), rgba(214,178,94,.12));
+    }
+    .btn-ghost{
+      background: transparent;
+      border-color: rgba(255,255,255,.18);
+    }
+    .btn-danger{
+      border-color: rgba(255,92,122,.45);
+      background: linear-gradient(180deg, rgba(255,92,122,.22), rgba(255,92,122,.08));
+    }
+    .btn-small{ padding:8px 10px; border-radius:10px; font-size:13px; font-weight:750; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      font-weight:750;
+      font-size:12.5px;
+      letter-spacing:.2px;
+      white-space:nowrap;
+    }
+    .badge-ok{ border-color: rgba(54,232,161,.45); color: rgba(54,232,161,.95); background: rgba(54,232,161,.10); }
+    .badge-warn{ border-color: rgba(214,178,94,.55); color: rgba(214,178,94,.98); background: rgba(214,178,94,.10); }
+    .badge-danger{ border-color: rgba(255,92,122,.45); color: rgba(255,92,122,.98); background: rgba(255,92,122,.10); }
+    .badge-info{ border-color: rgba(109,214,255,.45); color: rgba(109,214,255,.98); background: rgba(109,214,255,.10); }
+
+    /* Navbar */
+    .navbar{
+      position: sticky;
+      top:0;
+      z-index:60;
+      backdrop-filter: blur(14px);
+      background: rgba(7,10,20,.55);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    html[data-theme="light"] .navbar{
+      background: rgba(247,248,255,.74);
+      border-bottom: 1px solid rgba(11,16,32,.10);
+    }
+    .navbarInner{
+      max-width:var(--container);
+      margin:0 auto;
+      padding:12px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      letter-spacing:-.4px;
+    }
+    .brandMark{
+      width:36px; height:36px;
+      border-radius:12px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(214,178,94,.95), rgba(214,178,94,.15) 55%, transparent 62%),
+        radial-gradient(circle at 70% 60%, rgba(109,214,255,.85), rgba(109,214,255,.10) 58%, transparent 63%),
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 12px 40px rgba(214,178,94,.18);
+    }
+    .navLinks{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .navLink{
+      padding:9px 12px;
+      border-radius:12px;
+      border:1px solid transparent;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13.5px;
+      transition: border-color .12s ease, color .12s ease, background .12s ease;
+    }
+    .navLink:hover{
+      border-color: rgba(214,178,94,.45);
+      color:var(--text);
+      background: rgba(255,255,255,.04);
+      text-decoration:none;
+    }
+    .navActions{ display:flex; align-items:center; gap:10px; }
+    .hamburger{
+      display:none;
+      width:44px; height:44px;
+      border-radius:14px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:900;
+    }
+    @media (max-width: 920px){
+      .navLinks{ display:none; }
+      .hamburger{ display:inline-flex; align-items:center; justify-content:center; }
+    }
+    #mobileMenu{
+      display:none;
+      border-top: 1px solid rgba(255,255,255,.10);
+    }
+    #mobileMenu[data-open="true"]{ display:block; }
+    .mobileMenuInner{
+      max-width:var(--container);
+      margin:0 auto;
+      padding:10px 20px 16px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .mobileMenuInner .navLink{ width:100%; border-color: rgba(255,255,255,.10); background: rgba(255,255,255,.03); }
+
+    /* Forms */
+    label{ display:block; font-weight:850; font-size:13px; color:var(--muted); margin-bottom:7px; }
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text);
+      outline: none;
+      transition: border-color .12s ease, background .12s ease;
+      font-size:14.5px;
+    }
+    textarea{ min-height:120px; resize: vertical; }
+    input::placeholder, textarea::placeholder{ color: rgba(234,240,255,.45); }
+    html[data-theme="light"] input::placeholder,
+    html[data-theme="light"] textarea::placeholder{ color: rgba(11,16,32,.38); }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(214,178,94,.55);
+      background: rgba(255,255,255,.06);
+    }
+    .helpText{ color: var(--muted); font-size:12.5px; line-height:1.5; margin-top:8px; }
+    .formGrid{
+      display:grid;
+      gap:16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @media (max-width: 920px){ .formGrid{ grid-template-columns: 1fr; } }
+
+    /* Tables */
+    .tableWrap{
+      overflow:auto;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+    }
+    table{
+      width:100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 720px;
+    }
+    thead th{
+      position: sticky;
+      top:0;
+      background: rgba(255,255,255,.04);
+      z-index:1;
+      text-align:left;
+      padding:14px 14px;
+      font-size:12.5px;
+      letter-spacing:.3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    tbody td{
+      padding:14px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      color: rgba(234,240,255,.92);
+      vertical-align: middle;
+    }
+    tbody tr:hover td{
+      background: rgba(255,255,255,.03);
+    }
+    html[data-theme="light"] tbody td{ color: rgba(11,16,32,.92); }
+    html[data-theme="light"] tbody tr:hover td{ background: rgba(11,16,32,.03); }
+
+    /* Thumb */
+    .thumb{
+      height: 160px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(120% 80% at 20% 0%, rgba(214,178,94,.40), transparent 60%),
+        radial-gradient(100% 70% at 80% 20%, rgba(109,214,255,.30), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+      overflow:hidden;
+      position:relative;
+    }
+    .thumb::after{
+      content:"";
+      position:absolute;
+      inset:-30px -30px auto -30px;
+      height:120px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+      transform: rotate(-10deg);
+      opacity:.9;
+    }
+    .thumbLabel{
+      position:absolute;
+      left:14px;
+      bottom:14px;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .thumbTitle{
+      font-weight:950;
+      letter-spacing:-.4px;
+      font-size:18px;
+    }
+    .thumbMeta{
+      color:var(--muted);
+      font-weight:800;
+      font-size:12.5px;
+    }
+
+    /* Footer */
+    footer{
+      border-top: 1px solid rgba(255,255,255,.10);
+      padding:22px 0;
+      color: var(--muted);
+    }
+    .footerInner{
+      max-width: var(--container);
+      margin:0 auto;
+      padding:0 20px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .footerLinks{ display:flex; gap:14px; flex-wrap:wrap; }
+
+    /* Toast */
+    #grToast{
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 9999;
+      min-width: 260px;
+      max-width: 380px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(7,10,20,.72);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      color: var(--text);
+      display:none;
+    }
+    html[data-theme="light"] #grToast{
+      background: rgba(247,248,255,.86);
+      border: 1px solid rgba(11,16,32,.14);
+    }
+    #grToast[data-show="true"]{ display:block; }
+    #grToast strong{ display:block; margin-bottom:2px; }
+    #grToast .toastText{ color: var(--muted); line-height:1.45; font-weight:700; font-size:13.5px; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important; }
+      .btn:hover{ transform:none; }
+    }
+  </style>
+  </head>
+  <body>
+    <div class="appShell">
+  <nav class="navbar">
+    <div class="navbarInner">
+      <a class="brand" th:href="@{/}">
+        <span class="brandMark"></span>
+        <span>Gallery</span>
+      </a>
+      <div class="navLinks">
+        <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
+        <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/reservation/list}">내 예약</a>
+        <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/todo/list}">할 일</a>
+        <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/gallery/list}">관리자</a>
+      </div>
+      <div class="navActions">
+        <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px;">
+          <a class="btn btn-ghost btn-small" th:href="@{/member/login}">로그인</a>
+          <a class="btn btn-primary btn-small" th:href="@{/member/join}">회원가입</a>
+        </div>
+        <div sec:authorize="isAuthenticated()" style="display:flex;gap:8px;">
+          <form th:action="@{/member/logout}" method="post" style="margin:0;">
+            <button type="submit" class="btn btn-ghost btn-small">로그아웃</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+      <main class="container">
+        <section class="hero">
+          <div class="kicker">ADMIN</div>
+          <h1 class="title">예약 관리</h1>
+          <p class="subtitle">
+            사용자 예약을 확인하고 상태와 일정을 업데이트하는 운영 화면입니다.
+          </p>
+        </section>
+
+        <section class="card cardPad">
+          <div class="row" style="flex-wrap: wrap">
+            <div class="stack" style="gap: 6px">
+              <div
+                style="
+                  font-weight: 950;
+                  letter-spacing: -0.3px;
+                  font-size: 16px;
+                "
+              >
+                검색 및 상태 필터
+              </div>
+              <div class="helpText" style="margin: 0">
+                예약자 이름 · 갤러리명 · 상태로 검색하세요.
+              </div>
+            </div>
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: flex-end;
+                flex-wrap: wrap;
+              "
+            >
+              <div style="min-width: 240px">
+                <label for="resSearch">예약자 / 갤러리</label>
+                <input
+                  id="resSearch"
+                  type="text"
+                  placeholder="예약자, 갤러리명"
+                />
+              </div>
+              <div style="min-width: 180px">
+                <label for="resStatus">상태</label>
+                <select id="resStatus">
+                  <option value="ALL" selected>전체</option>
+                  <option value="SCHEDULED">확정</option>
+                  <option value="PENDING">대기</option>
+                  <option value="CANCELLED">취소</option>
+                  <option value="COMPLETED">완료</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div style="height: 14px"></div>
+
+          <div class="tableWrap">
+            <table aria-label="예약 관리 목록">
+              <thead>
+                <tr>
+                  <th style="width: 100px">예약 ID</th>
+                  <th>갤러리</th>
+                  <th style="width: 200px">예약자</th>
+                  <th style="width: 210px">일정</th>
+                  <th style="width: 150px">상태</th>
+                  <th style="width: 240px">작업</th>
+                </tr>
+              </thead>
+              <tbody id="reservationRows">
+                <tr
+                  th:if="${reservations == null or #lists.isEmpty(reservations)}"
+                >
+                  <td
+                    colspan="6"
+                    class="helpText"
+                    style="text-align: center; padding: 24px"
+                  >
+                    예약 데이터가 없습니다.
+                  </td>
+                </tr>
+                <tr
+                  th:each="reservation : ${reservations}"
+                  th:data-status="${reservation.displayStatus}"
+                >
+                  <td style="font-weight: 950" th:text="${reservation.code}">
+                    R-1001
+                  </td>
+                  <td>
+                    <div
+                      style="font-weight: 950; letter-spacing: -0.2px"
+                      th:text="${reservation.galleryName}"
+                    >
+                      Gallery
+                    </div>
+                    <div
+                      class="helpText"
+                      style="margin: 4px 0 0; font-size: 12.5px"
+                      th:text="${reservation.reservationType}"
+                    >
+                      유형
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      style="font-weight: 900"
+                      th:text="${reservation.memberUsername}"
+                    >
+                      사용자
+                    </div>
+                    <div
+                      class="helpText"
+                      style="margin: 4px 0 0; font-size: 12.5px"
+                      th:text="${reservation.contact}"
+                    >
+                      연락처
+                    </div>
+                  </td>
+                  <td>
+                    <div
+                      style="font-weight: 900"
+                      th:text="${reservation.reservationDate + ' ' + reservation.startTime}"
+                    >
+                      2026-04-10 19:00
+                    </div>
+                    <div
+                      class="helpText"
+                      style="margin: 4px 0 0; font-size: 12.5px"
+                      th:text="${'인원: ' + reservation.guests + '명'}"
+                    >
+                      인원: 2명
+                    </div>
+                  </td>
+                  <td>
+                    <span
+                      th:class="${reservation.displayStatus == 'SCHEDULED'} ? 'badge badge-ok' : (${reservation.displayStatus == 'PENDING'} ? 'badge badge-warn' : (${reservation.displayStatus == 'CANCELLED'} ? 'badge badge-danger' : 'badge badge-info'))"
+                      th:text="${reservation.displayStatus == 'SCHEDULED'} ? '확정' : (${reservation.displayStatus == 'PENDING'} ? '대기' : (${reservation.displayStatus == 'CANCELLED'} ? '취소' : '완료'))"
+                      >상태</span
+                    >
+                  </td>
+                  <td>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                      <form th:if="${reservation.displayStatus == 'PENDING'}" th:action="@{/admin/reservation/approve/{id}(id=${reservation.id})}" method="post" style="margin:0;"><button class="btn btn-small" type="submit">승인</button></form>
+                      <form th:if="${reservation.displayStatus == 'PENDING'}" th:action="@{/admin/reservation/reject/{id}(id=${reservation.id})}" method="post" style="margin:0;"><button class="btn btn-small btn-danger" type="submit">거절</button></form>
+                      <span th:unless="${reservation.displayStatus == 'PENDING'}" class="helpText" style="margin:0;">처리완료</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <div
+        id="confirmModal"
+        class="card"
+        style="
+          display: none;
+          position: fixed;
+          inset: 0;
+          margin: auto;
+          width: min(520px, calc(100vw - 28px));
+          height: fit-content;
+          z-index: 1000;
+          padding: 20px;
+          background: rgba(7, 10, 20, 0.88);
+        "
+      >
+        <div class="stack" style="gap: 14px">
+          <div class="row" style="align-items: flex-start">
+            <div>
+              <div class="badge badge-danger">확인 필요</div>
+              <div
+                style="
+                  font-weight: 950;
+                  letter-spacing: -0.3px;
+                  font-size: 18px;
+                  margin-top: 8px;
+                "
+              >
+                예약을 취소할까요?
+              </div>
+              <div class="helpText" style="margin: 8px 0 0">
+                이 동작은 되돌릴 수 없습니다.
+              </div>
+            </div>
+            <button
+              class="btn btn-ghost btn-small"
+              type="button"
+              id="confirmClose"
+              aria-label="닫기"
+            >
+              닫기
+            </button>
+          </div>
+          <div class="row" style="justify-content: flex-end">
+            <button class="btn btn-ghost" type="button" id="confirmKeep">
+              취소
+            </button>
+            <button class="btn btn-danger" type="button" id="confirmDo">
+              확인
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const search = document.getElementById("resSearch");
+        const status = document.getElementById("resStatus");
+        const rows = document.querySelectorAll("#reservationRows tr");
+
+        if (search && status && rows.length) {
+          function apply() {
+            const q = (search.value || "").toLowerCase().trim();
+            const s = status.value || "ALL";
+            rows.forEach((tr) => {
+              const text = (tr.innerText || "").toLowerCase();
+              const st = tr.getAttribute("data-status") || "SCHEDULED";
+              const hitTx = !q || text.includes(q);
+              const hitSt = s === "ALL" || st === s;
+              tr.style.display = hitTx && hitSt ? "" : "none";
+            });
+          }
+          search.addEventListener("input", apply);
+          status.addEventListener("change", apply);
+        }
+
+        const modal = document.getElementById("confirmModal");
+        const close = document.getElementById("confirmClose");
+        const keep = document.getElementById("confirmKeep");
+        const doBtn = document.getElementById("confirmDo");
+
+        function openModal() {
+          if (modal) modal.style.display = "block";
+        }
+        function closeModal() {
+          if (modal) modal.style.display = "none";
+        }
+
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest
+            ? e.target.closest("[data-open-confirm]")
+            : null;
+          if (btn) openModal();
+        });
+        if (close) close.addEventListener("click", closeModal);
+        if (keep) keep.addEventListener("click", closeModal);
+        if (doBtn) doBtn.addEventListener("click", closeModal);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeModal();
+        });
+      })();
+    </script>
+  </body>
+</html>

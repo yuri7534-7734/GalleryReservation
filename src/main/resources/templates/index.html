@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>회원가입 - 갤러리 예약</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>갤러리 예약</title>
   <style>
     /* inline shared style for standalone preview */
 :root{
@@ -431,9 +431,96 @@
       .btn:hover{ transform:none; }
     }
   </style>
-  </head>
-  <body>
-    <div class="appShell">
+  <style>
+    .heroMain {
+      padding: 100px 0 80px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .heroMain::before {
+      content: "";
+      position: absolute;
+      left: 50%; top: -200px;
+      transform: translateX(-50%);
+      width: 800px; height: 800px;
+      background: radial-gradient(circle at 50% 40%, rgba(214,178,94,.22), transparent 60%);
+      filter: blur(10px);
+      pointer-events: none;
+    }
+    .heroMain .kicker { margin: 0 auto; }
+    .heroMain .title {
+      font-size: clamp(36px, 6vw, 64px);
+      letter-spacing: -1.5px;
+      line-height: 1.05;
+      margin: 16px 0 12px;
+    }
+    .heroMain .subtitle {
+      margin: 0 auto;
+      font-size: 16px;
+      max-width: 52ch;
+    }
+    .heroActions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    .featureGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 60px 0;
+    }
+    @media (max-width: 920px) {
+      .featureGrid { grid-template-columns: 1fr; }
+    }
+    .featureCard {
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .featureIcon {
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .featureTitle {
+      font-size: 17px;
+      font-weight: 950;
+      letter-spacing: -.3px;
+    }
+    .sectionLabel {
+      font-size: 12.5px;
+      font-weight: 850;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .galleryRow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+    @media (max-width: 920px) {
+      .galleryRow { grid-template-columns: 1fr; }
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid var(--stroke);
+      margin: 0 0 60px;
+    }
+  </style>
+</head>
+<body>
+<div class="appShell">
   <nav class="navbar">
     <div class="navbarInner">
       <a class="brand" th:href="@{/}">
@@ -461,236 +548,96 @@
   </nav>
 
 
-      <main class="container">
-        <section class="hero">
-          <div class="kicker">MEMBER</div>
-          <h1 class="title">회원가입</h1>
-          <p class="subtitle">
-            미술관 예약을 더 빠르게. 계정을 만들고 전시 공간을 미리 계획하세요.
-          </p>
-        </section>
-
-        <section class="grid grid-2" style="align-items: start">
-          <div class="card cardPad">
-            <div class="row" style="align-items: flex-start; flex-wrap: wrap">
-              <div>
-                <h2
-                  style="
-                    margin: 0 0 8px;
-                    font-size: 16.5px;
-                    letter-spacing: -0.3px;
-                  "
-                >
-                  계정 정보
-                </h2>
-                <div class="helpText" style="margin: 0">
-                  필수 항목을 입력하면 바로 예약을 시작할 수 있습니다.
-                </div>
-              </div>
-              <span class="badge badge-warn">New</span>
-            </div>
-
-            <div style="height: 14px"></div>
-
-            <form
-              th:action="@{/member/join}"
-              th:object="${memberJoinRequestDto}"
-              method="post"
-              class="stack"
-            >
-              <div class="formGrid">
-                <div>
-                  <label for="joinName">아이디</label>
-                  <input
-                    id="joinName"
-                    th:field="*{username}"
-                    type="text"
-                    placeholder="honggildong"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="joinEmail">이메일</label>
-                  <input
-                    id="joinEmail"
-                    th:field="*{email}"
-                    type="email"
-                    placeholder="name@example.com"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="joinPassword">비밀번호</label>
-                  <input
-                    id="joinPassword"
-                    th:field="*{password}"
-                    type="password"
-                    placeholder="최소 8자"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="joinRole">역할</label>
-                  <select id="joinRole" th:field="*{role}">
-                    <option value="ROLE_USER" selected>사용자</option>
-                  </select>
-                </div>
-              </div>
-
-              <div
-                class="card"
-                style="
-                  box-shadow: none;
-                  background: rgba(255, 255, 255, 0.03);
-                  padding: 14px;
-                "
-              >
-                <div
-                  style="
-                    font-weight: 950;
-                    letter-spacing: -0.3px;
-                    margin-bottom: 8px;
-                  "
-                >
-                  이용 약관 동의
-                </div>
-                <div class="helpText" style="margin: 0 0 12px">
-                  서비스 이용을 위해 아래 항목에 동의해 주세요.
-                </div>
-                <label
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin: 0;
-                    cursor: pointer;
-                  "
-                >
-                  <input
-                    id="agree1"
-                    type="checkbox"
-                    name="agreeTerms"
-                    required
-                    style="width: auto"
-                  />
-                  <span style="font-weight: 850; font-size: 14px"
-                    >이용약관 및 개인정보 처리방침 동의 (필수)</span
-                  >
-                </label>
-                <label
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin: 10px 0 0;
-                    cursor: pointer;
-                  "
-                >
-                  <input
-                    id="agree2"
-                    type="checkbox"
-                    name="agreeMarketing"
-                    style="width: auto"
-                  />
-                  <span style="font-weight: 850; font-size: 14px"
-                    >마케팅 정보 수신 동의 (선택)</span
-                  >
-                </label>
-              </div>
-
-              <div
-                class="row"
-                style="justify-content: flex-end; flex-wrap: wrap"
-              >
-                <a class="btn btn-ghost" href="#" th:href="@{/member/login}"
-                  >이미 계정이 있어요</a
-                >
-                <button class="btn btn-primary" type="submit">가입하기</button>
-              </div>
-            </form>
-          </div>
-
-          <div class="stack">
-            <div class="card cardPad">
-              <div class="row" style="align-items: flex-start; flex-wrap: wrap">
-                <div>
-                  <div
-                    style="
-                      font-weight: 950;
-                      letter-spacing: -0.3px;
-                      font-size: 16.5px;
-                    "
-                  >
-                    가입하면 얻는 것
-                  </div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    간단한 예약 흐름을 설계했습니다.
-                  </div>
-                </div>
-                <span class="badge badge-info">Benefit</span>
-              </div>
-              <div style="height: 14px"></div>
-              <div class="stack" style="gap: 10px">
-                <div
-                  class="card"
-                  style="
-                    box-shadow: none;
-                    background: rgba(255, 255, 255, 0.03);
-                    padding: 14px;
-                  "
-                >
-                  <div style="font-weight: 950">1. 빠른 예약</div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    전시 공간 선택 후 날짜와 시간을 바로 입력합니다.
-                  </div>
-                </div>
-                <div
-                  class="card"
-                  style="
-                    box-shadow: none;
-                    background: rgba(255, 255, 255, 0.03);
-                    padding: 14px;
-                  "
-                >
-                  <div style="font-weight: 950">2. 상태 확인</div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    대기 · 확정 · 취소 상태를 한 화면에서 확인합니다.
-                  </div>
-                </div>
-                <div
-                  class="card"
-                  style="
-                    box-shadow: none;
-                    background: rgba(255, 255, 255, 0.03);
-                    padding: 14px;
-                  "
-                >
-                  <div style="font-weight: 950">3. 관람 메모</div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    요청 사항을 메모로 남길 수 있습니다.
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="card cardPad">
-              <div
-                style="
-                  font-weight: 950;
-                  letter-spacing: -0.3px;
-                  font-size: 16.5px;
-                "
-              >
-                보안 안내
-              </div>
-              <div class="helpText" style="margin-top: 8px">
-                비밀번호는 안전하게 암호화되어 저장됩니다. 타인과 공유하지
-                마세요.
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
+  <main>
+    <!-- Hero -->
+    <div class="container">
+      <section class="heroMain">
+        <div class="kicker">ART GALLERY RESERVATION</div>
+        <h1 class="title">예술과 함께하는<br>특별한 시간</h1>
+        <p class="subtitle">원하는 전시 공간을 선택하고 관람 일정을 예약하세요. 단색화부터 조각까지, 다양한 전시를 경험할 수 있습니다.</p>
+        <div class="heroActions">
+          <a class="btn btn-primary" href="#" th:href="@{/gallery/list}" style="padding:14px 28px; font-size:15px;">전시 둘러보기</a>
+          <a class="btn btn-ghost" href="#" th:href="@{/member/login}" style="padding:14px 28px; font-size:15px;">로그인</a>
+        </div>
+      </section>
     </div>
-  </body>
+
+    <!-- Featured Galleries -->
+    <div class="container">
+      <div class="sectionLabel">Featured Galleries</div>
+      <div class="galleryRow">
+        <a class="card" href="#" th:href="@{/gallery/list}" style="text-decoration:none;">
+          <div class="thumb" style="height:200px; border-radius:18px 18px 0 0;">
+            <div class="thumbLabel">
+              <div class="thumbTitle">Monochrome Hall</div>
+              <div class="thumbMeta">2층 · West Wing · 35석</div>
+            </div>
+          </div>
+          <div class="cardPad">
+            <div style="font-weight:900; letter-spacing:-.2px;">단색 전시 · 30분 코스</div>
+            <div class="helpText" style="margin:6px 0 8px;">빛과 여백을 따라 천천히 감상하세요.</div>
+            <span class="badge badge-ok">운영중</span>
+          </div>
+        </a>
+
+        <a class="card" href="#" th:href="@{/gallery/list}" style="text-decoration:none;">
+          <div class="thumb" style="height:200px; border-radius:18px 18px 0 0; background:
+            radial-gradient(120% 80% at 20% 0%, rgba(214,178,94,.52), transparent 60%),
+            radial-gradient(100% 70% at 80% 20%, rgba(109,214,255,.22), transparent 55%),
+            linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03));">
+            <div class="thumbLabel">
+              <div class="thumbTitle">Gilded Atrium</div>
+              <div class="thumbMeta">1층 · Central · 50석</div>
+            </div>
+          </div>
+          <div class="cardPad">
+            <div style="font-weight:900; letter-spacing:-.2px;">금빛 아트리움 · 야간 예약</div>
+            <div class="helpText" style="margin:6px 0 8px;">조용한 조명 아래, 작품의 결을 가까이.</div>
+            <span class="badge badge-ok">운영중</span>
+          </div>
+        </a>
+
+        <a class="card" href="#" th:href="@{/gallery/list}" style="text-decoration:none;">
+          <div class="thumb" style="height:200px; border-radius:18px 18px 0 0; background:
+            radial-gradient(120% 80% at 20% 0%, rgba(109,214,255,.42), transparent 60%),
+            radial-gradient(100% 70% at 80% 20%, rgba(214,178,94,.18), transparent 55%),
+            linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03));">
+            <div class="thumbLabel">
+              <div class="thumbTitle">Coastal Light Room</div>
+              <div class="thumbMeta">3층 · East Wing · 28석</div>
+            </div>
+          </div>
+          <div class="cardPad">
+            <div style="font-weight:900; letter-spacing:-.2px;">해풍 같은 조명 · 주간 전시</div>
+            <div class="helpText" style="margin:6px 0 8px;">부드러운 그림자, 느린 시간.</div>
+            <span class="badge badge-warn">일시중지</span>
+          </div>
+        </a>
+      </div>
+
+      <hr class="divider">
+
+      <!-- Features -->
+      <div class="sectionLabel">이런 것들을 할 수 있어요</div>
+      <div class="featureGrid">
+        <div class="card featureCard">
+          <div class="featureIcon">🎨</div>
+          <div class="featureTitle">전시 공간 탐색</div>
+          <div class="helpText" style="margin:0;">다양한 테마의 전시 공간을 조건별로 검색하고 상세 정보를 확인하세요.</div>
+        </div>
+        <div class="card featureCard">
+          <div class="featureIcon">📅</div>
+          <div class="featureTitle">간편 예약</div>
+          <div class="helpText" style="margin:0;">원하는 날짜와 시간을 선택해 빠르게 예약하고 상태를 실시간으로 확인하세요.</div>
+        </div>
+        <div class="card featureCard">
+          <div class="featureIcon">✅</div>
+          <div class="featureTitle">운영 관리</div>
+          <div class="helpText" style="margin:0;">관리자는 갤러리와 예약 현황을 한 화면에서 관리할 수 있습니다.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
 </html>
