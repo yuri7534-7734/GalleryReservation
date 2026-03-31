@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "todo")
+@EntityListeners(AuditingEntityListener.class) //createdDate,LastModifiedDate 사용을위한 어노테이션
 @Getter @Builder @AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Todo {
 
@@ -22,13 +24,23 @@ public class Todo {
     @Column(name="title", nullable = false,length = 200)
     private String title;
 
-    @Column(name="content")
-    private String content;
+    @Column(name="description")
+    private String description;
 
-    @Column(name="is_done",nullable = false)
-    private boolean isDone;
+    @Enumerated(EnumType.STRING)
+    @Column(name="category")
+    private TodoCategory category;
 
+    @Column(name = "assignee")
+    private String assignee;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority")
+    private TodoPriority priority;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private TodoStatus status;
 
     @Column(name = "due_date", updatable = false)
     private LocalDate dueDate;

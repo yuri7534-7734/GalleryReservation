@@ -1,5 +1,8 @@
 package com.study.galleryreservation.dto.todo;
 
+import com.study.galleryreservation.domain.todo.TodoCategory;
+import com.study.galleryreservation.domain.todo.TodoPriority;
+import com.study.galleryreservation.domain.todo.TodoStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,9 +14,15 @@ public class TodoResponseDto {
 
     private String title;
 
-    private String content;
+   private String description;
 
-    private boolean isDone;
+   private TodoCategory category;
+
+   private String assignee;
+
+   private TodoPriority priority;
+
+   private TodoStatus status;
 
     private LocalDate dueDate;
 

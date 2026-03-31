@@ -1,10 +1,10 @@
 package com.study.galleryreservation.repository;
 
 import com.study.galleryreservation.domain.todo.Todo;
+import com.study.galleryreservation.domain.todo.TodoStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
@@ -13,12 +13,17 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     List<Todo> findByMember_Id(Long memberId);
 
 
-    //  특정맴버의 완료여부로 조회
-    List<Todo> findByMember_IdAndIsDone(Long memberId, boolean isDone);
+    // 상태 필터
+    List<Todo>findByMember_IdAndStatus(Long memberId, TodoStatus status);
 
-    // 마감 기한 일로 조회
-    List<Todo>findByMember_IdAndDueDate(Long memberId, LocalDate dueDate);
+    //제목 검색
+    List<Todo>findByMember_IDAndTitleContaining(Long memberId,String keyword);
 
+    //마감일 오른차순 정렬
+    List<Todo>findByMember_IdOrderByDueDateAsc(Long memberId);
+
+    //보인 Todo여부 확인   true/false 여부만 확인하면되서 boolean사용
+    boolean existsByIdAndMember_Id(Long id,Long memberId);
 
 
 
