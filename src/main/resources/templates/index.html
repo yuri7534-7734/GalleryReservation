@@ -7,35 +7,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>할 일 목록 - 갤러리 예약</title>
+    <title>갤러리 예약</title>
     <style>
-      /* 디자인 컨셉: 화이트 큐브 갤러리 */
+      /* 기존 스타일 구조를 100% 유지하며 컬러값만 화이트 톤으로 변경 */
       :root {
-        --bg0: #ffffff;
-        --bg1: #f8f9fb;
+        --bg0: #ffffff; /* 순백색 배경 */
+        --bg1: #f7f8fa;
         --surface: #ffffff;
-        --surface2: #f1f3f7;
-        --stroke: rgba(0, 0, 0, 0.08);
-        --text: #1a1d23;
-        --muted: rgba(26, 29, 35, 0.6);
-        --accent: #b8934d;
-        --accent2: #4a90e2;
-        --danger: #ff4d4f;
-        --ok: #52c41a;
-        --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+        --surface2: #f1f3f5;
+        --stroke: rgba(0, 0, 0, 0.08); /* 어두운 선에서 부드러운 회색 선으로 */
+        --text: #1a1d23; /* 가독성 좋은 짙은 회색 */
+        --muted: rgba(26, 29, 35, 0.65);
+        --accent: #b8934d; /* 골드 포인트를 조금 더 차분하게 */
+        --accent2: #3498db;
+        --danger: #e74c3c;
+        --ok: #27ae60;
+        --shadow: 0 12px 40px rgba(0, 0, 0, 0.06); /* 그림자를 훨씬 연하게 */
         --radius: 18px;
         --radius-sm: 12px;
         --ring: 0 0 0 4px rgba(184, 147, 77, 0.15);
         --container: 1120px;
       }
+      /* 다크모드 대응 대신 라이트모드 고정 스타일로 전환 */
       html[data-theme="light"] {
         --bg0: #ffffff;
-        --bg1: #f8f9fb;
+        --bg1: #f7f8fa;
         --surface: #ffffff;
-        --surface2: #f1f3f7;
+        --surface2: #f1f3f5;
         --stroke: rgba(0, 0, 0, 0.08);
         --text: #1a1d23;
-        --muted: rgba(26, 29, 35, 0.6);
+        --muted: rgba(26, 29, 35, 0.65);
         --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
       }
       * {
@@ -60,17 +61,12 @@
         background:
           radial-gradient(
             1200px 600px at 18% -10%,
-            rgba(184, 147, 77, 0.08),
+            rgba(184, 147, 77, 0.06),
             transparent 60%
           ),
           radial-gradient(
             900px 520px at 90% 10%,
-            rgba(74, 144, 226, 0.05),
-            transparent 55%
-          ),
-          radial-gradient(
-            700px 420px at 40% 95%,
-            rgba(82, 196, 26, 0.04),
+            rgba(52, 152, 219, 0.04),
             transparent 55%
           ),
           linear-gradient(180deg, var(--bg0), var(--bg1));
@@ -163,7 +159,7 @@
         height: 560px;
         background: radial-gradient(
           circle at 50% 30%,
-          rgba(74, 144, 226, 0.08),
+          rgba(52, 152, 219, 0.08),
           transparent 60%
         );
         filter: blur(20px);
@@ -253,8 +249,8 @@
         border-color: var(--stroke);
       }
       .btn-danger {
-        border-color: rgba(255, 77, 79, 0.2);
-        background: rgba(255, 77, 79, 0.05);
+        border-color: rgba(231, 76, 60, 0.2);
+        background: rgba(231, 76, 60, 0.05);
         color: var(--danger);
       }
       .btn-small {
@@ -279,9 +275,9 @@
         white-space: nowrap;
       }
       .badge-ok {
-        border-color: rgba(82, 196, 26, 0.2);
+        border-color: rgba(39, 174, 96, 0.2);
         color: var(--ok);
-        background: rgba(82, 196, 26, 0.08);
+        background: rgba(39, 174, 96, 0.08);
       }
       .badge-warn {
         border-color: rgba(184, 147, 77, 0.2);
@@ -289,14 +285,14 @@
         background: rgba(184, 147, 77, 0.08);
       }
       .badge-danger {
-        border-color: rgba(255, 77, 79, 0.2);
+        border-color: rgba(231, 76, 60, 0.2);
         color: var(--danger);
-        background: rgba(255, 77, 79, 0.08);
+        background: rgba(231, 76, 60, 0.08);
       }
       .badge-info {
-        border-color: rgba(74, 144, 226, 0.2);
+        border-color: rgba(52, 152, 219, 0.2);
         color: var(--accent2);
-        background: rgba(74, 144, 226, 0.08);
+        background: rgba(52, 152, 219, 0.08);
       }
 
       /* Navbar */
@@ -410,7 +406,7 @@
         display: block;
         font-weight: 850;
         font-size: 13px;
-        color: var(--text);
+        color: var(--muted);
         margin-bottom: 7px;
       }
       input,
@@ -434,14 +430,13 @@
       }
       input::placeholder,
       textarea::placeholder {
-        color: #adb5bd;
+        color: rgba(0, 0, 0, 0.3);
       }
       input:focus,
       select:focus,
       textarea:focus {
         border-color: var(--accent);
         background: #ffffff;
-        box-shadow: var(--ring);
       }
       .helpText {
         color: var(--muted);
@@ -496,6 +491,35 @@
         background: var(--bg1);
       }
 
+      /* Thumb */
+      .thumb {
+        height: 160px;
+        border-radius: 16px;
+        border: 1px solid var(--stroke);
+        background: linear-gradient(135deg, #fdfdfd 0%, #f1f3f5 100%);
+        overflow: hidden;
+        position: relative;
+      }
+      .thumbLabel {
+        position: absolute;
+        left: 14px;
+        bottom: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .thumbTitle {
+        font-weight: 950;
+        letter-spacing: -0.4px;
+        font-size: 18px;
+        color: #111;
+      }
+      .thumbMeta {
+        color: var(--muted);
+        font-weight: 800;
+        font-size: 12.5px;
+      }
+
       /* Footer */
       footer {
         border-top: 1px solid var(--stroke);
@@ -519,6 +543,26 @@
         flex-wrap: wrap;
       }
 
+      /* Toast */
+      #grToast {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 9999;
+        min-width: 260px;
+        max-width: 380px;
+        padding: 16px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: #ffffff;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        color: var(--text);
+        display: none;
+      }
+      #grToast[data-show="true"] {
+        display: block;
+      }
+
       /* Reduced motion */
       @media (prefers-reduced-motion: reduce) {
         * {
@@ -528,6 +572,112 @@
         .btn:hover {
           transform: none;
         }
+      }
+    </style>
+    <style>
+      /* HeroMain & Feature Grid 추가 스타일 */
+      .heroMain {
+        padding: 100px 0 80px;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+      }
+      .heroMain::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: -200px;
+        transform: translateX(-50%);
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(
+          circle at 50% 40%,
+          rgba(184, 147, 77, 0.08),
+          transparent 60%
+        );
+        filter: blur(40px);
+        pointer-events: none;
+      }
+      .heroMain .kicker {
+        margin: 0 auto;
+      }
+      .heroMain .title {
+        font-size: clamp(36px, 6vw, 64px);
+        letter-spacing: -1.5px;
+        line-height: 1.05;
+        margin: 16px 0 12px;
+        color: #111;
+      }
+      .heroMain .subtitle {
+        margin: 0 auto;
+        font-size: 16px;
+        max-width: 52ch;
+      }
+      .heroActions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 32px;
+        flex-wrap: wrap;
+      }
+      .featureGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin: 60px 0;
+      }
+      @media (max-width: 920px) {
+        .featureGrid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .featureCard {
+        padding: 28px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        align-items: center;
+      }
+      .featureIcon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+      .featureTitle {
+        font-size: 17px;
+        font-weight: 800;
+        letter-spacing: -0.3px;
+      }
+      .sectionLabel {
+        font-size: 12.5px;
+        font-weight: 850;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 20px;
+      }
+      .galleryRow {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 60px;
+      }
+      @media (max-width: 920px) {
+        .galleryRow {
+          grid-template-columns: 1fr;
+        }
+      }
+      .divider {
+        border: none;
+        border-top: 1px solid var(--stroke);
+        margin: 0 0 60px;
       }
     </style>
   </head>
@@ -590,189 +740,151 @@
         </div>
       </nav>
 
-      <main class="container">
-        <section class="hero">
-          <div class="kicker">TODO</div>
-          <h1 class="title">운영 할 일 목록</h1>
-          <p class="subtitle">
-            전시 운영 준비, 점검, 공지 초안을 관리하는 화면입니다.
-          </p>
-        </section>
+      <main>
+        <div class="container">
+          <section class="heroMain">
+            <div class="kicker">ART GALLERY RESERVATION</div>
+            <h1 class="title">예술과 함께하는<br />특별한 시간</h1>
+            <p class="subtitle">
+              원하는 전시 공간을 선택하고 관람 일정을 예약하세요. 단색화부터
+              조각까지, 다양한 전시를 경험할 수 있습니다.
+            </p>
+            <div class="heroActions">
+              <a
+                class="btn btn-primary"
+                href="#"
+                th:href="@{/gallery/list}"
+                style="padding: 14px 28px; font-size: 15px"
+                >전시 둘러보기</a
+              >
+            </div>
+          </section>
+        </div>
 
-        <section class="card cardPad">
-          <div class="row" style="flex-wrap: wrap">
-            <div class="stack" style="gap: 6px">
+        <div class="container">
+          <div class="sectionLabel">Featured Galleries</div>
+          <div class="galleryRow">
+            <a
+              class="card"
+              href="#"
+              th:href="@{/gallery/list}"
+              style="text-decoration: none"
+            >
               <div
+                class="thumb"
                 style="
-                  font-weight: 950;
-                  letter-spacing: -0.3px;
-                  font-size: 16px;
+                  height: 200px;
+                  border-radius: 18px 18px 0 0;
+                  background: linear-gradient(135deg, #f9f9f9, #eef1f5);
                 "
               >
-                검색 및 필터
+                <div class="thumbLabel">
+                  <div class="thumbTitle">Monochrome Hall</div>
+                  <div class="thumbMeta">2층 · West Wing · 35석</div>
+                </div>
               </div>
-              <div class="helpText" style="margin: 0">
-                완료 · 미완료를 빠르게 구분하세요.
+              <div class="cardPad">
+                <div style="font-weight: 900; letter-spacing: -0.2px">
+                  단색 전시 · 30분 코스
+                </div>
+                <div class="helpText" style="margin: 6px 0 8px">
+                  빛과 여백을 따라 천천히 감상하세요.
+                </div>
+                <span class="badge badge-ok">운영중</span>
               </div>
-            </div>
-            <div
-              style="
-                display: flex;
-                gap: 10px;
-                align-items: flex-end;
-                flex-wrap: wrap;
-              "
+            </a>
+
+            <a
+              class="card"
+              href="#"
+              th:href="@{/gallery/list}"
+              style="text-decoration: none"
             >
-              <div>
-                <label for="tStatus">상태</label>
-                <select id="tStatus">
-                  <option value="ALL" selected>전체</option>
-                  <option value="OPEN">미완료</option>
-                  <option value="DONE">완료</option>
-                </select>
+              <div
+                class="thumb"
+                style="
+                  height: 200px;
+                  border-radius: 18px 18px 0 0;
+                  background: linear-gradient(135deg, #fff9eb, #f3e6c9);
+                "
+              >
+                <div class="thumbLabel">
+                  <div class="thumbTitle">Gilded Atrium</div>
+                  <div class="thumbMeta">1층 · Central · 50석</div>
+                </div>
               </div>
-              <div>
-                <label for="tSearch">검색</label>
-                <input id="tSearch" type="text" placeholder="제목 / 카테고리" />
+              <div class="cardPad">
+                <div style="font-weight: 900; letter-spacing: -0.2px">
+                  금빛 아트리움 · 야간 예약
+                </div>
+                <div class="helpText" style="margin: 6px 0 8px">
+                  조용한 조명 아래, 작품의 결을 가까이.
+                </div>
+                <span class="badge badge-ok">운영중</span>
               </div>
-              <div style="align-self: flex-end">
-                <a class="btn btn-primary" href="#" th:href="@{/todo/form}"
-                  >새 할 일</a
-                >
+            </a>
+
+            <a
+              class="card"
+              href="#"
+              th:href="@{/gallery/list}"
+              style="text-decoration: none"
+            >
+              <div
+                class="thumb"
+                style="
+                  height: 200px;
+                  border-radius: 18px 18px 0 0;
+                  background: linear-gradient(135deg, #ebf7ff, #d6e9f5);
+                "
+              >
+                <div class="thumbLabel">
+                  <div class="thumbTitle">Coastal Light Room</div>
+                  <div class="thumbMeta">3층 · East Wing · 28석</div>
+                </div>
+              </div>
+              <div class="cardPad">
+                <div style="font-weight: 900; letter-spacing: -0.2px">
+                  해풍 같은 조명 · 주간 전시
+                </div>
+                <div class="helpText" style="margin: 6px 0 8px">
+                  부드러운 그림자, 느린 시간.
+                </div>
+                <span class="badge badge-warn">일시중지</span>
+              </div>
+            </a>
+          </div>
+
+          <hr class="divider" />
+
+          <div class="sectionLabel">이런 것들을 할 수 있어요</div>
+          <div class="featureGrid">
+            <div class="card featureCard">
+              <div class="featureIcon">🎨</div>
+              <div class="featureTitle">전시 공간 탐색</div>
+              <div class="helpText" style="margin: 0">
+                다양한 테마의 전시 공간을 조건별로 검색하고 상세 정보를
+                확인하세요.
               </div>
             </div>
-          </div>
-
-          <div style="height: 14px"></div>
-
-          <div class="tableWrap">
-            <table aria-label="할 일 목록">
-              <thead>
-                <tr>
-                  <th style="width: 120px">기한</th>
-                  <th>업무</th>
-                  <th style="width: 160px">카테고리</th>
-                  <th style="width: 180px">담당자</th>
-                  <th style="width: 140px">상태</th>
-                  <th style="width: 220px">작업</th>
-                </tr>
-              </thead>
-              <tbody id="todoRows">
-                <tr th:if="${todos == null or #lists.isEmpty(todos)}">
-                  <td
-                    colspan="6"
-                    class="helpText"
-                    style="text-align: center; padding: 24px"
-                  >
-                    등록된 할 일이 없습니다. 새 할 일을 만들어보세요.
-                  </td>
-                </tr>
-                <tr th:each="todo : ${todos}" th:data-status="${todo.status}">
-                  <td th:text="${todo.dueDate}">2026-04-03</td>
-                  <td>
-                    <div
-                      style="
-                        font-weight: 950;
-                        letter-spacing: -0.2px;
-                        color: #111;
-                      "
-                      th:text="${todo.title}"
-                    >
-                      할 일
-                    </div>
-                    <div
-                      class="helpText"
-                      style="
-                        margin: 4px 0 0;
-                        font-size: 12.5px;
-                        color: var(--muted);
-                      "
-                      th:text="${todo.description}"
-                    >
-                      설명
-                    </div>
-                  </td>
-                  <td th:text="${todo.category}">운영</td>
-                  <td
-                    th:text="${#strings.isEmpty(todo.assignee) ? '-' : todo.assignee}"
-                  >
-                    담당자
-                  </td>
-                  <td>
-                    <span
-                      th:class="${todo.status == 'DONE'} ? 'badge badge-ok' : 'badge badge-warn'"
-                      th:text="${todo.status == 'DONE'} ? '완료' : '미완료'"
-                      >상태</span
-                    >
-                  </td>
-                  <td>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                      <a
-                        class="btn btn-small btn-ghost"
-                        href="#"
-                        th:href="@{/todo/form}"
-                        >상세</a
-                      >
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </main>
-
-      <footer
-        style="
-          border-top: 1px solid var(--stroke);
-          padding: 30px 0;
-          background: #fff;
-          margin-top: 40px;
-        "
-      >
-        <div
-          class="container"
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 700;
-          "
-        >
-          <div>© 2026 Art Gallery Reservation System.</div>
-          <div style="display: flex; gap: 20px">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
+            <div class="card featureCard">
+              <div class="featureIcon">📅</div>
+              <div class="featureTitle">간편 예약</div>
+              <div class="helpText" style="margin: 0">
+                원하는 날짜와 시간을 선택해 빠르게 예약하고 상태를 실시간으로
+                확인하세요.
+              </div>
+            </div>
+            <div class="card featureCard">
+              <div class="featureIcon">✅</div>
+              <div class="featureTitle">운영 관리</div>
+              <div class="helpText" style="margin: 0">
+                관리자는 갤러리와 예약 현황을 한 화면에서 관리할 수 있습니다.
+              </div>
+            </div>
           </div>
         </div>
-      </footer>
+      </main>
     </div>
-
-    <script>
-      (function () {
-        const status = document.getElementById("tStatus");
-        const search = document.getElementById("tSearch");
-        const rows = document.querySelectorAll("#todoRows tr");
-        if (!status || !search || !rows.length) return;
-
-        function apply() {
-          const st = status.value || "ALL";
-          const q = (search.value || "").toLowerCase().trim();
-          rows.forEach((tr) => {
-            const trSt = tr.getAttribute("data-status") || "OPEN";
-            const text = (tr.innerText || "").toLowerCase();
-            const hitSt = st === "ALL" || trSt === st;
-            const hitTx = !q || text.includes(q);
-            tr.style.display = hitSt && hitTx ? "" : "none";
-          });
-        }
-
-        status.addEventListener("change", apply);
-        search.addEventListener("input", apply);
-        apply();
-      })();
-    </script>
   </body>
 </html>
