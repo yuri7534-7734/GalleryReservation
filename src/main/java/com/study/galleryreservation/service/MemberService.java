@@ -30,7 +30,7 @@ public class MemberService {
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .email(dto.getEmail())
                 .role(MemberRole.ROLE_USER)
-                .created_at(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
                 .build();
         repository.save(member);
     }

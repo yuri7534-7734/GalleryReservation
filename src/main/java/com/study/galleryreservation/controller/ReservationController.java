@@ -2,17 +2,19 @@ package com.study.galleryreservation.controller;
 
 //import com.study.galleryreservation.service.ReservationService;
 
+import com.study.galleryreservation.domain.session.SnsUser;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
+import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
 import com.study.galleryreservation.service.ReservationService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,19 +31,36 @@ public class ReservationController {
         return "reservation/form";
     }
     @PostMapping("/form")
-    public String postForm(@ModelAttribute ReservationCreateRequestDto requestDto){
+    public String postForm(@ModelAttribute ReservationCreateRequestDto requestDto,
+                           HttpSession session){
+        SnsUser snsUser = (SnsUser) session.getAttribute("user");
 
-        String username = SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
-
-        reservationService.save(requestDto, username);
+        reservationService.save(requestDto, snsUser.getEmail());
 
         return "redirect:/reservation/list";
     }
 
+    // 예약 내역 페이지 이동
     @GetMapping("/list")
-    public String getList(){
+    public String reservationList(Model model, HttpSession session){
+        SnsUser snsUser = (SnsUser) session.getAttribute("user");
+        List<ReservationResponseDto> reservation = reservationService.findByEmail(snsUser.getEmail());
+        model.addAttribute("reservations",reservation);
+
         return "reservation/list";
     }
+
+    //예약 내역 삭제
+    @PostMapping("/cancel/{id}")
+    public String cancel(@PathVariable Long id, HttpSession session){
+        SnsUser snsUser = (SnsUser) session.getAttribute("user");
+
+        if (snsUser == null) {
+            return "redirect:/login";
+        }
+
+        reservationService.cancel(id, snsUser.getEmail());
+        return "redirect:/reservation/list";
+    }
+
 }

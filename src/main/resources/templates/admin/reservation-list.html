@@ -649,6 +649,11 @@
                 method="post"
                 style="margin: 0"
               >
+                <input
+                  type="hidden"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"
+                />
                 <button type="submit" class="btn btn-ghost btn-small">
                   로그아웃
                 </button>

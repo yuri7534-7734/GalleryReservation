@@ -1,663 +1,889 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>할 일 작성 - 갤러리 예약</title>
-  <style>
-    /* 디자인 컨셉: 화이트 큐브 갤러리 */
-    :root{
-      --bg0:#FFFFFF;
-      --bg1:#F8F9FB;
-      --surface:#FFFFFF;
-      --surface2:#F1F3F7;
-      --stroke:rgba(0,0,0,.08);
-      --text:#1A1D23;
-      --muted:rgba(26,29,35,.6);
-      --accent:#B8934D;
-      --accent2:#4A90E2;
-      --danger:#FF4D4F;
-      --ok:#52C41A;
-      --shadow:0 12px 40px rgba(0,0,0,.06);
-      --radius:18px;
-      --radius-sm:12px;
-      --ring:0 0 0 4px rgba(184,147,77,.15);
-      --container:1120px;
-    }
-    html[data-theme="light"]{
-      --bg0:#FFFFFF;
-      --bg1:#F8F9FB;
-      --surface:#FFFFFF;
-      --surface2:#F1F3F7;
-      --stroke:rgba(0,0,0,.08);
-      --text:#1A1D23;
-      --muted:rgba(26,29,35,.6);
-      --shadow:0 12px 40px rgba(0,0,0,.06);
-    }
-    *{ box-sizing:border-box; }
-    html{ scroll-behavior:smooth; }
-    body{
-      margin:0;
-      color:var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
-      background:
-        radial-gradient(1200px 600px at 18% -10%, rgba(184,147,77,.08), transparent 60%),
-        radial-gradient(900px 520px at 90% 10%, rgba(74,144,226,.05), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      min-height:100vh;
-    }
-    a{ color:inherit; text-decoration:none; }
-    a:hover{ text-decoration:underline; }
-    .appShell{ min-height:100vh; display:flex; flex-direction:column; }
-    main{ flex:1; }
-    .container{ max-width:var(--container); margin:0 auto; padding:0 20px; }
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>할 일 작성 - 갤러리 예약</title>
+    <style>
+      /* 디자인 컨셉: 화이트 큐브 갤러리 */
+      :root {
+        --bg0: #ffffff;
+        --bg1: #f8f9fb;
+        --surface: #ffffff;
+        --surface2: #f1f3f7;
+        --stroke: rgba(0, 0, 0, 0.08);
+        --text: #1a1d23;
+        --muted: rgba(26, 29, 35, 0.6);
+        --accent: #b8934d;
+        --accent2: #4a90e2;
+        --danger: #ff4d4f;
+        --ok: #52c41a;
+        --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+        --radius: 18px;
+        --radius-sm: 12px;
+        --ring: 0 0 0 4px rgba(184, 147, 77, 0.15);
+        --container: 1120px;
+      }
+      html[data-theme="light"] {
+        --bg0: #ffffff;
+        --bg1: #f8f9fb;
+        --surface: #ffffff;
+        --surface2: #f1f3f7;
+        --stroke: rgba(0, 0, 0, 0.08);
+        --text: #1a1d23;
+        --muted: rgba(26, 29, 35, 0.6);
+        --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          "Noto Sans KR",
+          "Malgun Gothic",
+          "Apple SD Gothic Neo",
+          sans-serif;
+        background:
+          radial-gradient(
+            1200px 600px at 18% -10%,
+            rgba(184, 147, 77, 0.08),
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 520px at 90% 10%,
+            rgba(74, 144, 226, 0.05),
+            transparent 55%
+          ),
+          linear-gradient(180deg, var(--bg0), var(--bg1));
+        min-height: 100vh;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .appShell {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      main {
+        flex: 1;
+      }
+      .container {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 0 20px;
+      }
 
-    /* Focus */
-    :focus-visible{
-      outline:none;
-      box-shadow: var(--ring);
-      border-color: var(--accent) !important;
-    }
+      /* Focus */
+      :focus-visible {
+        outline: none;
+        box-shadow: var(--ring);
+        border-color: var(--accent) !important;
+      }
 
-    /* Typography */
-    .kicker{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:8px 12px;
-      border:1px solid var(--stroke);
-      background:#FFFFFF;
-      border-radius:999px;
-      color:var(--accent);
-      font-weight:700;
-      letter-spacing:.2px;
-      font-size:13px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-    }
-    .title{
-      margin:12px 0 8px;
-      font-size: clamp(26px, 3vw, 38px);
-      letter-spacing:-.8px;
-      line-height:1.1;
-      font-weight: 800;
-    }
-    .subtitle{
-      margin:0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.6;
-      max-width:70ch;
-    }
-    .hero{
-      padding:44px 0 26px;
-      position:relative;
-      overflow:hidden;
-    }
-    .hero::before{
-      content:"";
-      position:absolute;
-      left:-260px; top:-260px;
-      width:560px; height:560px;
-      background: radial-gradient(circle at 30% 30%, rgba(184,147,77,.12), transparent 62%);
-      filter: blur(20px);
-      pointer-events:none;
-      opacity:.95;
-    }
-    .hero::after{
-      content:"";
-      position:absolute;
-      right:-260px; top:-180px;
-      width:560px; height:560px;
-      background: radial-gradient(circle at 50% 30%, rgba(74,144,226,.08), transparent 60%);
-      filter: blur(20px);
-      pointer-events:none;
-      opacity:.8;
-    }
+      /* Typography */
+      .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border: 1px solid var(--stroke);
+        background: #ffffff;
+        border-radius: 999px;
+        color: var(--accent);
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        font-size: 13px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+      }
+      .title {
+        margin: 12px 0 8px;
+        font-size: clamp(26px, 3vw, 38px);
+        letter-spacing: -0.8px;
+        line-height: 1.1;
+        font-weight: 800;
+      }
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.6;
+        max-width: 70ch;
+      }
+      .hero {
+        padding: 44px 0 26px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        left: -260px;
+        top: -260px;
+        width: 560px;
+        height: 560px;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(184, 147, 77, 0.12),
+          transparent 62%
+        );
+        filter: blur(20px);
+        pointer-events: none;
+        opacity: 0.95;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        right: -260px;
+        top: -180px;
+        width: 560px;
+        height: 560px;
+        background: radial-gradient(
+          circle at 50% 30%,
+          rgba(74, 144, 226, 0.08),
+          transparent 60%
+        );
+        filter: blur(20px);
+        pointer-events: none;
+        opacity: 0.8;
+      }
 
-    /* Components */
-    .card{
-      background:var(--surface);
-      border:1px solid var(--stroke);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-    .cardPad{ padding:18px; }
-    .row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    .stack{ display:flex; flex-direction:column; gap:12px; }
-    .grid{ display:grid; gap:16px; }
-    .grid-2{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    @media (max-width: 920px){
-      .grid-2, .grid-3{ grid-template-columns: 1fr; }
-    }
+      /* Components */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(10px);
+      }
+      .cardPad {
+        padding: 18px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+      .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      @media (max-width: 920px) {
+        .grid-2,
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+      }
 
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      padding:11px 14px;
-      border-radius: 12px;
-      border:1px solid var(--stroke);
-      background:#FFFFFF;
-      color:var(--text);
-      font-weight:700;
-      letter-spacing:.15px;
-      cursor:pointer;
-      user-select:none;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-      text-decoration:none;
-      white-space:nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); border-color: var(--accent); background: var(--bg1); }
-    .btn:active{ transform: translateY(0px); }
-    .btn-primary{
-      background: var(--text);
-      color: #FFFFFF;
-      border: none;
-    }
-    .btn-primary:hover{ background: #333; color: #FFF; }
-    .btn-ghost{
-      background: transparent;
-      border-color: var(--stroke);
-    }
-    .btn-danger{
-      border-color: rgba(255,77,79,.2);
-      background: rgba(255,77,79,.05);
-      color: var(--danger);
-    }
-    .btn-small{ padding:8px 10px; border-radius:10px; font-size:13px; font-weight:750; }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 11px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: #ffffff;
+        color: var(--text);
+        font-weight: 700;
+        letter-spacing: 0.15px;
+        cursor: pointer;
+        user-select: none;
+        transition:
+          transform 0.12s ease,
+          background 0.12s ease,
+          border-color 0.12s ease;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .btn:hover {
+        transform: translateY(-1px);
+        border-color: var(--accent);
+        background: var(--bg1);
+      }
+      .btn:active {
+        transform: translateY(0px);
+      }
+      .btn-primary {
+        background: var(--text);
+        color: #ffffff;
+        border: none;
+      }
+      .btn-primary:hover {
+        background: #333;
+        color: #fff;
+      }
+      .btn-ghost {
+        background: transparent;
+        border-color: var(--stroke);
+      }
+      .btn-danger {
+        border-color: rgba(255, 77, 79, 0.2);
+        background: rgba(255, 77, 79, 0.05);
+        color: var(--danger);
+      }
+      .btn-small {
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 750;
+      }
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:6px 12px;
-      border-radius:999px;
-      border:1px solid var(--stroke);
-      background: var(--surface2);
-      color: var(--muted);
-      font-weight:750;
-      font-size:12.5px;
-      letter-spacing:.2px;
-      white-space:nowrap;
-    }
-    .badge-ok{ border-color: rgba(82,196,26,.2); color: var(--ok); background: rgba(82,196,26,.08); }
-    .badge-warn{ border-color: rgba(184,147,77,.2); color: var(--accent); background: rgba(184,147,77,.08); }
-    .badge-danger{ border-color: rgba(255,77,79,.2); color: var(--danger); background: rgba(255,77,79,.08); }
-    .badge-info{ border-color: rgba(74,144,226,.2); color: var(--accent2); background: rgba(74,144,226,.08); }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--stroke);
+        background: var(--surface2);
+        color: var(--muted);
+        font-weight: 750;
+        font-size: 12.5px;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+      }
+      .badge-ok {
+        border-color: rgba(82, 196, 26, 0.2);
+        color: var(--ok);
+        background: rgba(82, 196, 26, 0.08);
+      }
+      .badge-warn {
+        border-color: rgba(184, 147, 77, 0.2);
+        color: var(--accent);
+        background: rgba(184, 147, 77, 0.08);
+      }
+      .badge-danger {
+        border-color: rgba(255, 77, 79, 0.2);
+        color: var(--danger);
+        background: rgba(255, 77, 79, 0.08);
+      }
+      .badge-info {
+        border-color: rgba(74, 144, 226, 0.2);
+        color: var(--accent2);
+        background: rgba(74, 144, 226, 0.08);
+      }
 
-    /* Navbar */
-    .navbar{
-      position: sticky;
-      top:0;
-      z-index:60;
-      backdrop-filter: blur(14px);
-      background: rgba(255,255,255,.8);
-      border-bottom: 1px solid var(--stroke);
-    }
-    html[data-theme="light"] .navbar{
-      background: rgba(255,255,255,.8);
-      border-bottom: 1px solid var(--stroke);
-    }
-    .navbarInner{
-      max-width:var(--container);
-      margin:0 auto;
-      padding:12px 20px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:900;
-      letter-spacing:-.4px;
-    }
-    .brandMark{
-      width:36px; height:36px;
-      border-radius:12px;
-      background: var(--accent);
-      box-shadow: 0 4px 15px rgba(184,147,77,.2);
-    }
-    .navLinks{
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-    .navLink{
-      padding:9px 12px;
-      border-radius:12px;
-      border:1px solid transparent;
-      color:var(--muted);
-      font-weight:800;
-      font-size:13.5px;
-      transition: border-color .12s ease, color .12s ease, background .12s ease;
-    }
-    .navLink:hover{
-      color:var(--text);
-      background: var(--surface2);
-      text-decoration:none;
-    }
-    .navActions{ display:flex; align-items:center; gap:10px; }
-    .hamburger{
-      display:none;
-      width:44px; height:44px;
-      border-radius:14px;
-      border:1px solid var(--stroke);
-      background: #FFFFFF;
-      color:var(--text);
-      cursor:pointer;
-      font-weight:900;
-    }
-    @media (max-width: 920px){
-      .navLinks{ display:none; }
-      .hamburger{ display:inline-flex; align-items:center; justify-content:center; }
-    }
-    #mobileMenu{
-      display:none;
-      border-top: 1px solid var(--stroke);
-      background: #FFFFFF;
-    }
-    #mobileMenu[data-open="true"]{ display:block; }
-    .mobileMenuInner{
-      max-width:var(--container);
-      margin:0 auto;
-      padding:10px 20px 16px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    .mobileMenuInner .navLink{ width:100%; border-color: var(--stroke); background: var(--bg1); }
+      /* Navbar */
+      .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        backdrop-filter: blur(14px);
+        background: rgba(255, 255, 255, 0.8);
+        border-bottom: 1px solid var(--stroke);
+      }
+      html[data-theme="light"] .navbar {
+        background: rgba(255, 255, 255, 0.8);
+        border-bottom: 1px solid var(--stroke);
+      }
+      .navbarInner {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 900;
+        letter-spacing: -0.4px;
+      }
+      .brandMark {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: var(--accent);
+        box-shadow: 0 4px 15px rgba(184, 147, 77, 0.2);
+      }
+      .navLinks {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .navLink {
+        padding: 9px 12px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        color: var(--muted);
+        font-weight: 800;
+        font-size: 13.5px;
+        transition:
+          border-color 0.12s ease,
+          color 0.12s ease,
+          background 0.12s ease;
+      }
+      .navLink:hover {
+        color: var(--text);
+        background: var(--surface2);
+        text-decoration: none;
+      }
+      .navActions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .hamburger {
+        display: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: #ffffff;
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 900;
+      }
+      @media (max-width: 920px) {
+        .navLinks {
+          display: none;
+        }
+        .hamburger {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+      #mobileMenu {
+        display: none;
+        border-top: 1px solid var(--stroke);
+        background: #ffffff;
+      }
+      #mobileMenu[data-open="true"] {
+        display: block;
+      }
+      .mobileMenuInner {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 10px 20px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .mobileMenuInner .navLink {
+        width: 100%;
+        border-color: var(--stroke);
+        background: var(--bg1);
+      }
 
-    /* Forms */
-    label{ display:block; font-weight:850; font-size:13px; color:var(--text); margin-bottom:7px; }
-    input, select, textarea{
-      width:100%;
-      padding:12px 12px;
-      border-radius: 12px;
-      background: #FFFFFF;
-      border: 1px solid var(--stroke);
-      color: var(--text);
-      outline: none;
-      transition: border-color .12s ease, background .12s ease;
-      font-size:14.5px;
-    }
-    textarea{ min-height:120px; resize: vertical; }
-    input::placeholder, textarea::placeholder{ color: #ADB5BD; }
-    input:focus, select:focus, textarea:focus{
-      border-color: var(--accent);
-      background: #FFFFFF;
-      box-shadow: var(--ring);
-    }
-    .helpText{ color: var(--muted); font-size:12.5px; line-height:1.5; margin-top:8px; }
-    .formGrid{
-      display:grid;
-      gap:16px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    @media (max-width: 920px){ .formGrid{ grid-template-columns: 1fr; } }
+      /* Forms */
+      label {
+        display: block;
+        font-weight: 850;
+        font-size: 13px;
+        color: var(--text);
+        margin-bottom: 7px;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 12px 12px;
+        border-radius: 12px;
+        background: #ffffff;
+        border: 1px solid var(--stroke);
+        color: var(--text);
+        outline: none;
+        transition:
+          border-color 0.12s ease,
+          background 0.12s ease;
+        font-size: 14.5px;
+      }
+      textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: #adb5bd;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--accent);
+        background: #ffffff;
+        box-shadow: var(--ring);
+      }
+      .helpText {
+        color: var(--muted);
+        font-size: 12.5px;
+        line-height: 1.5;
+        margin-top: 8px;
+      }
+      .formGrid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      @media (max-width: 920px) {
+        .formGrid {
+          grid-template-columns: 1fr;
+        }
+      }
 
-    /* Tables */
-    .tableWrap{
-      overflow:auto;
-      border-radius: var(--radius);
-      border:1px solid var(--stroke);
-      background: #FFFFFF;
-    }
-    table{
-      width:100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      min-width: 720px;
-    }
-    thead th{
-      position: sticky;
-      top:0;
-      background: var(--bg1);
-      z-index:1;
-      text-align:left;
-      padding:14px 14px;
-      font-size:12.5px;
-      letter-spacing:.3px;
-      text-transform: uppercase;
-      color: var(--muted);
-      border-bottom: 1px solid var(--stroke);
-    }
-    tbody td{
-      padding:14px 14px;
-      border-bottom: 1px solid var(--stroke);
-      color: var(--text);
-      vertical-align: middle;
-    }
-    tbody tr:hover td{
-      background: var(--bg1);
-    }
+      /* Tables */
+      .tableWrap {
+        overflow: auto;
+        border-radius: var(--radius);
+        border: 1px solid var(--stroke);
+        background: #ffffff;
+      }
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        min-width: 720px;
+      }
+      thead th {
+        position: sticky;
+        top: 0;
+        background: var(--bg1);
+        z-index: 1;
+        text-align: left;
+        padding: 14px 14px;
+        font-size: 12.5px;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        color: var(--muted);
+        border-bottom: 1px solid var(--stroke);
+      }
+      tbody td {
+        padding: 14px 14px;
+        border-bottom: 1px solid var(--stroke);
+        color: var(--text);
+        vertical-align: middle;
+      }
+      tbody tr:hover td {
+        background: var(--bg1);
+      }
 
-    /* Footer */
-    footer{
-      border-top: 1px solid var(--stroke);
-      padding:22px 0;
-      color: var(--muted);
-      background: #FFFFFF;
-    }
-    .footerInner{
-      max-width: var(--container);
-      margin:0 auto;
-      padding:0 20px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
-      flex-wrap:wrap;
-    }
-    .footerLinks{ display:flex; gap:14px; flex-wrap:wrap; }
+      /* Footer */
+      footer {
+        border-top: 1px solid var(--stroke);
+        padding: 22px 0;
+        color: var(--muted);
+        background: #ffffff;
+      }
+      .footerInner {
+        max-width: var(--container);
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .footerLinks {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
 
-    /* Reduced motion */
-    @media (prefers-reduced-motion: reduce){
-      *{ transition:none !important; scroll-behavior:auto !important; }
-      .btn:hover{ transform:none; }
-    }
-  </style>
-</head>
-<body>
-<div class="appShell">
-  <nav class="navbar">
-    <div class="navbarInner">
-      <a class="brand" th:href="@{/}">
-        <span class="brandMark"></span>
-        <span>Gallery</span>
-      </a>
-      <div class="navLinks">
-        <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
-        <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/reservation/list}">내 예약</a>
-        <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/todo/list}">할 일</a>
-        <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/gallery/list}">관리자</a>
-      </div>
-      <div class="navActions">
-        <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px;">
-          <a class="btn btn-ghost btn-small" th:href="@{/member/login}">로그인</a>
-          <a class="btn btn-primary btn-small" th:href="@{/member/join}">회원가입</a>
-        </div>
-        <div sec:authorize="isAuthenticated()" style="display:flex;gap:8px;">
-          <form th:action="@{/member/logout}" method="post" style="margin:0;">
-            <button type="submit" class="btn btn-ghost btn-small">로그아웃</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-
-  <main class="container">
-    <section class="hero">
-      <div class="kicker">TODO</div>
-      <h1 class="title">할 일 작성</h1>
-      <p class="subtitle">
-        전시 운영 준비, 점검, 공지 초안 등 업무를 체계적으로 관리합니다.
-      </p>
-    </section>
-
-    <section class="grid grid-2" style="align-items: start">
-      <div class="card cardPad">
-        <form
-                th:action="@{/todo/form}"
-                th:object="${todoCreateRequestDto}"
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+        .btn:hover {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="appShell">
+      <nav class="navbar">
+        <div class="navbarInner">
+          <a class="brand" th:href="@{/}">
+            <span class="brandMark"></span>
+            <span>Gallery</span>
+          </a>
+          <div class="navLinks">
+            <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
+            <a
+              class="navLink"
+              sec:authorize="isAuthenticated()"
+              th:href="@{/reservation/list}"
+              >내 예약</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="isAuthenticated()"
+              th:href="@{/todo/list}"
+              >할 일</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/admin/gallery/list}"
+              >관리자</a
+            >
+          </div>
+          <div class="navActions">
+            <div
+              sec:authorize="!isAuthenticated()"
+              style="display: flex; gap: 8px"
+            >
+              <a class="btn btn-ghost btn-small" th:href="@{/member/login}"
+                >로그인</a
+              >
+              <a class="btn btn-primary btn-small" th:href="@{/member/join}"
+                >회원가입</a
+              >
+            </div>
+            <div
+              sec:authorize="isAuthenticated()"
+              style="display: flex; gap: 8px"
+            >
+              <form
+                th:action="@{/member/logout}"
                 method="post"
-                class="stack"
-                id="todoForm"
-        >
-          <div class="row" style="flex-wrap: wrap">
-            <div>
-              <div
-                      style="
+                style="margin: 0"
+              >
+                <input
+                  type="hidden"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"
+                />
+                <button type="submit" class="btn btn-ghost btn-small">
+                  로그아웃
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main class="container">
+        <section class="hero">
+          <div class="kicker">TODO</div>
+          <h1 class="title">할 일 작성</h1>
+          <p class="subtitle">
+            전시 운영 준비, 점검, 공지 초안 등 업무를 체계적으로 관리합니다.
+          </p>
+        </section>
+
+        <section class="grid grid-2" style="align-items: start">
+          <div class="card cardPad">
+            <form
+              th:action="@{/todo/form}"
+              th:object="${todoCreateRequestDto}"
+              method="post"
+              class="stack"
+              id="todoForm"
+            >
+              <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+              />
+              <div class="row" style="flex-wrap: wrap">
+                <div>
+                  <div
+                    style="
                       font-weight: 950;
                       letter-spacing: -0.3px;
                       font-size: 16px;
                     "
-              >
-                기본 정보
+                  >
+                    기본 정보
+                  </div>
+                  <div class="helpText" style="margin: 6px 0 0">
+                    제목 · 카테고리 · 기한을 입력하세요.
+                  </div>
+                </div>
+                <a
+                  class="btn btn-ghost btn-small"
+                  href="#"
+                  th:href="@{/todo/list}"
+                  >목록으로</a
+                >
               </div>
-              <div class="helpText" style="margin: 6px 0 0">
-                제목 · 카테고리 · 기한을 입력하세요.
+
+              <div class="formGrid">
+                <div>
+                  <label for="todoTitle">제목</label>
+                  <input
+                    id="todoTitle"
+                    th:field="*{title}"
+                    type="text"
+                    placeholder="예: 입장 동선 점검"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="todoCategory">카테고리</label>
+                  <select id="todoCategory" th:field="*{category}" required>
+                    <option value="운영" selected>운영</option>
+                    <option value="점검">점검</option>
+                    <option value="공지">공지</option>
+                    <option value="청소">청소</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="todoDue">기한</label>
+                  <input
+                    id="todoDue"
+                    th:field="*{dueDate}"
+                    type="date"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="todoAssignee">담당자</label>
+                  <input
+                    id="todoAssignee"
+                    th:field="*{assignee}"
+                    type="text"
+                    placeholder="예: 스태프 A"
+                  />
+                </div>
               </div>
-            </div>
-            <a
-                    class="btn btn-ghost btn-small"
-                    href="#"
-                    th:href="@{/todo/list}"
-            >목록으로</a
-            >
-          </div>
 
-          <div class="formGrid">
-            <div>
-              <label for="todoTitle">제목</label>
-              <input
-                      id="todoTitle"
-                      th:field="*{title}"
-                      type="text"
-                      placeholder="예: 입장 동선 점검"
-                      required
-              />
-            </div>
-            <div>
-              <label for="todoCategory">카테고리</label>
-              <select id="todoCategory" th:field="*{category}" required>
-                <option value="운영" selected>운영</option>
-                <option value="점검">점검</option>
-                <option value="공지">공지</option>
-                <option value="청소">청소</option>
-              </select>
-            </div>
-            <div>
-              <label for="todoDue">기한</label>
-              <input
-                      id="todoDue"
-                      th:field="*{dueDate}"
-                      type="date"
-                      required
-              />
-            </div>
-            <div>
-              <label for="todoAssignee">담당자</label>
-              <input
-                      id="todoAssignee"
-                      th:field="*{assignee}"
-                      type="text"
-                      placeholder="예: 스태프 A"
-              />
-            </div>
-          </div>
+              <div class="formGrid">
+                <div>
+                  <label for="todoPriority">우선순위</label>
+                  <select id="todoPriority" th:field="*{priority}">
+                    <option value="LOW">낮음</option>
+                    <option value="MEDIUM" selected>보통</option>
+                    <option value="HIGH">높음</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="todoStatus">상태</label>
+                  <select id="todoStatus" th:field="*{status}">
+                    <option value="OPEN" selected>미완료</option>
+                    <option value="DONE">완료</option>
+                  </select>
+                </div>
+              </div>
 
-          <div class="formGrid">
-            <div>
-              <label for="todoPriority">우선순위</label>
-              <select id="todoPriority" th:field="*{priority}">
-                <option value="LOW">낮음</option>
-                <option value="MEDIUM" selected>보통</option>
-                <option value="HIGH">높음</option>
-              </select>
-            </div>
-            <div>
-              <label for="todoStatus">상태</label>
-              <select id="todoStatus" th:field="*{status}">
-                <option value="OPEN" selected>미완료</option>
-                <option value="DONE">완료</option>
-              </select>
-            </div>
-          </div>
+              <div>
+                <label for="todoDesc">상세 설명</label>
+                <textarea
+                  id="todoDesc"
+                  th:field="*{description}"
+                  placeholder="작업 체크 포인트를 간단히 적어주세요. 예: 표지판 위치, 조도, 동선 혼잡도 등."
+                ></textarea>
+              </div>
 
-          <div>
-            <label for="todoDesc">상세 설명</label>
-            <textarea
-                    id="todoDesc"
-                    th:field="*{description}"
-                    placeholder="작업 체크 포인트를 간단히 적어주세요. 예: 표지판 위치, 조도, 동선 혼잡도 등."
-            ></textarea>
-          </div>
-
-          <div
-                  class="row"
-                  style="justify-content: flex-end; flex-wrap: wrap"
-          >
-            <a class="btn btn-ghost" href="#" th:href="@{/todo/list}"
-            >취소</a
-            >
-            <button class="btn btn-primary" type="submit">등록</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="stack">
-        <div class="card cardPad">
-          <div class="row" style="flex-wrap: wrap">
-            <div>
               <div
-                      style="
+                class="row"
+                style="justify-content: flex-end; flex-wrap: wrap"
+              >
+                <a class="btn btn-ghost" href="#" th:href="@{/todo/list}"
+                  >취소</a
+                >
+                <button class="btn btn-primary" type="submit">등록</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="stack">
+            <div class="card cardPad">
+              <div class="row" style="flex-wrap: wrap">
+                <div>
+                  <div
+                    style="
                       font-weight: 950;
                       letter-spacing: -0.3px;
                       font-size: 16.5px;
                     "
-              >
-                미리보기
+                  >
+                    미리보기
+                  </div>
+                  <div class="helpText" style="margin: 6px 0 0">
+                    입력값이 카드 형태로 실시간 표시됩니다.
+                  </div>
+                </div>
+                <span class="badge badge-warn" id="previewState">미완료</span>
               </div>
-              <div class="helpText" style="margin: 6px 0 0">
-                입력값이 카드 형태로 실시간 표시됩니다.
-              </div>
-            </div>
-            <span class="badge badge-warn" id="previewState">미완료</span>
-          </div>
 
-          <div style="height: 14px"></div>
+              <div style="height: 14px"></div>
 
-          <div
-                  class="card"
-                  style="
+              <div
+                class="card"
+                style="
                   box-shadow: none;
                   background: var(--bg1);
                   padding: 14px;
                   border-color: var(--stroke);
                 "
-          >
-            <div
-                    style="
+              >
+                <div
+                  style="
                     font-weight: 1000;
                     letter-spacing: -0.35px;
                     font-size: 18px;
                     color: #111;
                   "
-                    id="prevTitle"
-            >
-              할 일 제목
+                  id="prevTitle"
+                >
+                  할 일 제목
+                </div>
+                <div
+                  class="helpText"
+                  style="margin: 6px 0 0; font-size: 13.5px; color: var(--text)"
+                  id="prevDesc"
+                >
+                  상세 설명이 여기에 표시됩니다.
+                </div>
+                <div style="height: 12px"></div>
+                <div class="grid grid-2" style="gap: 12px">
+                  <div class="badge" id="prevCategory">카테고리</div>
+                  <div class="badge" id="prevDue">기한</div>
+                </div>
+                <div style="height: 12px"></div>
+                <div class="row" style="justify-content: flex-start; gap: 8px">
+                  <div class="badge" id="prevPriority">우선순위</div>
+                  <div class="badge badge-info" id="prevAssignee">담당자</div>
+                </div>
+              </div>
             </div>
-            <div
-                    class="helpText"
-                    style="margin: 6px 0 0; font-size: 13.5px; color: var(--text);"
-                    id="prevDesc"
-            >
-              상세 설명이 여기에 표시됩니다.
-            </div>
-            <div style="height: 12px"></div>
-            <div class="grid grid-2" style="gap: 12px">
-              <div class="badge" id="prevCategory">카테고리</div>
-              <div class="badge" id="prevDue">기한</div>
-            </div>
-            <div style="height: 12px"></div>
-            <div class="row" style="justify-content: flex-start; gap: 8px">
-              <div class="badge" id="prevPriority">우선순위</div>
-              <div class="badge badge-info" id="prevAssignee">담당자</div>
-            </div>
-          </div>
-        </div>
 
-        <div class="card cardPad" style="background: var(--bg1); border-color: var(--accent);">
-          <h2
-                  style="
+            <div
+              class="card cardPad"
+              style="background: var(--bg1); border-color: var(--accent)"
+            >
+              <h2
+                style="
                   margin: 0 0 8px;
                   font-size: 16.5px;
                   letter-spacing: -0.3px;
                   font-weight: 800;
                 "
-          >
-            작성 팁
-          </h2>
-          <div class="helpText" style="margin: 0; line-height: 1.8; color: var(--text);">
-            "무엇을 · 어디까지 · 어떤 결과를" 한 문장에 담으면, 다음
-            담당자가 이어서 처리하기 쉬워집니다.
+              >
+                작성 팁
+              </h2>
+              <div
+                class="helpText"
+                style="margin: 0; line-height: 1.8; color: var(--text)"
+              >
+                "무엇을 · 어디까지 · 어떤 결과를" 한 문장에 담으면, 다음
+                담당자가 이어서 처리하기 쉬워집니다.
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer
+        style="
+          border-top: 1px solid var(--stroke);
+          padding: 30px 0;
+          background: #fff;
+          margin-top: 40px;
+        "
+      >
+        <div
+          class="container"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+          "
+        >
+          <div>© 2026 Art Gallery Reservation System.</div>
+          <div style="display: flex; gap: 20px">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
-
-  <footer style="border-top: 1px solid var(--stroke); padding: 30px 0; background: #FFF; margin-top: 40px;">
-    <div class="container" style="display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:13px; font-weight:700;">
-      <div>© 2026 Art Gallery Reservation System.</div>
-      <div style="display:flex; gap:20px;">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Use</a>
-      </div>
+      </footer>
     </div>
-  </footer>
-</div>
 
-<script>
-  (function () {
-    const form = document.getElementById("todoForm");
-    if (!form) return;
+    <script>
+      (function () {
+        const form = document.getElementById("todoForm");
+        if (!form) return;
 
-    const title = document.getElementById("todoTitle");
-    const category = document.getElementById("todoCategory");
-    const due = document.getElementById("todoDue");
-    const assignee = document.getElementById("todoAssignee");
-    const priority = document.getElementById("todoPriority");
-    const status = document.getElementById("todoStatus");
-    const desc = document.getElementById("todoDesc");
+        const title = document.getElementById("todoTitle");
+        const category = document.getElementById("todoCategory");
+        const due = document.getElementById("todoDue");
+        const assignee = document.getElementById("todoAssignee");
+        const priority = document.getElementById("todoPriority");
+        const status = document.getElementById("todoStatus");
+        const desc = document.getElementById("todoDesc");
 
-    const prevTitle = document.getElementById("prevTitle");
-    const prevDesc = document.getElementById("prevDesc");
-    const prevCategory = document.getElementById("prevCategory");
-    const prevDue = document.getElementById("prevDue");
-    const prevPriority = document.getElementById("prevPriority");
-    const prevAssignee = document.getElementById("prevAssignee");
-    const previewState = document.getElementById("previewState");
-    if (!prevTitle || !prevDue) return;
+        const prevTitle = document.getElementById("prevTitle");
+        const prevDesc = document.getElementById("prevDesc");
+        const prevCategory = document.getElementById("prevCategory");
+        const prevDue = document.getElementById("prevDue");
+        const prevPriority = document.getElementById("prevPriority");
+        const prevAssignee = document.getElementById("prevAssignee");
+        const previewState = document.getElementById("previewState");
+        if (!prevTitle || !prevDue) return;
 
-    function apply() {
-      prevTitle.textContent = (title.value || "할 일 제목").trim();
-      prevDesc.textContent = (
-        desc.value || "상세 설명이 여기에 표시됩니다."
-      ).trim();
-      prevCategory.textContent =
-        category.options[category.selectedIndex]?.text || "카테고리";
-      prevDue.textContent = due.value ? due.value : "기한";
-      prevPriority.textContent =
-        priority.options[priority.selectedIndex]?.text || "우선순위";
-      prevAssignee.textContent =
-        (assignee.value || "담당자").trim() || "담당자";
+        function apply() {
+          prevTitle.textContent = (title.value || "할 일 제목").trim();
+          prevDesc.textContent = (
+            desc.value || "상세 설명이 여기에 표시됩니다."
+          ).trim();
+          prevCategory.textContent =
+            category.options[category.selectedIndex]?.text || "카테고리";
+          prevDue.textContent = due.value ? due.value : "기한";
+          prevPriority.textContent =
+            priority.options[priority.selectedIndex]?.text || "우선순위";
+          prevAssignee.textContent =
+            (assignee.value || "담당자").trim() || "담당자";
 
-      const st = status.value || "OPEN";
-      previewState.className = "badge";
-      if (st === "DONE") {
-        previewState.textContent = "완료";
-        previewState.classList.add("badge-ok");
-      } else {
-        previewState.textContent = "미완료";
-        previewState.classList.add("badge-warn");
-      }
-    }
+          const st = status.value || "OPEN";
+          previewState.className = "badge";
+          if (st === "DONE") {
+            previewState.textContent = "완료";
+            previewState.classList.add("badge-ok");
+          } else {
+            previewState.textContent = "미완료";
+            previewState.classList.add("badge-warn");
+          }
+        }
 
-    ["input", "change"].forEach((evt) => {
-      [title, category, due, assignee, priority, status, desc].forEach(
-        (el) => el && el.addEventListener(evt, apply),
-      );
-    });
-    apply();
-  })();
-</script>
-</body>
+        ["input", "change"].forEach((evt) => {
+          [title, category, due, assignee, priority, status, desc].forEach(
+            (el) => el && el.addEventListener(evt, apply),
+          );
+        });
+        apply();
+      })();
+    </script>
+  </body>
 </html>

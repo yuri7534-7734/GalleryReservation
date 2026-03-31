@@ -7,19 +7,35 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "gallery")
-@Getter @Builder @AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Gallery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String location;
-    private String description;
-    private Integer capacity;
-    private boolean isActive;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
+    @Column(name="name", nullable = false)
+    private String name;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "capacity")
+    private Integer capacity;
+
+    @Column(name = "is_active")
+    private boolean isActive;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
 }

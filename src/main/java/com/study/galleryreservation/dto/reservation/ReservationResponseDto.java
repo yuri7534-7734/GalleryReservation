@@ -13,20 +13,22 @@ import java.time.LocalTime;
 public class ReservationResponseDto {
 
     private Long id;
-    private String galleryName;        // reservation.galleryName
-    private String snsUsername;     // reservation.memberUsername
-    private LocalDate reservationDate; // reservation.reservationDate
-    private LocalTime startTime;       // reservation.startTime
-    private ReservationStatus displayStatus; // reservation.displayStatus
+    private String galleryName;
+    private String memberName;
+    private LocalDate reservationDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private ReservationStatus status;
 
     public static ReservationResponseDto from(Reservation reservation) {
         return ReservationResponseDto.builder()
                 .id(reservation.getId())
                 .galleryName(reservation.getGallery().getName())
-                .snsUsername(reservation.getSnsUser().getName())
+                .memberName(reservation.getMember().getUsername())
                 .reservationDate(reservation.getReservationDate())
                 .startTime(reservation.getStartTime())
-                .displayStatus(reservation.getStatus())
+                .endTime(reservation.getEndTime())
+                .status(reservation.getStatus())
                 .build();
     }
 }

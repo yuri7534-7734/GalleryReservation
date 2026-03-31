@@ -1,10 +1,12 @@
 package com.study.galleryreservation.service;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
+import com.study.galleryreservation.domain.member.Member;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.reservation.ReservationStatus;
 import com.study.galleryreservation.domain.session.SnsUser;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
+import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
 import com.study.galleryreservation.repository.MemberRepository;
 import com.study.galleryreservation.repository.ReservationRepository;
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,15 +24,13 @@ public class ReservationService {
 
     public final ReservationRepository reservationRepository;
     public final MemberRepository memberRepository;
-    public final SnsUserRepository snsUserRepository;
     public final GalleryRepository galleryRepository;
 
+    //저장
     @Transactional
-    public void save(ReservationCreateRequestDto requestDto, String username) {
+    public void save(ReservationCreateRequestDto requestDto, String email) {
 
-        System.out.println("=== username 확인: " + username + " ===");
-
-        SnsUser snsUser = snsUserRepository.findByProviderId(username)
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(()->new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         Gallery gallery = galleryRepository.findById(requestDto.getGalleryId())
@@ -36,7 +38,7 @@ public class ReservationService {
 
 
         Reservation reservation = Reservation.builder()
-                .snsUser(snsUser)
+                .member(member)
                 .gallery(gallery)
                 .reservationDate(requestDto.getReservationDate())
                 .startTime(requestDto.getStartTime())
@@ -46,6 +48,27 @@ public class ReservationService {
 
         reservationRepository.save(reservation);
     }
+
+    //로그인한 유저의 예약 목록을 DTO로 변환해서 화면에 넘겨주는 메서드
+    public List<ReservationResponseDto> findByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(()-> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+        return reservationRepository.findByMember(member)
+                .stream()
+                .map(ReservationResponseDto::from)
+                .toList();
+
+    }
+    //예약 삭제
+    public void cancel(Long id, String email){
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("예약을 찾을 수 없습니다."));
+
+       reservationRepository.delete(reservation);
+    }
+
+
+
 }
 
 

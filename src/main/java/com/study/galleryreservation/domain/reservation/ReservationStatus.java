@@ -10,6 +10,7 @@ public enum ReservationStatus {
     APPROVED("예약 확정"),  // 확정 (관리자 승인)
     REJECTED("예약 거절");   // 거절 (관리자 거절)
 
+
     private String value;
 
 

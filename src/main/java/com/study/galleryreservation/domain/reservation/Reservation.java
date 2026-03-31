@@ -1,6 +1,7 @@
 package com.study.galleryreservation.domain.reservation;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
+import com.study.galleryreservation.domain.member.Member;
 import com.study.galleryreservation.domain.session.SnsUser;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,8 +20,8 @@ public class Reservation {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sns_user_id")
-    private SnsUser snsUser; //예약한 회원 ID
+    @JoinColumn(name = "member_id")
+    private Member member; //예약한 회원 ID
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gallery_id")

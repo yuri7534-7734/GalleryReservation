@@ -490,9 +490,9 @@
           </tr>
           <tr
                   th:each="reservation : ${reservations}"
-                  th:data-status="${reservation.displayStatus}"
+                  th:data-status="${reservation.status}"
           >
-            <td style="font-weight: 950" th:text="${reservation.code}">
+            <td style="font-weight: 950" th:text="${reservation.id}">
               R-1001
             </td>
             <td>
@@ -520,8 +520,8 @@
             </td>
             <td>
                     <span
-                            th:class="${reservation.displayStatus == 'APPROVED'} ? 'badge badge-ok' : (${reservation.displayStatus == 'PENDING'} ? 'badge badge-warn' : 'badge badge-danger')"
-                            th:text="${reservation.displayStatus == 'APPROVED'} ? '확정' : (${reservation.displayStatus == 'PENDING'} ? '대기' : '거절')"
+                            th:class="${reservation.status == 'APPROVED'} ? 'badge badge-ok' : (${reservation.status == 'PENDING'} ? 'badge badge-warn' : 'badge badge-danger')"
+                            th:text="${reservation.status== 'APPROVED'} ? '확정' : (${reservation.status == 'PENDING'} ? '대기' : '거절')"
                     >상태</span
                     >
             </td>

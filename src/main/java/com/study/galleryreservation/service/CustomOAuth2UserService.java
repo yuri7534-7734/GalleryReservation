@@ -1,6 +1,8 @@
 package com.study.galleryreservation.service;
 
 import com.study.galleryreservation.config.OAuthAttributes;
+import com.study.galleryreservation.domain.member.Member;
+import com.study.galleryreservation.domain.member.MemberRole;
 import com.study.galleryreservation.domain.session.SnsUser;
 import com.study.galleryreservation.domain.session.UserRole;
 import com.study.galleryreservation.repository.MemberRepository;
@@ -8,6 +10,7 @@ import com.study.galleryreservation.repository.SnsUserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private final HttpSession httpSession;
     private final SnsUserRepository repository;
     private final MemberRepository memberRepository;
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -59,6 +64,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // 세션에 유저 정보 저장 --> 이거 수정해야함.
         httpSession.setAttribute("user", UserRole.valueOf("ROLE_USER"));
+
+        //#예약시 필요한 user의 email을 얻기위함#
+        httpSession.setAttribute("user", user);
 
         // Spring Security에게 "이 유저는 인증된 유저야" 라고 알려주는 객체 반환
         return new DefaultOAuth2User(
@@ -104,9 +112,21 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                         .providerId(providerId) // "118234567890"
                         .role(UserRole.ROLE_USER)   // 기본 권한은 USER
                         .build());
+        repository.save(snsUser);
+
+        //#로그인할 때 snsUser로 저장되어서 member_id가 null로 되어 추가
+        memberRepository.findByEmail(email).orElseGet(() -> {
+            Member member = Member.builder()
+                    .username(provider + "_" + providerId) // 고유한 username 생성
+                    .password("OAUTH2_NO_PASSWORD")
+                    .email(email)
+                    .role(MemberRole.ROLE_USER)
+                    .build();
+            return memberRepository.save(member);
+        });
 
         // 9. DB에 저장
-        return repository.save(snsUser);
+        return snsUser;
     }
 
     private String resolveEmail(OAuthAttributes authAttributes) {
