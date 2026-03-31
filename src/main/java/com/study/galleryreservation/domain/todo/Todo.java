@@ -24,23 +24,11 @@ public class Todo {
     @Column(name="title", nullable = false,length = 200)
     private String title;
 
-    @Column(name="description")
-    private String description;
+    @Column(name="content")
+    private String content;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="category")
-    private TodoCategory category;
-
-    @Column(name = "assignee")
-    private String assignee;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "priority")
-    private TodoPriority priority;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private TodoStatus status;
+    @Column(name="is_done",nullable = false)
+    private boolean isDone;
 
     @Column(name = "due_date", updatable = false)
     private LocalDate dueDate;

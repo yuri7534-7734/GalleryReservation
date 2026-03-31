@@ -1,8 +1,5 @@
 package com.study.galleryreservation.dto.todo;
 
-import com.study.galleryreservation.domain.todo.TodoCategory;
-import com.study.galleryreservation.domain.todo.TodoPriority;
-import com.study.galleryreservation.domain.todo.TodoStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,18 +16,11 @@ import java.time.LocalDate;
 
 public class TodoUpdateRequestDto {
 
-
     private String title;
 
-    private String description;
+    private String content;
 
-    private TodoCategory category;
-
-    private String assignee;
-
-    private TodoPriority priority;
-
-    private TodoStatus status;
+    private boolean isDone;
 
     private LocalDate dueDate;
 
