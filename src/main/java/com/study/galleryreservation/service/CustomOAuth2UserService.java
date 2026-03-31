@@ -1,6 +1,7 @@
 package com.study.galleryreservation.service;
 
 import com.study.galleryreservation.config.OAuthAttributes;
+import com.study.galleryreservation.domain.session.SessionUser;
 import com.study.galleryreservation.domain.session.SnsUser;
 import com.study.galleryreservation.domain.session.UserRole;
 import com.study.galleryreservation.repository.SnsUserRepository;
@@ -56,7 +57,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         SnsUser user = saveOrUpdate(attribute);
 
         // 세션에 유저 정보 저장 --> 이거 수정해야함.
-        httpSession.setAttribute("user", UserRole.valueOf("ROLE_USER"));
+        httpSession.setAttribute("user", new SessionUser(user));
+
 
         // Spring Security에게 "이 유저는 인증된 유저야" 라고 알려주는 객체 반환
         return new DefaultOAuth2User(

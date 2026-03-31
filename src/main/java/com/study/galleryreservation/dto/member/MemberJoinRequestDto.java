@@ -1,5 +1,6 @@
 package com.study.galleryreservation.dto.member;
 
+import com.study.galleryreservation.domain.member.Member;
 import com.study.galleryreservation.domain.member.MemberRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -13,9 +14,9 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor
 public class MemberJoinRequestDto {
-    public String username;
-    public String password;
-    public String email;
-    public MemberRole role;
+    private String username;
+    private String password;
+    private String email;
+    private MemberRole role;
     private LocalDateTime created_at;
 }

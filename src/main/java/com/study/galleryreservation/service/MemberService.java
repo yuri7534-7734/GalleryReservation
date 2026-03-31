@@ -21,18 +21,17 @@ public class MemberService {
 
     @Transactional
     public void signup(MemberJoinRequestDto dto){
-        if (repository.findByUsername(dto.username).isPresent()) {
+        if (repository.findByUsername(dto.getUsername()).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         }
 
         Member member = Member.builder()
-                .username(dto.username)
-                .password(passwordEncoder.encode(dto.password))
-                .email(dto.email)
-                .role(MemberRole.ROLE_USER) // 가입 시 서버에서 고정 권장
+                .username(dto.getUsername())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .email(dto.getEmail())
+                .role(MemberRole.ROLE_USER)
                 .created_at(LocalDateTime.now())
                 .build();
-
         repository.save(member);
     }
 }
