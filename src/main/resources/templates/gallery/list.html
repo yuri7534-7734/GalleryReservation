@@ -9,16 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>전시 목록 - 갤러리 예약</title>
     <style>
-      /* 기존 스타일 구조를 100% 유지하며 컬러값만 밝게 변경 */
       :root {
-        --bg0: #ffffff; /* 화이트 배경 */
+        --bg0: #ffffff;
         --bg1: #f8f9fb;
         --surface: #ffffff;
         --surface2: #f1f3f7;
         --stroke: rgba(0, 0, 0, 0.08);
-        --text: #1a1d23; /* 가독성을 위한 짙은 회색 */
+        --text: #1a1d23;
         --muted: rgba(26, 29, 35, 0.6);
-        --accent: #b8934d; /* 골드 포인트 */
+        --accent: #b8934d;
         --accent2: #4a90e2;
         --danger: #ff4d4f;
         --ok: #52c41a;
@@ -96,15 +95,6 @@
         margin: 0 auto;
         padding: 0 20px;
       }
-
-      /* Focus */
-      :focus-visible {
-        outline: none;
-        box-shadow: var(--ring);
-        border-color: var(--accent) !important;
-      }
-
-      /* Typography */
       .kicker {
         display: inline-flex;
         align-items: center;
@@ -138,40 +128,6 @@
         position: relative;
         overflow: hidden;
       }
-      .hero::before {
-        content: "";
-        position: absolute;
-        left: -260px;
-        top: -260px;
-        width: 560px;
-        height: 560px;
-        background: radial-gradient(
-          circle at 30% 30%,
-          rgba(184, 147, 77, 0.12),
-          transparent 62%
-        );
-        filter: blur(20px);
-        pointer-events: none;
-        opacity: 0.95;
-      }
-      .hero::after {
-        content: "";
-        position: absolute;
-        right: -260px;
-        top: -180px;
-        width: 560px;
-        height: 560px;
-        background: radial-gradient(
-          circle at 50% 30%,
-          rgba(74, 144, 226, 0.08),
-          transparent 60%
-        );
-        filter: blur(20px);
-        pointer-events: none;
-        opacity: 0.8;
-      }
-
-      /* Components */
       .card {
         background: var(--surface);
         border: 1px solid var(--stroke);
@@ -209,7 +165,6 @@
           grid-template-columns: 1fr;
         }
       }
-
       .btn {
         display: inline-flex;
         align-items: center;
@@ -221,49 +176,25 @@
         background: #ffffff;
         color: var(--text);
         font-weight: 700;
-        letter-spacing: 0.15px;
         cursor: pointer;
-        user-select: none;
         transition:
           transform 0.12s ease,
-          background 0.12s ease,
-          border-color 0.12s ease;
-        text-decoration: none;
-        white-space: nowrap;
+          background 0.12s ease;
       }
       .btn:hover {
         transform: translateY(-1px);
         border-color: var(--accent);
         background: var(--bg1);
       }
-      .btn:active {
-        transform: translateY(0px);
-      }
       .btn-primary {
         background: var(--text);
         color: #ffffff;
         border: none;
       }
-      .btn-primary:hover {
-        background: #333;
-        color: #fff;
-      }
       .btn-ghost {
         background: transparent;
         border-color: var(--stroke);
       }
-      .btn-danger {
-        border-color: rgba(255, 77, 79, 0.2);
-        background: rgba(255, 77, 79, 0.05);
-        color: var(--danger);
-      }
-      .btn-small {
-        padding: 8px 10px;
-        border-radius: 10px;
-        font-size: 13px;
-        font-weight: 750;
-      }
-
       .badge {
         display: inline-flex;
         align-items: center;
@@ -275,8 +206,6 @@
         color: var(--muted);
         font-weight: 750;
         font-size: 12.5px;
-        letter-spacing: 0.2px;
-        white-space: nowrap;
       }
       .badge-ok {
         border-color: rgba(82, 196, 26, 0.2);
@@ -293,22 +222,11 @@
         color: var(--danger);
         background: rgba(255, 77, 79, 0.08);
       }
-      .badge-info {
-        border-color: rgba(74, 144, 226, 0.2);
-        color: var(--accent2);
-        background: rgba(74, 144, 226, 0.08);
-      }
-
-      /* Navbar */
       .navbar {
         position: sticky;
         top: 0;
         z-index: 60;
         backdrop-filter: blur(14px);
-        background: rgba(255, 255, 255, 0.8);
-        border-bottom: 1px solid var(--stroke);
-      }
-      html[data-theme="light"] .navbar {
         background: rgba(255, 255, 255, 0.8);
         border-bottom: 1px solid var(--stroke);
       }
@@ -319,21 +237,18 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
       }
       .brand {
         display: flex;
         align-items: center;
         gap: 10px;
         font-weight: 900;
-        letter-spacing: -0.4px;
       }
       .brandMark {
         width: 36px;
         height: 36px;
         border-radius: 12px;
         background: var(--accent);
-        box-shadow: 0 4px 15px rgba(184, 147, 77, 0.2);
       }
       .navLinks {
         display: flex;
@@ -343,69 +258,14 @@
       .navLink {
         padding: 9px 12px;
         border-radius: 12px;
-        border: 1px solid transparent;
         color: var(--muted);
         font-weight: 800;
         font-size: 13.5px;
-        transition:
-          border-color 0.12s ease,
-          color 0.12s ease,
-          background 0.12s ease;
       }
       .navLink:hover {
         color: var(--text);
         background: var(--surface2);
-        text-decoration: none;
       }
-      .navActions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .hamburger {
-        display: none;
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        color: var(--text);
-        cursor: pointer;
-        font-weight: 900;
-      }
-      @media (max-width: 920px) {
-        .navLinks {
-          display: none;
-        }
-        .hamburger {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-      #mobileMenu {
-        display: none;
-        border-top: 1px solid var(--stroke);
-        background: #ffffff;
-      }
-      #mobileMenu[data-open="true"] {
-        display: block;
-      }
-      .mobileMenuInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 10px 20px 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .mobileMenuInner .navLink {
-        width: 100%;
-        border-color: var(--stroke);
-        background: var(--bg1);
-      }
-
-      /* Forms */
       label {
         display: block;
         font-weight: 850;
@@ -414,89 +274,18 @@
         margin-bottom: 7px;
       }
       input,
-      select,
-      textarea {
+      select {
         width: 100%;
-        padding: 12px 12px;
+        padding: 12px;
         border-radius: 12px;
-        background: #ffffff;
         border: 1px solid var(--stroke);
-        color: var(--text);
-        outline: none;
-        transition:
-          border-color 0.12s ease,
-          background 0.12s ease;
-        font-size: 14.5px;
-      }
-      textarea {
-        min-height: 120px;
-        resize: vertical;
-      }
-      input::placeholder,
-      textarea::placeholder {
-        color: #adb5bd;
-      }
-      input:focus,
-      select:focus,
-      textarea:focus {
-        border-color: var(--accent);
         background: #ffffff;
-        box-shadow: var(--ring);
       }
       .helpText {
         color: var(--muted);
         font-size: 12.5px;
-        line-height: 1.5;
         margin-top: 8px;
       }
-      .formGrid {
-        display: grid;
-        gap: 16px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      @media (max-width: 920px) {
-        .formGrid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      /* Tables */
-      .tableWrap {
-        overflow: auto;
-        border-radius: var(--radius);
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-      }
-      table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        min-width: 720px;
-      }
-      thead th {
-        position: sticky;
-        top: 0;
-        background: var(--bg1);
-        z-index: 1;
-        text-align: left;
-        padding: 14px 14px;
-        font-size: 12.5px;
-        letter-spacing: 0.3px;
-        text-transform: uppercase;
-        color: var(--muted);
-        border-bottom: 1px solid var(--stroke);
-      }
-      tbody td {
-        padding: 14px 14px;
-        border-bottom: 1px solid var(--stroke);
-        color: var(--text);
-        vertical-align: middle;
-      }
-      tbody tr:hover td {
-        background: var(--bg1);
-      }
-
-      /* Thumb */
       .thumb {
         height: 160px;
         border-radius: 16px;
@@ -504,20 +293,6 @@
         background: linear-gradient(135deg, #fdfdfd 0%, #f1f3f5 100%);
         overflow: hidden;
         position: relative;
-      }
-      .thumb::after {
-        content: "";
-        position: absolute;
-        inset: -30px -30px auto -30px;
-        height: 120px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(0, 0, 0, 0.02),
-          transparent
-        );
-        transform: rotate(-10deg);
-        opacity: 0.9;
       }
       .thumbLabel {
         position: absolute;
@@ -529,7 +304,6 @@
       }
       .thumbTitle {
         font-weight: 950;
-        letter-spacing: -0.4px;
         font-size: 18px;
         color: #111;
       }
@@ -537,70 +311,6 @@
         color: var(--muted);
         font-weight: 800;
         font-size: 12.5px;
-      }
-
-      /* Footer */
-      footer {
-        border-top: 1px solid var(--stroke);
-        padding: 22px 0;
-        color: var(--muted);
-        background: #ffffff;
-      }
-      .footerInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-      .footerLinks {
-        display: flex;
-        gap: 14px;
-        flex-wrap: wrap;
-      }
-
-      /* Toast */
-      #grToast {
-        position: fixed;
-        right: 16px;
-        bottom: 16px;
-        z-index: 9999;
-        min-width: 260px;
-        max-width: 380px;
-        padding: 16px;
-        border-radius: 14px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        color: var(--text);
-        display: none;
-      }
-      #grToast[data-show="true"] {
-        display: block;
-      }
-      #grToast strong {
-        display: block;
-        margin-bottom: 2px;
-      }
-      #grToast .toastText {
-        color: var(--muted);
-        line-height: 1.45;
-        font-weight: 700;
-        font-size: 13.5px;
-      }
-
-      /* Reduced motion */
-      @media (prefers-reduced-motion: reduce) {
-        * {
-          transition: none !important;
-          scroll-behavior: auto !important;
-        }
-        .btn:hover {
-          transform: none;
-        }
       }
     </style>
   </head>
@@ -697,7 +407,6 @@
               <span class="badge badge-warn">실시간</span>
             </div>
             <div style="height: 14px"></div>
-
             <div class="stack" style="gap: 14px">
               <div>
                 <label for="q">검색</label>
@@ -747,22 +456,16 @@
               </div>
             </div>
 
-            <div
-              th:if="${galleries != null and not #lists.isEmpty(galleries)}"
-              class="grid grid-3"
-              id="galleryCardGrid"
-            >
+            <div class="grid grid-3" id="galleryCardGrid">
               <article
                 th:each="gallery : ${galleries}"
                 class="card cardPad"
                 th:data-region="${gallery.location}"
                 th:data-cap="${gallery.capacity}"
-                th:data-status="${gallery.status}"
+                th:data-status="${gallery.isActive}"
               >
                 <a
-                  href="#"
                   th:href="@{/gallery/detail(id=${gallery.id})}"
-                  th:aria-label="${gallery.name} + ' 상세'"
                   style="text-decoration: none"
                 >
                   <div class="thumb">
@@ -787,260 +490,10 @@
                   </div>
                   <div style="height: 12px"></div>
                   <span
-                    th:class="${gallery.status == 'ACTIVE'} ? 'badge badge-ok' : (${gallery.status == 'PAUSED'} ? 'badge badge-warn' : 'badge badge-danger')"
-                    th:text="${gallery.status == 'ACTIVE'} ? '운영중' : (${gallery.status == 'PAUSED'} ? '일시중지' : '마감')"
+                    th:class="${gallery.isActive} ? 'badge badge-ok' : 'badge badge-danger'"
+                    th:text="${gallery.isActive} ? '운영중' : '마감'"
                     >상태</span
                   >
-                </a>
-              </article>
-            </div>
-
-            <div
-              th:unless="${galleries != null and not #lists.isEmpty(galleries)}"
-              class="grid grid-3"
-              id="galleryCardGrid"
-            >
-              <article
-                class="card cardPad"
-                data-region="2"
-                data-cap="35"
-                data-status="ACTIVE"
-              >
-                <a
-                  href="#"
-                  th:href="@{/gallery/detail}"
-                  aria-label="Monochrome Hall 상세"
-                  style="text-decoration: none"
-                >
-                  <div class="thumb">
-                    <div class="thumbLabel">
-                      <div class="thumbTitle">Monochrome Hall</div>
-                      <div class="thumbMeta">2층 · West Wing · 35석</div>
-                    </div>
-                  </div>
-                  <div style="height: 12px"></div>
-                  <div style="font-weight: 900; letter-spacing: -0.2px">
-                    단색 전시 · 30분 코스
-                  </div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    빛과 여백을 따라 천천히 감상하세요.
-                  </div>
-                  <div style="height: 12px"></div>
-                  <span class="badge badge-ok">운영중</span>
-                </a>
-              </article>
-
-              <article
-                class="card cardPad"
-                data-region="1"
-                data-cap="50"
-                data-status="ACTIVE"
-              >
-                <a
-                  href="#"
-                  th:href="@{/gallery/detail}"
-                  aria-label="Gilded Atrium 상세"
-                  style="text-decoration: none"
-                >
-                  <div
-                    class="thumb"
-                    style="
-                      background:
-                        radial-gradient(
-                          120% 80% at 20% 0%,
-                          rgba(184, 147, 77, 0.2),
-                          transparent 60%
-                        ),
-                        radial-gradient(
-                          100% 70% at 80% 20%,
-                          rgba(74, 144, 226, 0.1),
-                          transparent 55%
-                        ),
-                        linear-gradient(180deg, #fdfdfd, #f1f3f5);
-                    "
-                  >
-                    <div class="thumbLabel">
-                      <div class="thumbTitle">Gilded Atrium</div>
-                      <div class="thumbMeta">1층 · Central · 50석</div>
-                    </div>
-                  </div>
-                  <div style="height: 12px"></div>
-                  <div style="font-weight: 900; letter-spacing: -0.2px">
-                    금빛 아트리움 · 야간 예약
-                  </div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    조용한 조명 아래, 작품의 결을 가까이.
-                  </div>
-                  <div style="height: 12px"></div>
-                  <span class="badge badge-ok">운영중</span>
-                </a>
-              </article>
-
-              <article
-                class="card cardPad"
-                data-region="3"
-                data-cap="28"
-                data-status="PAUSED"
-              >
-                <a
-                  href="#"
-                  th:href="@{/gallery/detail}"
-                  aria-label="Coastal Light Room 상세"
-                  style="text-decoration: none"
-                >
-                  <div
-                    class="thumb"
-                    style="
-                      background:
-                        radial-gradient(
-                          120% 80% at 20% 0%,
-                          rgba(74, 144, 226, 0.2),
-                          transparent 60%
-                        ),
-                        radial-gradient(
-                          100% 70% at 80% 20%,
-                          rgba(184, 147, 77, 0.1),
-                          transparent 55%
-                        ),
-                        linear-gradient(180deg, #fdfdfd, #f1f3f5);
-                    "
-                  >
-                    <div class="thumbLabel">
-                      <div class="thumbTitle">Coastal Light Room</div>
-                      <div class="thumbMeta">3층 · East Wing · 28석</div>
-                    </div>
-                  </div>
-                  <div style="height: 12px"></div>
-                  <div style="font-weight: 900; letter-spacing: -0.2px">
-                    해풍 같은 조명 · 주간 전시
-                  </div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    부드러운 그림자, 느린 시간.
-                  </div>
-                  <div style="height: 12px"></div>
-                  <span class="badge badge-warn">일시중지</span>
-                </a>
-              </article>
-
-              <article
-                class="card cardPad"
-                data-region="B"
-                data-cap="18"
-                data-status="SOLD_OUT"
-              >
-                <a
-                  href="#"
-                  th:href="@{/gallery/detail}"
-                  aria-label="Sculpture Study 상세"
-                  style="text-decoration: none"
-                >
-                  <div
-                    class="thumb"
-                    style="
-                      background:
-                        radial-gradient(
-                          120% 80% at 20% 0%,
-                          rgba(82, 196, 26, 0.15),
-                          transparent 60%
-                        ),
-                        radial-gradient(
-                          100% 70% at 80% 20%,
-                          rgba(184, 147, 77, 0.15),
-                          transparent 55%
-                        ),
-                        linear-gradient(180deg, #fdfdfd, #f1f3f5);
-                    "
-                  >
-                    <div class="thumbLabel">
-                      <div class="thumbTitle">Sculpture Study</div>
-                      <div class="thumbMeta">지하 · Gallery B · 18석</div>
-                    </div>
-                  </div>
-                  <div style="height: 12px"></div>
-                  <div style="font-weight: 900; letter-spacing: -0.2px">
-                    조각 관찰 · 한정 좌석
-                  </div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    한 작품을 오래 들여다보는 공간.
-                  </div>
-                  <div style="height: 12px"></div>
-                  <span class="badge badge-danger">마감</span>
-                </a>
-              </article>
-
-              <article
-                class="card cardPad"
-                data-region="2"
-                data-cap="24"
-                data-status="ACTIVE"
-              >
-                <a
-                  href="#"
-                  th:href="@{/gallery/detail}"
-                  aria-label="Ink &amp; Paper Corner 상세"
-                  style="text-decoration: none"
-                >
-                  <div class="thumb">
-                    <div class="thumbLabel">
-                      <div class="thumbTitle">Ink &amp; Paper Corner</div>
-                      <div class="thumbMeta">2층 · Atelier · 24석</div>
-                    </div>
-                  </div>
-                  <div style="height: 12px"></div>
-                  <div style="font-weight: 900; letter-spacing: -0.2px">
-                    서예 / 드로잉 · 20분 체험
-                  </div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    짧은 스케치로 남기는 관람 기록.
-                  </div>
-                  <div style="height: 12px"></div>
-                  <span class="badge badge-ok">운영중</span>
-                </a>
-              </article>
-
-              <article
-                class="card cardPad"
-                data-region="1"
-                data-cap="42"
-                data-status="ACTIVE"
-              >
-                <a
-                  href="#"
-                  th:href="@{/gallery/detail}"
-                  aria-label="Night Bloom Room 상세"
-                  style="text-decoration: none"
-                >
-                  <div
-                    class="thumb"
-                    style="
-                      background:
-                        radial-gradient(
-                          120% 80% at 20% 0%,
-                          rgba(255, 77, 79, 0.1),
-                          transparent 60%
-                        ),
-                        radial-gradient(
-                          100% 70% at 80% 20%,
-                          rgba(74, 144, 226, 0.15),
-                          transparent 55%
-                        ),
-                        linear-gradient(180deg, #fdfdfd, #f1f3f5);
-                    "
-                  >
-                    <div class="thumbLabel">
-                      <div class="thumbTitle">Night Bloom Room</div>
-                      <div class="thumbMeta">1층 · Garden Wing · 42석</div>
-                    </div>
-                  </div>
-                  <div style="height: 12px"></div>
-                  <div style="font-weight: 900; letter-spacing: -0.2px">
-                    꽃처럼 번지는 조명 · 야간 스테이지
-                  </div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    야간 전용 감상 프로그램.
-                  </div>
-                  <div style="height: 12px"></div>
-                  <span class="badge badge-ok">운영중</span>
                 </a>
               </article>
             </div>
@@ -1056,29 +509,29 @@
         const minCap = document.getElementById("minCap");
         const applyBtn = document.getElementById("applyFilter");
         const cards = document.querySelectorAll("#galleryCardGrid article");
-        if (!q || !region || !minCap || !cards.length) return;
+        if (!q || !region || !minCap) return;
 
         function apply() {
           const query = (q.value || "").toLowerCase().trim();
           const r = region.value || "ALL";
           const cap = Number(minCap.value || 1);
 
-          cards.forEach((card) => {
-            const text = (card.innerText || "").toLowerCase();
-            const cr = card.getAttribute("data-region") || "ALL";
-            const cCap = Number(card.getAttribute("data-cap") || 0);
+          document
+            .querySelectorAll("#galleryCardGrid article")
+            .forEach((card) => {
+              const text = (card.innerText || "").toLowerCase();
+              const cr = card.getAttribute("data-region") || "ALL";
+              const cCap = Number(card.getAttribute("data-cap") || 0);
 
-            const hitText = !query || text.includes(query);
-            const hitRegion = r === "ALL" || String(cr) === String(r);
-            const hitCap = cCap >= cap;
-            card.style.display = hitText && hitRegion && hitCap ? "" : "none";
-          });
+              const hitText = !query || text.includes(query);
+              const hitRegion = r === "ALL" || String(cr).includes(r);
+              const hitCap = cCap >= cap;
+              card.style.display = hitText && hitRegion && hitCap ? "" : "none";
+            });
         }
-
         [q, minCap].forEach((el) => el.addEventListener("input", apply));
         region.addEventListener("change", apply);
         if (applyBtn) applyBtn.addEventListener("click", apply);
-        apply();
       })();
     </script>
   </body>

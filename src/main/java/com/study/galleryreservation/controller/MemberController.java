@@ -15,17 +15,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class MemberController {
     private final MemberService service;
 
+    // 로그인 페이지 이동
     @GetMapping("/member/login")
     public String login(){
         return "/member/login";
     }
 
+    // 회원가입 페이지 이동
     @GetMapping("/member/join")
     public String join(Model model){
         model.addAttribute("memberJoinRequestDto", new MemberJoinRequestDto());
         return "member/join";
     }
 
+    // 회원가입
     @PostMapping("/member/join")
     public String memberJoin(@ModelAttribute MemberJoinRequestDto dto){
         service.signup(dto);
