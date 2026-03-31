@@ -1,12 +1,11 @@
-package com.study.galleryreservation.domain.member;
+package com.study.galleryreservation.domain.session;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-public enum MemberRole {
+public enum UserRole {
     ROLE_USER("ROLE_USER"), ROLE_ADMIN("ROLE_ADMIN");
 
     private String value;

@@ -1,8 +1,19 @@
 package com.study.galleryreservation.dto.member;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.study.galleryreservation.domain.member.MemberRole;
+import lombok.*;
 
-@Getter @Builder
+import java.time.LocalDateTime;
+
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MemberResponseDto {
+    private Long id;
+    public String username;
+    public String password;
+    public String email;
+    public MemberRole role;
+    private LocalDateTime created_at;
 }
