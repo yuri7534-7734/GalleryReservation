@@ -17,7 +17,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     List<Todo>findByMember_IdAndStatus(Long memberId, TodoStatus status);
 
     //제목 검색
-    List<Todo>findByMember_IDAndTitleContaining(Long memberId,String keyword);
+    List<Todo>findByMember_IdAndTitleContaining(Long memberId,String keyword);
 
     //마감일 오른차순 정렬
     List<Todo>findByMember_IdOrderByDueDateAsc(Long memberId);
