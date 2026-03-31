@@ -1,7 +1,7 @@
 package com.study.galleryreservation.domain.reservation;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
-import com.study.galleryreservation.domain.member.Member;
+import com.study.galleryreservation.domain.session.SnsUser;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,29 +19,42 @@ public class Reservation {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member memberId;
+    @JoinColumn(name = "sns_user_id")
+    private SnsUser snsUser; //예약한 회원 ID
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gallery_id")
-    private Gallery galleryId;
+    private Gallery gallery; //예약한 갤러리 Id
 
-    @Column(name = "reservation_date")
-    private LocalDate reservationDate;
+    @Column(name = "reservation_date", nullable = false)
+    private LocalDate reservationDate; //관람 날짜
 
-    @Column(name = "start_time")
-    private LocalTime startTime;
+    @Column(name = "start_time", nullable = false)
+    private LocalTime startTime; //관람 시작 시간
 
-    @Column(name = "end_time")
-    private LocalTime endTime;
+    @Column(name = "end_time", nullable = false)
+    private LocalTime endTime; //관람 종료 시간
 
     @Enumerated(EnumType.STRING)
-    private ReservationStatus status;
+    @Column(nullable = false)
+    private ReservationStatus status = ReservationStatus.PENDING; //예약 상태 (PENDING/APPROVED/REJECTED)
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt; //예약 신청 일시
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt; //예약 수정 일시(상태 변경)
+
+    @PrePersist
+    public void setCreatedAt(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void setUpdatedAt(){
+        this.updatedAt = LocalDateTime.now();
+    }
+
 
 }

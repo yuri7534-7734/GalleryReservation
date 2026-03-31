@@ -1,15 +1,27 @@
 package com.study.galleryreservation.dto.reservation;
 
-import com.study.galleryreservation.domain.reservation.ReservationStatus;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@Getter @Setter
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ReservationCreateRequestDto {
-    private Long memberId;
-    private Long galleryId;
-    private ReservationStatus status;
 
+    @NotNull(message = "갤러리를 선택해주세요")
+    private Long galleryId;
+
+    @NotNull(message = "예약 날짜를 입력해주세요")
+    private LocalDate reservationDate;
+
+    @NotNull(message = "시작 시간을 입력해주세요")
+    private LocalTime startTime;
+
+    @NotNull(message = "종료 시간을 입력해주세요")
+    private LocalTime endTime;
 }
