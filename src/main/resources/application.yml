@@ -9,8 +9,10 @@ spring:
     cache: false
 
   datasource:
-    url: jdbc:postgresql://aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres
-    username: postgres.towtayadnnrcauuedujw
+    #    url: jdbc:postgresql://aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres
+    #    username: postgres.towtayadnnrcauuedujw
+    url: jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:6543/postgres
+    username: postgres.efzhpdppgxecjiywedmg
     password: "kosmo123!@#"
     driver-class-name: org.postgresql.Driver
     hikari:
