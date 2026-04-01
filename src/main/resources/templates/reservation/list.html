@@ -454,6 +454,7 @@
               <option value="PENDING">대기</option>
               <option value="APPROVED">확정</option>
               <option value="REJECTED">거절</option>
+              <option value="CANCELLED">취소</option>
             </select>
           </div>
           <div>
@@ -528,21 +529,23 @@
             </td>
             <td>
               <span
-                      th:class="${reservation.status.name() == 'APPROVED'} ? 'badge badge-ok' : (${reservation.status.name() == 'PENDING'} ? 'badge badge-warn' : 'badge badge-danger')"
-                      th:text="${reservation.status.name() == 'APPROVED'} ? '확정' : (${reservation.status.name() == 'PENDING'} ? '대기' : '거절')"
-              >상태</span>
+                      th:class="${reservation.status.name() == 'APPROVED'}  ? 'badge badge-ok' :
+                                (${reservation.status.name() == 'PENDING'}   ? 'badge badge-warn' :
+                                (${reservation.status.name() == 'REJECTED'}  ? 'badge badge-danger' : 'badge'))"
+                      th:text="${reservation.status.name() == 'APPROVED'}  ? '확정' :
+                               (${reservation.status.name() == 'PENDING'}   ? '대기' :
+                               (${reservation.status.name() == 'REJECTED'}  ? '거절' : '취소'))"
+                      style="padding: 8px 14px; font-size: 13px; font-weight: 700;"
+              ></span>
             </td>
             <td>
-              <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                <span th:if="${reservation.status.name() == 'PENDING'}">
-                  <form th:action="@{/reservation/cancel/{id}(id=${reservation.id})}" method="post" style="margin:0;">
-                    <button class="btn btn-small btn-danger" type="submit">취소</button>
-                  </form>
-                </span>
-                <span th:unless="${reservation.status.name() == 'PENDING'}">
-                  <button class="btn btn-small" type="button" disabled style="opacity:.4;">취소불가</button>
-                </span>
-              </div>
+              <span th:if="${reservation.status.name() == 'PENDING'}">
+                <form th:action="@{/reservation/cancel/{id}(id=${reservation.id})}" method="post" style="margin:0;">
+                  <button class="btn btn-small btn-danger" type="submit">취소 요청</button>
+                </form>
+              </span>
+              <span th:unless="${reservation.status.name() == 'PENDING'}"
+                    style="display:inline-block; padding:8px 0; color:var(--muted); font-size:13px; font-weight:700;">—</span>
             </td>
           </tr>
           </tbody>

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -23,5 +25,17 @@ public class AdminController {
         model.addAttribute("reservations",reservationService.findAll());
 
         return "admin/reservation-list";
+    }
+
+    @PostMapping("/reservation/approve/{id}")
+    public String reservationApprove(@PathVariable Long id){
+        reservationService.approved(id);
+        return "redirect:/admin/reservation/list";
+    }
+
+    @PostMapping("/reservation/reject/{id}")
+    public String reservationReject(@PathVariable Long id){
+        reservationService.rejected(id);
+        return "redirect:/admin/reservation/list";
     }
 }

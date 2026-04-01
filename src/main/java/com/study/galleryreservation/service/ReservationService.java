@@ -76,7 +76,7 @@ public class ReservationService {
     }
     //예약 확정
     @Transactional
-    public void approve(Long id){
+    public void approved(Long id){
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("예약을 찾을 수 없습니다."));
         if (reservation.getStatus() != ReservationStatus.PENDING){
