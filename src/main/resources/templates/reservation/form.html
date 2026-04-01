@@ -538,6 +538,28 @@
                 <option value="20:00">20:00</option>
               </select>
             </div>
+            <div>
+              <label for="guestsInput">인원수</label>
+              <input
+                      id="guestsInput"
+                      th:field="*{guests}"
+                      type="number"
+                      min="1"
+                      max="100"
+                      step="1"
+                      placeholder="예: 2"
+                      required
+              />
+            </div>
+            <div>
+              <label for="contactInput">연락처 (선택)</label>
+              <input
+                      id="contactInput"
+                      th:field="*{contact}"
+                      type="tel"
+                      placeholder="010-0000-0000"
+              />
+            </div>
           </div>
 
           <div
@@ -619,7 +641,7 @@
                   갤러리를 선택하세요
                 </div>
               </div>
-              <span class="badge badge-warn" id="summaryStatus">대기</span>
+              <span class="badge badge-warn">대기</span>
             </div>
 
             <div class="grid grid-2" style="gap: 12px">
@@ -687,6 +709,72 @@
                       "
                 >
                   시간 선택
+                </div>
+              </div>
+              <div
+                      class="card"
+                      style="
+                      box-shadow: none;
+                      background: var(--bg1);
+                      padding: 12px;
+                      border-color: var(--stroke);
+                    "
+              >
+                <div
+                        class="helpText"
+                        style="
+                        margin: 0;
+                        text-transform: uppercase;
+                        letter-spacing: 0.3px;
+                        font-size: 12px;
+                        color: var(--accent);
+                        font-weight: 800;
+                      "
+                >
+                  인원수
+                </div>
+                <div
+                        id="summaryGuests"
+                        style="
+                        font-weight: 950;
+                        letter-spacing: -0.3px;
+                        margin-top: 8px;
+                      "
+                >
+                  -
+                </div>
+              </div>
+              <div
+                      class="card"
+                      style="
+                      box-shadow: none;
+                      background: var(--bg1);
+                      padding: 12px;
+                      border-color: var(--stroke);
+                    "
+              >
+                <div
+                        class="helpText"
+                        style="
+                        margin: 0;
+                        text-transform: uppercase;
+                        letter-spacing: 0.3px;
+                        font-size: 12px;
+                        color: var(--accent);
+                        font-weight: 800;
+                      "
+                >
+                  연락처
+                </div>
+                <div
+                        id="summaryContact"
+                        style="
+                        font-weight: 950;
+                        letter-spacing: -0.3px;
+                        margin-top: 8px;
+                      "
+                >
+                  -
                 </div>
               </div>
             </div>
@@ -757,31 +845,38 @@
 
 <script>
   (function () {
-    const gallerySelect = document.getElementById("gallerySelect");
-    const dateInput = document.getElementById("dateInput");
+    const gallerySelect   = document.getElementById("gallerySelect");
+    const dateInput       = document.getElementById("dateInput");
     const startTimeSelect = document.getElementById("startTimeSelect");
-    const endTimeSelect = document.getElementById("endTimeSelect");
+    const endTimeSelect   = document.getElementById("endTimeSelect");
+    const guestsInput     = document.getElementById("guestsInput");
+    const contactInput    = document.getElementById("contactInput");
 
-    const sGallery = document.getElementById("summaryGallery");
-    const sDate = document.getElementById("summaryDate");
-    const sTime = document.getElementById("summaryTime");
+    const sGallery  = document.getElementById("summaryGallery");
+    const sDate     = document.getElementById("summaryDate");
+    const sTime     = document.getElementById("summaryTime");
+    const sGuests   = document.getElementById("summaryGuests");
+    const sContact  = document.getElementById("summaryContact");
     if (!gallerySelect || !sGallery) return;
 
     function apply() {
-      const gText =
-        gallerySelect.options[gallerySelect.selectedIndex]?.text || "갤러리를 선택하세요";
-      const date = dateInput.value || "날짜 선택";
-      const start = startTimeSelect.value || "";
-      const end = endTimeSelect.value || "";
+      const gText   = gallerySelect.options[gallerySelect.selectedIndex]?.text || "갤러리를 선택하세요";
+      const date    = dateInput.value || "날짜 선택";
+      const start   = startTimeSelect.value || "";
+      const end     = endTimeSelect.value || "";
       const timeText = start && end ? start + " ~ " + end : "시간 선택";
+      const guests  = guestsInput.value ? guestsInput.value + "명" : "-";
+      const contact = contactInput.value || "-";
 
       sGallery.textContent = gText;
-      sDate.textContent = date;
-      sTime.textContent = timeText;
+      sDate.textContent    = date;
+      sTime.textContent    = timeText;
+      sGuests.textContent  = guests;
+      sContact.textContent = contact;
     }
 
     ["input", "change"].forEach((evt) => {
-      [gallerySelect, dateInput, startTimeSelect, endTimeSelect]
+      [gallerySelect, dateInput, startTimeSelect, endTimeSelect, guestsInput, contactInput]
         .forEach((el) => el && el.addEventListener(evt, apply));
     });
     apply();

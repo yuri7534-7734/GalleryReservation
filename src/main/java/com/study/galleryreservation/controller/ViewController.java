@@ -1,21 +1,12 @@
 package com.study.galleryreservation.controller;
 
-import com.study.galleryreservation.domain.reservation.Reservation;
-import com.study.galleryreservation.domain.session.SnsUser;
-import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
 import com.study.galleryreservation.repository.ReservationRepository;
 import com.study.galleryreservation.service.ReservationService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.List;
 
 @Controller
 public class ViewController {
@@ -62,4 +53,5 @@ public class ViewController {
     public String adminGalleryForm(){
         return "admin/gallery-form";
     }
+
 }

@@ -1,9 +1,6 @@
 package com.study.galleryreservation.dto.member;
 
 import com.study.galleryreservation.domain.member.MemberRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

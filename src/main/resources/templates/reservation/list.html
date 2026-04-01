@@ -469,11 +469,13 @@
         <table aria-label="내 예약 목록">
           <thead>
           <tr>
-            <th style="width: 120px">예약 번호</th>
+            <th style="width: 100px">예약 번호</th>
             <th>갤러리</th>
-            <th style="width: 260px">일정</th>
-            <th style="width: 160px">상태</th>
-            <th style="width: 160px">작업</th>
+            <th style="width: 220px">일정</th>
+            <th style="width: 80px">인원</th>
+            <th style="width: 130px">연락처</th>
+            <th style="width: 120px">상태</th>
+            <th style="width: 130px">작업</th>
           </tr>
           </thead>
           <tbody id="myRows">
@@ -481,7 +483,7 @@
                   th:if="${reservations == null or #lists.isEmpty(reservations)}"
           >
             <td
-                    colspan="5"
+                    colspan="7"
                     class="helpText"
                     style="text-align: center; padding: 24px"
             >
@@ -490,7 +492,7 @@
           </tr>
           <tr
                   th:each="reservation : ${reservations}"
-                  th:data-status="${reservation.status}"
+                  th:data-status="${reservation.status.name()}"
           >
             <td style="font-weight: 950" th:text="${reservation.id}">
               R-1001
@@ -518,12 +520,17 @@
                 10:00 ~ 12:00
               </div>
             </td>
+            <td th:text="${reservation.guests != null ? reservation.guests + '명' : '-'}">
+              2명
+            </td>
+            <td th:text="${reservation.contact != null and !#strings.isEmpty(reservation.contact) ? reservation.contact : '-'}">
+              010-0000-0000
+            </td>
             <td>
-                    <span
-                            th:class="${reservation.status == 'APPROVED'} ? 'badge badge-ok' : (${reservation.status == 'PENDING'} ? 'badge badge-warn' : 'badge badge-danger')"
-                            th:text="${reservation.status== 'APPROVED'} ? '확정' : (${reservation.status == 'PENDING'} ? '대기' : '거절')"
-                    >상태</span
-                    >
+              <span
+                      th:class="${reservation.status.name() == 'APPROVED'} ? 'badge badge-ok' : (${reservation.status.name() == 'PENDING'} ? 'badge badge-warn' : 'badge badge-danger')"
+                      th:text="${reservation.status.name() == 'APPROVED'} ? '확정' : (${reservation.status.name() == 'PENDING'} ? '대기' : '거절')"
+              >상태</span>
             </td>
             <td>
               <div style="display: flex; gap: 8px; flex-wrap: wrap">

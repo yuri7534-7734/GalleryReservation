@@ -9,7 +9,6 @@ import com.study.galleryreservation.repository.GalleryRepository;
 import com.study.galleryreservation.service.ReservationService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -54,11 +53,6 @@ public class ReservationController {
     @PostMapping("/cancel/{id}")
     public String cancel(@PathVariable Long id, HttpSession session){
         SnsUser snsUser = (SnsUser) session.getAttribute("user");
-
-        if (snsUser == null) {
-            return "redirect:/login";
-        }
-
         reservationService.cancel(id, snsUser.getEmail());
         return "redirect:/reservation/list";
     }

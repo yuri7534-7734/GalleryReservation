@@ -2,7 +2,6 @@ package com.study.galleryreservation.domain.reservation;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
 import com.study.galleryreservation.domain.member.Member;
-import com.study.galleryreservation.domain.session.SnsUser;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +35,12 @@ public class Reservation {
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime; //관람 종료 시간
 
+    @Column(name = "guests")
+    private Integer guests; //인원수
+
+    @Column(name = "contact_info", length = 20)
+    private String contact; //연락처
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReservationStatus status = ReservationStatus.PENDING; //예약 상태 (PENDING/APPROVED/REJECTED)
@@ -45,6 +50,7 @@ public class Reservation {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt; //예약 수정 일시(상태 변경)
+
 
     @PrePersist
     public void setCreatedAt(){
@@ -57,5 +63,21 @@ public class Reservation {
         this.updatedAt = LocalDateTime.now();
     }
 
+    //예약 취소 (PENDING 상태만 가능)
+    public void cancel() {
+        if (this.status != ReservationStatus.PENDING) {
+            throw new IllegalArgumentException("대기 중인 예약만 취소할 수 있습니다.");
+        }
+        this.status = ReservationStatus.CANCELLED;
+    }
 
+    //예약 확정
+    public void approved() {
+        this.status = ReservationStatus.APPROVED;
+    }
+
+    //예약 거절
+    public void rejected() {
+        this.status = ReservationStatus.REJECTED;
+    }
 }
