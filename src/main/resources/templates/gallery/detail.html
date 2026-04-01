@@ -728,7 +728,7 @@
                       letter-spacing: -0.3px;
                       margin-top: 8px;
                     "
-                    th:text="'10:00 - 18:00'"
+                    th:text="${#strings.concat(#temporals.format(gallery.openTime, 'HH:mm'), ' - ', #temporals.format(gallery.closeTime, 'HH:mm'))}"
                   >
                     10:00 - 18:00
                   </div>
@@ -938,10 +938,20 @@
                   <div>
                     <label for="rTime">시간</label>
                     <select id="rTime" name="time" required>
-                      <option value="10:00">10:00</option>
-                      <option value="13:00">13:00</option>
-                      <option value="16:00">16:00</option>
-                      <option value="19:00">19:00</option>
+                      <th:block th:if="${visitTimeSlots != null and !visitTimeSlots.isEmpty()}">
+                        <option
+                          th:each="t : ${visitTimeSlots}"
+                          th:value="${#temporals.format(t, 'HH:mm')}"
+                          th:text="${#temporals.format(t, 'HH:mm')}"
+                        >
+                          10:00
+                        </option>
+                      </th:block>
+                      <th:block th:if="${visitTimeSlots == null or visitTimeSlots.isEmpty()}">
+                        <option value="10:00">10:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="16:00">16:00</option>
+                      </th:block>
                     </select>
                   </div>
                   <div>

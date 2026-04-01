@@ -3,6 +3,8 @@ package com.study.galleryreservation.dto.gallery;
 import com.study.galleryreservation.domain.gallery.Gallery;
 import lombok.*;
 
+import java.time.LocalTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,9 +17,13 @@ public class GalleryCreateRequestDto {
     private String description;
     private Integer capacity;
     private boolean isActive;
+    private LocalTime openTime;
+    private LocalTime closeTime;
 
     // Service 레이어에서 엔티티로 변환할 때 사용
     public Gallery toEntity() {
+        LocalTime open = openTime != null ? openTime : LocalTime.of(10, 0);
+        LocalTime close = closeTime != null ? closeTime : LocalTime.of(18, 0);
         return Gallery.builder()
                 .name(name)
                 .location(location)
@@ -25,6 +31,8 @@ public class GalleryCreateRequestDto {
                 .description(description)
                 .capacity(capacity)
                 .isActive(isActive)
+                .openTime(open)
+                .closeTime(close)
                 .build();
     }
 }

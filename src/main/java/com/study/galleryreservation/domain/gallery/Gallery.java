@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,14 @@ public class Gallery {
 
     @Column(name = "is_active")
     private boolean isActive;
+
+    @Column(name = "open_time", nullable = false)
+    @Builder.Default
+    private LocalTime openTime = LocalTime.of(10, 0);
+
+    @Column(name = "close_time", nullable = false)
+    @Builder.Default
+    private LocalTime closeTime = LocalTime.of(18, 0);
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

@@ -5,11 +5,11 @@ import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
 import com.study.galleryreservation.dto.gallery.GalleryResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +32,8 @@ public class GalleryService {
         }
 
         LocalDateTime now = LocalDateTime.now();
+        LocalTime open = dto.getOpenTime() != null ? dto.getOpenTime() : LocalTime.of(10, 0);
+        LocalTime close = dto.getCloseTime() != null ? dto.getCloseTime() : LocalTime.of(18, 0);
         Gallery gallery = Gallery.builder()
                 .name(dto.getName())
                 .location(dto.getLocation())
@@ -39,6 +41,8 @@ public class GalleryService {
                 .description(dto.getDescription())
                 .capacity(dto.getCapacity())
                 .isActive(true)
+                .openTime(open)
+                .closeTime(close)
                 .createdAt(now)
                 .updatedAt(now)
                 .build();
