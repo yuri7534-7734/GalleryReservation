@@ -4,6 +4,7 @@ import com.study.galleryreservation.domain.gallery.Gallery;
 import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

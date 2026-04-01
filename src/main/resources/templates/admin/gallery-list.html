@@ -677,7 +677,7 @@
                 </tr>
                 <tr
                   th:each="gallery, iter : ${galleries}"
-                  th:data-status="${gallery.status}"
+                  th:data-status="${gallery.active ? 'ACTIVE' : 'INACTIVE'}"
                 >
                   <td th:text="${iter.count}">1</td>
                   <td>
@@ -707,8 +707,8 @@
                   <td th:text="${gallery.capacity} + '명'">30명</td>
                   <td>
                     <span
-                      th:class="${gallery.status == 'ACTIVE'} ? 'badge badge-ok' : (${gallery.status == 'PAUSED'} ? 'badge badge-warn' : 'badge badge-danger')"
-                      th:text="${gallery.status == 'ACTIVE'} ? '운영중' : (${gallery.status == 'PAUSED'} ? '일시중지' : '마감')"
+                      th:class="${gallery.active} ? 'badge badge-ok' : 'badge badge-danger'"
+                      th:text="${gallery.active} ? '운영중' : '비활성'"
                       >운영중</span
                     >
                   </td>

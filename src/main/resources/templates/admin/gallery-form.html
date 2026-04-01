@@ -668,6 +668,11 @@
               method="post"
               class="stack"
             >
+              <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+              />
               <div>
                 <div class="row">
                   <h2
@@ -736,7 +741,7 @@
                 </div>
                 <div>
                   <label for="gStatus">상태</label>
-                  <select id="gStatus" th:field="*{status}" required>
+                  <select id="gStatus" name="status">
                     <option value="ACTIVE" selected>운영중</option>
                     <option value="PAUSED">일시중지</option>
                     <option value="SOLD_OUT">마감</option>
@@ -748,7 +753,7 @@
                 <label for="gHours">운영 시간</label>
                 <input
                   id="gHours"
-                  th:field="*{hours}"
+                  name="hours"
                   type="text"
                   placeholder="예: 10:00 - 18:00"
                 />
@@ -758,7 +763,7 @@
                 <label for="gCover">커버 이미지 URL (선택)</label>
                 <input
                   id="gCover"
-                  th:field="*{coverUrl}"
+                  name="coverUrl"
                   type="url"
                   placeholder="https://example.com/cover.jpg"
                 />
@@ -780,7 +785,6 @@
                 class="row"
                 style="justify-content: flex-end; flex-wrap: wrap"
               >
-                <button class="btn btn-ghost" type="button">임시 저장</button>
                 <button class="btn btn-primary" type="submit">등록하기</button>
               </div>
             </form>
@@ -964,7 +968,6 @@
           pHours.textContent = hours;
           pDesc.textContent = desc;
           pCapacity.textContent = `인원 ${cap}`;
-
 
           applyBadge();
 

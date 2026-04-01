@@ -649,7 +649,7 @@
                 </div>
                 <div>
                   <label for="todoCategory">카테고리</label>
-                  <select id="todoCategory" th:field="*{category}" required>
+                  <select id="todoCategory" name="category">
                     <option value="운영" selected>운영</option>
                     <option value="점검">점검</option>
                     <option value="공지">공지</option>
@@ -669,7 +669,7 @@
                   <label for="todoAssignee">담당자</label>
                   <input
                     id="todoAssignee"
-                    th:field="*{assignee}"
+                    name="assignee"
                     type="text"
                     placeholder="예: 스태프 A"
                   />
@@ -679,7 +679,7 @@
               <div class="formGrid">
                 <div>
                   <label for="todoPriority">우선순위</label>
-                  <select id="todoPriority" th:field="*{priority}">
+                  <select id="todoPriority" name="priority">
                     <option value="LOW">낮음</option>
                     <option value="MEDIUM" selected>보통</option>
                     <option value="HIGH">높음</option>
@@ -687,9 +687,9 @@
                 </div>
                 <div>
                   <label for="todoStatus">상태</label>
-                  <select id="todoStatus" th:field="*{status}">
-                    <option value="OPEN" selected>미완료</option>
-                    <option value="DONE">완료</option>
+                  <select id="todoStatus" th:field="*{isDone}">
+                    <option value="false" selected>미완료</option>
+                    <option value="true">완료</option>
                   </select>
                 </div>
               </div>
@@ -698,7 +698,7 @@
                 <label for="todoDesc">상세 설명</label>
                 <textarea
                   id="todoDesc"
-                  th:field="*{description}"
+                  th:field="*{content}"
                   placeholder="작업 체크 포인트를 간단히 적어주세요. 예: 표지판 위치, 조도, 동선 혼잡도 등."
                 ></textarea>
               </div>

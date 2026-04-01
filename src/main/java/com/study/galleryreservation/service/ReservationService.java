@@ -26,9 +26,9 @@ public class ReservationService {
 
     //저장
     @Transactional
-    public void save(ReservationCreateRequestDto requestDto, String email) {
+    public void save(ReservationCreateRequestDto requestDto, String username) {
 
-        Member member = memberRepository.findByEmail(email)
+        Member member = memberRepository.findByUsername(username)
                 .orElseThrow(()->new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         Gallery gallery = galleryRepository.findById(requestDto.getGalleryId())
@@ -48,8 +48,8 @@ public class ReservationService {
     }
 
     //로그인한 유저의 예약 목록을 DTO로 변환해서 화면에 넘겨주는 메서드
-    public List<ReservationResponseDto> findByEmail(String email) {
-        Member member = memberRepository.findByEmail(email)
+    public List<ReservationResponseDto> findByUsername(String username) {
+        Member member = memberRepository.findByUsername(username)
                 .orElseThrow(()-> new IllegalArgumentException("회원을 찾을 수 없습니다."));
         return reservationRepository.findByMember(member)
                 .stream()
@@ -58,7 +58,8 @@ public class ReservationService {
 
     }
     //예약 삭제
-    public void cancel(Long id, String email){
+    @Transactional
+    public void cancel(Long id, String username){
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("예약을 찾을 수 없습니다."));
 

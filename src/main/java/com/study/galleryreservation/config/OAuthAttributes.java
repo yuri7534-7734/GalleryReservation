@@ -31,9 +31,11 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         Object sub = attributes.get("sub");
+        String providerId = String.valueOf(sub);
 
         Map<String, Object> mapped = new HashMap<>();
         mapped.put("id", sub);
+        mapped.put("username", "google_" + providerId);  // Principal.getName() = "google_xxx"
         mapped.put("name", attributes.get("name"));
         mapped.put("email", attributes.get("email"));
         mapped.put("picture", attributes.get("picture"));
@@ -42,9 +44,9 @@ public class OAuthAttributes {
                 .name((String) mapped.get("name"))
                 .email((String) mapped.get("email"))
                 .picture((String) mapped.get("picture"))
-                .providerId(String.valueOf(mapped.get("id")))
+                .providerId(providerId)
                 .registrationId("google")
-                .nameAttributeKey("id")
+                .nameAttributeKey("username")   // Principal.getName() → "google_xxx"
                 .attributes(mapped)
                 .build();
     }
@@ -52,9 +54,11 @@ public class OAuthAttributes {
     @SuppressWarnings("unchecked")
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+        String providerId = String.valueOf(response != null ? response.get("id") : null);
 
         Map<String, Object> mapped = new HashMap<>();
         mapped.put("id", response != null ? response.get("id") : null);
+        mapped.put("username", "naver_" + providerId);  // Principal.getName() = "naver_xxx"
         mapped.put("name", response != null ? response.get("name") : null);
         mapped.put("email", response != null ? response.get("email") : null);
         mapped.put("picture", response != null ? response.get("profile_image") : null);
@@ -63,9 +67,9 @@ public class OAuthAttributes {
                 .name((String) mapped.get("name"))
                 .email((String) mapped.get("email"))
                 .picture((String) mapped.get("picture"))
-                .providerId(String.valueOf(mapped.get("id")))
+                .providerId(providerId)
                 .registrationId("naver")
-                .nameAttributeKey("id")
+                .nameAttributeKey("username")   // Principal.getName() → "naver_xxx"
                 .attributes(mapped)
                 .build();
     }
@@ -73,6 +77,7 @@ public class OAuthAttributes {
     @SuppressWarnings("unchecked")
     private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
         Object id = attributes.get("id");
+        String providerId = String.valueOf(id);
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> profile = kakaoAccount != null
                 ? (Map<String, Object>) kakaoAccount.get("profile")
@@ -84,6 +89,7 @@ public class OAuthAttributes {
 
         Map<String, Object> mapped = new HashMap<>();
         mapped.put("id", id);
+        mapped.put("username", "kakao_" + providerId);  // Principal.getName() = "kakao_xxx"
         mapped.put("name", name);
         mapped.put("email", email);
         mapped.put("picture", picture);
@@ -92,9 +98,9 @@ public class OAuthAttributes {
                 .name(name)
                 .email(email)
                 .picture(picture)
-                .providerId(String.valueOf(id))
+                .providerId(providerId)
                 .registrationId("kakao")
-                .nameAttributeKey("id")
+                .nameAttributeKey("username")   // Principal.getName() → "kakao_xxx"
                 .attributes(mapped)
                 .build();
     }
