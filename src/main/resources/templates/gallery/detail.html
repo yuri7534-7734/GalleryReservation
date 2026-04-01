@@ -691,7 +691,6 @@
                   </div>
                   <div
                     class="thumbMeta"
-                    <!-- th:text="${gallery != null ? gallery.location + ' · ' + gallery.capacity + '석' : '2층 · West Wing · 35석'}"-->
                     th:text="${gallery != null ? (gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : '층') + ' · ' + gallery.location + ' · ' + gallery.capacity + '석' : '2층 · West Wing · 35석'}"
                   >
                     2층 · West Wing · 35석
