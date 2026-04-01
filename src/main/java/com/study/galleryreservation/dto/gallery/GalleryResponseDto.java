@@ -11,15 +11,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class GalleryResponseDto {
-    private final Long id;
-    private final String name;
-    private final String location;
+    private Long id;
+    private String name;
+    private String location;
     private String floorZone;
-    private final String description;
-    private final Integer capacity;
-    private final boolean isActive;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private String description;
+    private Integer capacity;
+    private boolean isActive;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     // 엔티티를 DTO로 변환하는 생성자
     public GalleryResponseDto(Gallery entity) {
