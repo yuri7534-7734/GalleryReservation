@@ -1,9 +1,12 @@
 package com.study.galleryreservation.service;
 
 import com.study.galleryreservation.config.OAuthAttributes;
+import com.study.galleryreservation.domain.member.Member;
+import com.study.galleryreservation.domain.member.MemberRole;
 import com.study.galleryreservation.domain.session.SessionUser;
 import com.study.galleryreservation.domain.session.SnsUser;
 import com.study.galleryreservation.domain.session.UserRole;
+import com.study.galleryreservation.repository.MemberRepository;
 import com.study.galleryreservation.repository.SnsUserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private final HttpSession httpSession;
     private final SnsUserRepository repository;
+    private final MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -78,7 +83,19 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                         .role(UserRole.ROLE_USER)
                         .build());
 
-        return repository.save(snsUser);
+        SnsUser savedSnsUser = repository.save(snsUser);
+
+        // Member 테이블에도 동기화 (없을 때만 생성, SNS 로그인도 Todo/Reservation 등 기능 사용 가능하도록)
+        memberRepository.findByEmail(email).orElseGet(() -> memberRepository.save(
+                Member.builder()
+                        .username(provider + "_" + providerId)   // e.g. kakao_123456 (unique 보장)
+                        .password("SNS_" + UUID.randomUUID())    // 실제 로그인에 사용하지 않는 더미값
+                        .email(email)
+                        .role(MemberRole.ROLE_USER)
+                        .build()
+        ));
+
+        return savedSnsUser;
     }
 
     private String resolveEmail(OAuthAttributes authAttributes) {

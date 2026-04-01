@@ -1,9 +1,12 @@
 package com.study.galleryreservation.domain.gallery;
 
+import com.study.galleryreservation.domain.reservation.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "gallery")
@@ -16,6 +19,10 @@ public class Gallery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Reservation> reservations = new ArrayList<>();
 
     @Column(name="name", nullable = false)
     private String name;

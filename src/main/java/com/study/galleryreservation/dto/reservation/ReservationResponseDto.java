@@ -1,8 +1,34 @@
 package com.study.galleryreservation.dto.reservation;
 
+import com.study.galleryreservation.domain.reservation.Reservation;
+import com.study.galleryreservation.domain.reservation.ReservationStatus;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter @Builder
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+@Getter
+@Builder
 public class ReservationResponseDto {
+
+    private Long id;
+    private String galleryName;
+    private String memberName;
+    private LocalDate reservationDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private ReservationStatus status;
+
+    public static ReservationResponseDto from(Reservation reservation) {
+        return ReservationResponseDto.builder()
+                .id(reservation.getId())
+                .galleryName(reservation.getGallery().getName())
+                .memberName(reservation.getMember().getUsername())
+                .reservationDate(reservation.getReservationDate())
+                .startTime(reservation.getStartTime())
+                .endTime(reservation.getEndTime())
+                .status(reservation.getStatus())
+                .build();
+    }
 }
