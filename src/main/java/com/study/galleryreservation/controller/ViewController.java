@@ -1,17 +1,18 @@
 package com.study.galleryreservation.controller;
 
+import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.dto.todo.TodoCreateRequestDto;
 import com.study.galleryreservation.repository.GalleryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
+@RequiredArgsConstructor
 public class ViewController {
-    @Autowired
-    private GalleryRepository galleryRepository;
+    private final GalleryRepository galleryRepository;
 
     // 메인 페이지
     @GetMapping("/")
@@ -51,17 +52,5 @@ public class ViewController {
     public String todoForm(Model model){
         model.addAttribute("todoCreateRequestDto", new TodoCreateRequestDto());
         return "todo/form";
-    }
-
-    // 갤러리 관리(관리자 전용)
-    @GetMapping("/admin/gallery/list")
-    public String adminGalleryList(){
-        return "admin/gallery-list";
-    }
-
-    // 갤러리 등록(관리자 전용)
-    @GetMapping("/admin/gallery/form")
-    public String adminGalleryForm(){
-        return "admin/gallery-form";
     }
 }

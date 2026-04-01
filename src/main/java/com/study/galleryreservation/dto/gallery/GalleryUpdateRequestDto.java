@@ -11,6 +11,7 @@ public class GalleryUpdateRequestDto {
 
     private String name;
     private String location;
+    private String floorZone;
     private String description;
     private Integer capacity;
     private boolean is_active;

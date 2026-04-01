@@ -84,7 +84,7 @@ public class TodoService {
                 .member(todo.getMember())
                 .title(dto.getTitle())
                 .content(dto.getContent())
-                .isDone(dto.isDone())
+                .isDone(dto.getIsDone())
                 .dueDate(dto.getDueDate())
                 .build();
 

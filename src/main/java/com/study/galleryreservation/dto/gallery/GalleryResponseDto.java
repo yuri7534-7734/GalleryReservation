@@ -14,6 +14,7 @@ public class GalleryResponseDto {
     private final Long id;
     private final String name;
     private final String location;
+    private String floorZone;
     private final String description;
     private final Integer capacity;
     private final boolean isActive;
@@ -25,6 +26,7 @@ public class GalleryResponseDto {
         this.id = entity.getId();
         this.name = entity.getName();
         this.location = entity.getLocation();
+        this.floorZone = entity.getFloorZone();
         this.description = entity.getDescription();
         this.capacity = entity.getCapacity();
         this.isActive = entity.isActive();
