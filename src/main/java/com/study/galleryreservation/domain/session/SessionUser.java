@@ -1,6 +1,7 @@
 package com.study.galleryreservation.domain.session;
 
-import com.study.galleryreservation.domain.session.SnsUser;
+import com.study.galleryreservation.domain.member.Member;
+
 import java.io.Serializable;
 
 public class SessionUser implements Serializable {
@@ -17,4 +18,10 @@ public class SessionUser implements Serializable {
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPicture() { return picture; }
+
+    public SessionUser(Member member) {
+        this.name = member.getUsername();
+        this.email = member.getEmail();
+        this.picture = "";
+    }
 }

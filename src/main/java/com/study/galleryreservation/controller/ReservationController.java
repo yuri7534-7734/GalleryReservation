@@ -1,8 +1,6 @@
 package com.study.galleryreservation.controller;
 
-//import com.study.galleryreservation.service.ReservationService;
-
-import com.study.galleryreservation.domain.session.SnsUser;
+import com.study.galleryreservation.domain.session.SessionUser;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
@@ -24,37 +22,32 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping("/form")
-    public String getForm(Model model){
+    public String getForm(Model model) {
         model.addAttribute("reservationCreateRequestDto", new ReservationCreateRequestDto());
         model.addAttribute("galleries", galleryRepository.findAll());
         return "reservation/form";
     }
+
     @PostMapping("/form")
     public String postForm(@ModelAttribute ReservationCreateRequestDto requestDto,
-                           HttpSession session){
-        SnsUser snsUser = (SnsUser) session.getAttribute("user");
-
-        reservationService.save(requestDto, snsUser.getEmail());
-
+                           HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        reservationService.save(requestDto, sessionUser.getEmail());
         return "redirect:/reservation/list";
     }
 
-    // 예약 내역 페이지 이동
     @GetMapping("/list")
-    public String reservationList(Model model, HttpSession session){
-        SnsUser snsUser = (SnsUser) session.getAttribute("user");
-        List<ReservationResponseDto> reservation = reservationService.findByEmail(snsUser.getEmail());
-        model.addAttribute("reservations",reservation);
-
+    public String reservationList(Model model, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        List<ReservationResponseDto> reservation = reservationService.findByEmail(sessionUser.getEmail());
+        model.addAttribute("reservations", reservation);
         return "reservation/list";
     }
 
-    //예약 내역 삭제
     @PostMapping("/cancel/{id}")
-    public String cancel(@PathVariable Long id, HttpSession session){
-        SnsUser snsUser = (SnsUser) session.getAttribute("user");
-        reservationService.cancel(id, snsUser.getEmail());
+    public String cancel(@PathVariable Long id, HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        reservationService.cancel(id, sessionUser.getEmail());
         return "redirect:/reservation/list";
     }
-
 }
