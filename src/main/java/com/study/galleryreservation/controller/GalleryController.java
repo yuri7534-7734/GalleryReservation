@@ -22,5 +22,13 @@ public class GalleryController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("gallery", gallery);
         return "gallery/detail";
+
+    private final GalleryService galleryService;
+
+    @GetMapping("/gallery/")
+    public String galleryList(Model model) {
+        model.addAttribute("galleries", galleryService.findAll());
+        return "list";
+
     }
 }

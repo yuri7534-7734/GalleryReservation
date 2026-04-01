@@ -39,9 +39,6 @@ public class Gallery {
     @Column(name = "capacity")
     private Integer capacity;
 
-    @Column(name = "floor_zone", nullable = false)
-    private String floorZone;
-
     @Column(name = "is_active")
     private boolean isActive;
 
