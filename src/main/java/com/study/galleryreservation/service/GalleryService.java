@@ -1,13 +1,14 @@
 package com.study.galleryreservation.service;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
+import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
 import com.study.galleryreservation.dto.gallery.GalleryResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
