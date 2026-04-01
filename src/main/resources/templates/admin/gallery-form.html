@@ -743,19 +743,19 @@
 
               <div class="formGrid">
                 <div>
-                  <label for="gOpenTime">운영 시작</label>
+                  <label for="gStartTime">운영 시작</label>
                   <input
-                    id="gOpenTime"
-                    th:field="*{openTime}"
+                    id="gStartTime"
+                    th:field="*{startTime}"
                     type="time"
                     step="1800"
                   />
                 </div>
                 <div>
-                  <label for="gCloseTime">운영 종료</label>
+                  <label for="gEndTime">운영 종료</label>
                   <input
-                    id="gCloseTime"
-                    th:field="*{closeTime}"
+                    id="gEndTime"
+                    th:field="*{endTime}"
                     type="time"
                     step="1800"
                   />
@@ -770,7 +770,7 @@
                 <label for="gCover">커버 이미지 URL (선택)</label>
                 <input
                   id="gCover"
-                  name="coverUrl"
+                  th:field="*{coverImageUrl}"
                   type="url"
                   placeholder="https://example.com/cover.jpg"
                 />
@@ -936,8 +936,8 @@
           "gLocation",
           "gFloorZone",
           "gCapacity",
-          "gOpenTime",
-          "gCloseTime",
+          "gStartTime",
+          "gEndTime",
           "gDesc",
           "gCover",
         ];
@@ -955,9 +955,9 @@
           const fv = el.gFloorZone?.value || "1";
           const floorLabel = floorLabels[fv] || "층";
           const cap = el.gCapacity?.value?.trim() || "0";
-          const openT = el.gOpenTime?.value?.trim() || "10:00";
-          const closeT = el.gCloseTime?.value?.trim() || "18:00";
-          const hours = `${openT} - ${closeT}`;
+          const startT = el.gStartTime?.value?.trim() || "10:00";
+          const endT = el.gEndTime?.value?.trim() || "18:00";
+          const hours = `${startT} - ${endT}`;
           const desc = el.gDesc?.value?.trim() || "소개가 여기에 표시됩니다.";
           const cover = el.gCover?.value?.trim();
 

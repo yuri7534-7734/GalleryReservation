@@ -17,13 +17,14 @@ public class GalleryCreateRequestDto {
     private String description;
     private Integer capacity;
     private boolean isActive;
-    private LocalTime openTime;
-    private LocalTime closeTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private String coverImageUrl;
 
     // Service 레이어에서 엔티티로 변환할 때 사용
     public Gallery toEntity() {
-        LocalTime open = openTime != null ? openTime : LocalTime.of(10, 0);
-        LocalTime close = closeTime != null ? closeTime : LocalTime.of(18, 0);
+        LocalTime start = startTime != null ? startTime : LocalTime.of(10, 0);
+        LocalTime end = endTime != null ? endTime : LocalTime.of(18, 0);
         return Gallery.builder()
                 .name(name)
                 .location(location)
@@ -31,8 +32,9 @@ public class GalleryCreateRequestDto {
                 .description(description)
                 .capacity(capacity)
                 .isActive(isActive)
-                .openTime(open)
-                .closeTime(close)
+                .startTime(start)
+                .endTime(end)
+                .coverImageUrl(coverImageUrl != null && !coverImageUrl.isBlank() ? coverImageUrl.trim() : null)
                 .build();
     }
 }

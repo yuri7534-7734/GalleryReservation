@@ -728,7 +728,7 @@
                       letter-spacing: -0.3px;
                       margin-top: 8px;
                     "
-                    th:text="${#strings.concat(#temporals.format(gallery.openTime, 'HH:mm'), ' - ', #temporals.format(gallery.closeTime, 'HH:mm'))}"
+                    th:text="${#strings.concat(#temporals.format(gallery.startTime, 'HH:mm'), ' - ', #temporals.format(gallery.endTime, 'HH:mm'))}"
                   >
                     10:00 - 18:00
                   </div>

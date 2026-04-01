@@ -28,9 +28,13 @@ src/main/resources/static/docu/20260401_GalleryReservation_002.md
 src/main/resources/static/docu/20260401_GalleryReservation_003.md
 src/main/resources/static/docu/20260401_GalleryReservation_004.md
 src/main/resources/static/docu/20260401_GalleryReservation_005.md
+src/main/resources/static/docu/20260401_GalleryReservation_006.md
+src/main/resources/static/docu/20260401_GalleryReservation_007.md
 src/main/resources/static/docu/20260401_prompt.txt
 src/main/resources/static/docu/20260401_sql추가01.sql
 src/main/resources/static/docu/sql추가02.sql
+src/main/resources/static/docu/sql추가03.sql
+src/main/resources/static/docu/sql추가04.sql
 src/main/resources/application.yml
 src/main/resources/db.sql
 

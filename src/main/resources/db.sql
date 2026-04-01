@@ -52,8 +52,9 @@ CREATE TABLE gallery (
     description TEXT,                                                 -- 갤러리 소개
     capacity    INT          NOT NULL,                                -- 최대 수용 인원
     is_active   BOOLEAN      NOT NULL DEFAULT TRUE,                   -- 운영 여부 (true=운영중, false=비활성)
-    open_time   TIME         NOT NULL DEFAULT TIME '10:00',            -- 관람 시작 시각
-    close_time  TIME         NOT NULL DEFAULT TIME '18:00',           -- 관람 종료 시각
+    start_time  TIME         NOT NULL DEFAULT TIME '10:00',            -- 관람 시작 시각
+    end_time    TIME         NOT NULL DEFAULT TIME '18:00',            -- 관람 종료 시각
+    cover_image_url VARCHAR(500),                                      -- 커버 이미지 URL (선택)
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,      -- 등록 일시
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP       -- 수정 일시 (UPDATE 시 트리거로 자동 갱신)
 );

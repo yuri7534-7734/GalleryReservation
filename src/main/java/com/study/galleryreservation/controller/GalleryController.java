@@ -25,17 +25,17 @@ public class GalleryController {
         Gallery gallery = galleryRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("gallery", gallery);
-        model.addAttribute("visitTimeSlots", halfHourSlots(gallery.getOpenTime(), gallery.getCloseTime()));
+        model.addAttribute("visitTimeSlots", halfHourSlots(gallery.getStartTime(), gallery.getEndTime()));
         return "gallery/detail";
     }
 
-    /** open(포함) ~ close(미포함) 구간을 30분 간격으로 나눈 관람 선택 시간 목록 */
-    static List<LocalTime> halfHourSlots(LocalTime open, LocalTime close) {
+    /** start(포함) ~ end(미포함) 구간을 30분 간격으로 나눈 관람 선택 시간 목록 */
+    static List<LocalTime> halfHourSlots(LocalTime start, LocalTime end) {
         List<LocalTime> slots = new ArrayList<>();
-        if (open == null || close == null || !close.isAfter(open)) {
+        if (start == null || end == null || !end.isAfter(start)) {
             return slots;
         }
-        for (LocalTime t = open; t.isBefore(close); t = t.plusMinutes(30)) {
+        for (LocalTime t = start; t.isBefore(end); t = t.plusMinutes(30)) {
             slots.add(t);
         }
         return slots;

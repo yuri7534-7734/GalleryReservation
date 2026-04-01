@@ -16,6 +16,7 @@ public class GalleryUpdateRequestDto {
     private String description;
     private Integer capacity;
     private boolean isActive;
-    private LocalTime openTime;
-    private LocalTime closeTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private String coverImageUrl;
 }

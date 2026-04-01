@@ -32,8 +32,15 @@ public class GalleryService {
         }
 
         LocalDateTime now = LocalDateTime.now();
-        LocalTime open = dto.getOpenTime() != null ? dto.getOpenTime() : LocalTime.of(10, 0);
-        LocalTime close = dto.getCloseTime() != null ? dto.getCloseTime() : LocalTime.of(18, 0);
+        LocalTime start = dto.getStartTime() != null ? dto.getStartTime() : LocalTime.of(10, 0);
+        LocalTime end = dto.getEndTime() != null ? dto.getEndTime() : LocalTime.of(18, 0);
+        String cover = dto.getCoverImageUrl();
+        if (cover != null) {
+            cover = cover.trim();
+            if (cover.isEmpty()) {
+                cover = null;
+            }
+        }
         Gallery gallery = Gallery.builder()
                 .name(dto.getName())
                 .location(dto.getLocation())
@@ -41,8 +48,9 @@ public class GalleryService {
                 .description(dto.getDescription())
                 .capacity(dto.getCapacity())
                 .isActive(true)
-                .openTime(open)
-                .closeTime(close)
+                .startTime(start)
+                .endTime(end)
+                .coverImageUrl(cover)
                 .createdAt(now)
                 .updatedAt(now)
                 .build();

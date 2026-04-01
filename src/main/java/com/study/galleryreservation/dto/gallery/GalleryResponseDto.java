@@ -19,8 +19,9 @@ public class GalleryResponseDto {
     private String description;
     private Integer capacity;
     private boolean isActive;
-    private LocalTime openTime;
-    private LocalTime closeTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private String coverImageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -33,8 +34,9 @@ public class GalleryResponseDto {
         this.description = entity.getDescription();
         this.capacity = entity.getCapacity();
         this.isActive = entity.isActive();
-        this.openTime = entity.getOpenTime();
-        this.closeTime = entity.getCloseTime();
+        this.startTime = entity.getStartTime();
+        this.endTime = entity.getEndTime();
+        this.coverImageUrl = entity.getCoverImageUrl();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
     }
