@@ -21,7 +21,7 @@ public class GalleryCreateRequestDto {
         return Gallery.builder()
                 .name(name)
                 .location(location)
-                .floorZone(floorZone)
+                .floorZone(floorZone != null && !floorZone.isBlank() ? floorZone : "1")
                 .description(description)
                 .capacity(capacity)
                 .isActive(isActive)

@@ -14,5 +14,5 @@ public class GalleryUpdateRequestDto {
     private String floorZone;
     private String description;
     private Integer capacity;
-    private boolean isActive;
+    private boolean is_active;
 }

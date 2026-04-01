@@ -20,5 +20,12 @@ out/
 ### Mac OS ###
 .DS_Store
 
-### 시크릿 파일 ###
+### 올리지 않는 파일 ###
 src/main/resources/application-secret.properties
+src/main/java/com/study/galleryreservation/controller/ViewController.java
+src/main/resources/static/docu/20260401_GalleryReservation_001.md
+src/main/resources/static/docu/20260401_GalleryReservation_002.md
+src/main/resources/static/docu/20260401_GalleryReservation_003.md
+src/main/resources/static/docu/20260401_GalleryReservation_004.md
+src/main/resources/static/docu/20260401_prompt.txt
+
