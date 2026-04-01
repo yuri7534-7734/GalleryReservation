@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class GalleryController {
 
     private final GalleryRepository galleryRepository;
+
+
     //갤러리 상세화면
     @GetMapping("/gallery/detail")
     public String galleryDetail(@RequestParam("id") Long id, Model model) {
@@ -23,12 +25,12 @@ public class GalleryController {
         model.addAttribute("gallery", gallery);
         return "gallery/detail";
 
-    private final GalleryService galleryService;
-
-    @GetMapping("/gallery/")
-    public String galleryList(Model model) {
-        model.addAttribute("galleries", galleryService.findAll());
-        return "list";
+    //private final GalleryService galleryService;
+    //
+    //@GetMapping("/gallery/")
+    //public String galleryList(Model model) {
+    //    model.addAttribute("galleries", galleryService.findAll());
+    //    return "list";
 
     }
 }
