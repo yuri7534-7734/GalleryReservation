@@ -15,6 +15,7 @@ public class ReservationResponseDto {
     private Long id;
     private String galleryName;
     private String memberName;
+    private String email;
     private LocalDate reservationDate;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -27,6 +28,7 @@ public class ReservationResponseDto {
                 .id(reservation.getId())
                 .galleryName(reservation.getGallery().getName())
                 .memberName(reservation.getMember().getUsername())
+                .email(reservation.getMember().getEmail())
                 .reservationDate(reservation.getReservationDate())
                 .startTime(reservation.getStartTime())
                 .endTime(reservation.getEndTime())
