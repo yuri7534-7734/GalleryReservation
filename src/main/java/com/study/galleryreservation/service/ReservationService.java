@@ -53,7 +53,7 @@ public class ReservationService {
     public List<ReservationResponseDto> findByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(()-> new IllegalArgumentException("회원을 찾을 수 없습니다."));
-        return reservationRepository.findByMemberOrderByCreatedAtDesc(member)
+        return reservationRepository.findByMemberOrderByCreatedAtAsc(member)
                 .stream()
                 .map(ReservationResponseDto::from)
                 .toList();
@@ -96,9 +96,9 @@ public class ReservationService {
         reservation.rejected();
     }
 
-    public List<ReservationResponseDto> findAll(){
+    public List<ReservationResponseDto> findAllByOrderByIdAsc(){
 
-        return reservationRepository.findAll()
+        return reservationRepository.findAllByOrderByIdAsc()
                 .stream()
                 .map(ReservationResponseDto::from)
                 .toList();
