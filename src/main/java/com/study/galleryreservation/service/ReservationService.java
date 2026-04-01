@@ -96,9 +96,9 @@ public class ReservationService {
         reservation.rejected();
     }
 
-    public List<ReservationResponseDto> findAll(){
+    public List<ReservationResponseDto> findAllByOrderByIdAsc(){
 
-        return reservationRepository.findAll()
+        return reservationRepository.findAllByOrderByIdAsc()
                 .stream()
                 .map(ReservationResponseDto::from)
                 .toList();
