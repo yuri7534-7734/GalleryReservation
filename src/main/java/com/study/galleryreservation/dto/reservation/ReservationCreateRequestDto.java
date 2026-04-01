@@ -24,4 +24,10 @@ public class ReservationCreateRequestDto {
 
     @NotNull(message = "종료 시간을 입력해주세요")
     private LocalTime endTime;
+
+    @NotNull(message = "인원을 확인해주세요")
+    private Integer guests;
+
+    @NotNull(message = "연락처를 입력해주세요")
+    private String contact;
 }

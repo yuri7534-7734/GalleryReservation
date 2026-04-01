@@ -74,6 +74,8 @@ CREATE TABLE reservation (
     reservation_date DATE        NOT NULL,                                 -- 관람 날짜
     start_time       TIME        NOT NULL,                                 -- 관람 시작 시간
     end_time         TIME        NOT NULL,                                 -- 관람 종료 시간
+    guests           INT,                                                  -- 인원수 (선택)
+    contact_info     VARCHAR(20),                                          -- 연락처 (선택)
     status           VARCHAR(20) NOT NULL DEFAULT 'PENDING',               -- 예약 상태 (PENDING=대기 / APPROVED=확정 / REJECTED=거절)
     created_at       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,       -- 예약 신청 일시
     updated_at       TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,       -- 상태 변경/수정 일시 (UPDATE 시 트리거로 자동 갱신)

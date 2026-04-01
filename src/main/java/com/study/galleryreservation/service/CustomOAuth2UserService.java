@@ -26,7 +26,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-
     private final HttpSession httpSession;
     private final SnsUserRepository repository;
     private final MemberRepository memberRepository;

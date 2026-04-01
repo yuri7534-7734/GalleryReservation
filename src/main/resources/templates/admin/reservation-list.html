@@ -257,6 +257,11 @@
         border-radius: 10px;
         font-size: 13px;
         font-weight: 750;
+        margin-right: 5px;
+
+      }
+      .btn-align {
+        display: flex;
       }
 
       .badge {
@@ -708,10 +713,10 @@
                 <label for="resStatus">상태</label>
                 <select id="resStatus">
                   <option value="ALL" selected>전체</option>
-                  <option value="SCHEDULED">확정</option>
                   <option value="PENDING">대기</option>
-                  <option value="CANCELLED">취소</option>
-                  <option value="COMPLETED">완료</option>
+                  <option value="APPROVED">확정</option>
+                  <option value="REJECTED">거절 (관리자)</option>
+                  <option value="CANCELLED">취소 (예약자)</option>
                 </select>
               </div>
             </div>
@@ -727,8 +732,8 @@
                   <th>갤러리</th>
                   <th style="width: 200px">예약자</th>
                   <th style="width: 210px">일정</th>
-                  <th style="width: 150px">상태</th>
-                  <th style="width: 240px">작업</th>
+                  <th style="width: 120px">상태</th>
+                  <th style="width: 180px">작업</th>
                 </tr>
               </thead>
               <tbody id="reservationRows">
@@ -745,9 +750,9 @@
                 </tr>
                 <tr
                   th:each="reservation : ${reservations}"
-                  th:data-status="${reservation.displayStatus}"
+                  th:data-status="${reservation.status.name()}"
                 >
-                  <td style="font-weight: 950" th:text="${reservation.code}">
+                  <td style="font-weight: 950" th:text="${reservation.id}">
                     R-1001
                   </td>
                   <td>
@@ -761,22 +766,22 @@
                     >
                       Gallery
                     </div>
-                    <div
-                      class="helpText"
-                      style="
-                        margin: 4px 0 0;
-                        font-size: 12.5px;
-                        color: var(--muted);
-                      "
-                      th:text="${reservation.reservationType}"
-                    >
-                      유형
-                    </div>
+<!--                    <div-->
+<!--                      class="helpText"-->
+<!--                      style="-->
+<!--                        margin: 4px 0 0;-->
+<!--                        font-size: 12.5px;-->
+<!--                        color: var(&#45;&#45;muted);-->
+<!--                      "-->
+<!--                      th:text="${reservation.reservationType}"-->
+<!--                    >-->
+<!--                      유형-->
+<!--                    </div>-->
                   </td>
                   <td>
                     <div
                       style="font-weight: 900"
-                      th:text="${reservation.memberUsername}"
+                      th:text="${reservation.email}"
                     >
                       사용자
                     </div>
@@ -813,40 +818,29 @@
                   </td>
                   <td>
                     <span
-                      th:class="${reservation.displayStatus == 'SCHEDULED'} ? 'badge badge-ok' : (${reservation.displayStatus == 'PENDING'} ? 'badge badge-warn' : (${reservation.displayStatus == 'CANCELLED'} ? 'badge badge-danger' : 'badge badge-info'))"
-                      th:text="${reservation.displayStatus == 'SCHEDULED'} ? '확정' : (${reservation.displayStatus == 'PENDING'} ? '대기' : (${reservation.displayStatus == 'CANCELLED'} ? '취소' : '완료'))"
-                      >상태</span
-                    >
+                      th:class="${reservation.status.name() == 'APPROVED'}  ? 'badge badge-ok' :
+                                (${reservation.status.name() == 'PENDING'}   ? 'badge badge-warn' :
+                                (${reservation.status.name() == 'REJECTED'}  ? 'badge badge-danger' : 'badge'))"
+                      th:text="${reservation.status.name() == 'APPROVED'}  ? '확정' :
+                               (${reservation.status.name() == 'PENDING'}   ? '대기' :
+                               (${reservation.status.name() == 'REJECTED'}  ? '거절' : '취소'))"
+                      style="padding: 8px 14px; font-size: 13px; font-weight: 700;"
+                    ></span>
                   </td>
                   <td>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                      <form
-                        th:if="${reservation.displayStatus == 'PENDING'}"
-                        th:action="@{/admin/reservation/approve/{id}(id=${reservation.id})}"
-                        method="post"
-                        style="margin: 0"
-                      >
-                        <button class="btn btn-small btn-primary" type="submit">
-                          승인
-                        </button>
+                    <div th:if="${reservation.status.name() == 'PENDING'}"
+                         style="display:flex; gap:6px; align-items:center;">
+                      <form th:action="@{/admin/reservation/approve/{id}(id=${reservation.id})}"
+                            method="post" style="margin:0">
+                        <button class="btn btn-small btn-primary" type="submit">승인</button>
                       </form>
-                      <form
-                        th:if="${reservation.displayStatus == 'PENDING'}"
-                        th:action="@{/admin/reservation/reject/{id}(id=${reservation.id})}"
-                        method="post"
-                        style="margin: 0"
-                      >
-                        <button class="btn btn-small btn-danger" type="submit">
-                          거절
-                        </button>
+                      <form th:action="@{/admin/reservation/reject/{id}(id=${reservation.id})}"
+                            method="post" style="margin:0">
+                        <button class="btn btn-small btn-danger" type="submit">거절</button>
                       </form>
-                      <span
-                        th:unless="${reservation.displayStatus == 'PENDING'}"
-                        class="helpText"
-                        style="margin: 0; font-weight: 800; color: var(--muted)"
-                        >처리완료</span
-                      >
                     </div>
+                    <span th:unless="${reservation.status.name() == 'PENDING'}"
+                          style="display:inline-block; padding:8px 0; color:var(--muted); font-size:13px; font-weight:700;">—</span>
                   </td>
                 </tr>
               </tbody>
@@ -954,7 +948,7 @@
             const s = status.value || "ALL";
             rows.forEach((tr) => {
               const text = (tr.innerText || "").toLowerCase();
-              const st = tr.getAttribute("data-status") || "SCHEDULED";
+              const st = tr.getAttribute("data-status") || "PENDING";
               const hitTx = !q || text.includes(q);
               const hitSt = s === "ALL" || st === s;
               tr.style.display = hitTx && hitSt ? "" : "none";

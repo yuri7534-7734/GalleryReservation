@@ -15,9 +15,12 @@ public class ReservationResponseDto {
     private Long id;
     private String galleryName;
     private String memberName;
+    private String email;
     private LocalDate reservationDate;
     private LocalTime startTime;
     private LocalTime endTime;
+    private Integer guests;
+    private String contact;
     private ReservationStatus status;
 
     public static ReservationResponseDto from(Reservation reservation) {
@@ -25,10 +28,14 @@ public class ReservationResponseDto {
                 .id(reservation.getId())
                 .galleryName(reservation.getGallery().getName())
                 .memberName(reservation.getMember().getUsername())
+                .email(reservation.getMember().getEmail())
                 .reservationDate(reservation.getReservationDate())
                 .startTime(reservation.getStartTime())
                 .endTime(reservation.getEndTime())
+                .guests(reservation.getGuests())
+                .contact(reservation.getContact())
                 .status(reservation.getStatus())
                 .build();
     }
 }
+
