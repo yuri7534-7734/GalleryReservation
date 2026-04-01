@@ -721,7 +721,6 @@
                     th:field="*{floorZone}"
                     type="text"
                     placeholder="예: 1, A, 3F"
-                    value="1"
                   />
                 </div>
                 <div>
@@ -735,14 +734,6 @@
                     placeholder="예: 35"
                     required
                   />
-                </div>
-                <div>
-                  <label for="gStatus">상태</label>
-                  <select id="gStatus" name="status">
-                    <option value="ACTIVE" selected>운영중</option>
-                    <option value="PAUSED">일시중지</option>
-                    <option value="SOLD_OUT">마감</option>
-                  </select>
                 </div>
               </div>
 
@@ -923,30 +914,17 @@
         const ids = [
           "gName",
           "gLocation",
-          "gFloorZone",
           "gCapacity",
           "gHours",
           "gDesc",
-          "gStatus",
           "gCover",
         ];
         const el = {};
         ids.forEach((id) => (el[id] = document.getElementById(id)));
 
         function applyBadge() {
-          const s =
-            el.gStatus && el.gStatus.value ? el.gStatus.value : "ACTIVE";
-          badge.className = "badge";
-          if (s === "ACTIVE") {
-            badge.textContent = "운영중";
-            badge.classList.add("badge-ok");
-          } else if (s === "PAUSED") {
-            badge.textContent = "일시중지";
-            badge.classList.add("badge-warn");
-          } else {
-            badge.textContent = "마감";
-            badge.classList.add("badge-danger");
-          }
+          badge.className = "badge badge-ok";
+          badge.textContent = "운영 중";
         }
 
         function applyPreview() {
