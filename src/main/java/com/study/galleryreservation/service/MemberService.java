@@ -34,4 +34,4 @@ public class MemberService {
                 .build();
         repository.save(member);
     }
-}
+}// 수정

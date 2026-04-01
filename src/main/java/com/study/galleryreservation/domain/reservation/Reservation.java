@@ -2,6 +2,7 @@ package com.study.galleryreservation.domain.reservation;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
 import com.study.galleryreservation.domain.member.Member;
+import com.study.galleryreservation.domain.session.SnsUser;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -50,7 +51,6 @@ public class Reservation {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt; //예약 수정 일시(상태 변경)
-
 
     @PrePersist
     public void setCreatedAt(){

@@ -1,6 +1,7 @@
 package com.study.galleryreservation.service;
 
 import com.study.galleryreservation.domain.member.Member;
+import com.study.galleryreservation.domain.member.MemberRole;
 import com.study.galleryreservation.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         Member member = repository.findByUsername(username).orElseThrow(()->
                 new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority(member.getRole().getValue()));
+        MemberRole role = member.getRole() != null ? member.getRole() : MemberRole.ROLE_USER;
+        authorityList.add(new SimpleGrantedAuthority(role.getValue()));
 
         return new User(member.username, member.password, authorityList);
     }

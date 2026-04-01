@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface SnsUserRepository extends JpaRepository<SnsUser, Long> {
     Optional<SnsUser> findByProviderAndProviderId(String provider, String providerId);
-    Optional<SnsUser> findByProviderId(String username);
 }

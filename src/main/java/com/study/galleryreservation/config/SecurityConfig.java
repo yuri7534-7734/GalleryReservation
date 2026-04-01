@@ -27,7 +27,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -47,7 +47,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers("/css/**", "/js/**").permitAll()
                 .requestMatchers("/", "/member/join", "/member/login").permitAll()
-                .requestMatchers("/gallery/list", "/gallery/detail/**").permitAll()
+                .requestMatchers("/gallery/list", "/gallery/detail", "/gallery/detail/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );
