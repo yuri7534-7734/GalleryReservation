@@ -2,6 +2,8 @@ package com.study.galleryreservation.dto.gallery;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @NoArgsConstructor
@@ -14,5 +16,7 @@ public class GalleryUpdateRequestDto {
     private String floorZone;
     private String description;
     private Integer capacity;
-    private boolean is_active;
+    private boolean isActive;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
