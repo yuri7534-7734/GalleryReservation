@@ -7,8 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Getter@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TodoCreateRequestDto {
@@ -18,7 +17,7 @@ public class TodoCreateRequestDto {
 
     private String content;
 
-    private Boolean isDone;
+    private boolean isDone;
 
     private LocalDate dueDate;
 

@@ -668,7 +668,11 @@
               method="post"
               class="stack"
             >
-              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+              <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+              />
               <div>
                 <div class="row">
                   <h2

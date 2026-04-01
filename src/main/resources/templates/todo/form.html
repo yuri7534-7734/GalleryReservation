@@ -9,7 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>할 일 작성 - 갤러리 예약</title>
     <style>
-      /* 디자인 컨셉: 화이트 큐브 갤러리 */
       :root {
         --bg0: #ffffff;
         --bg1: #f8f9fb;
@@ -27,16 +26,6 @@
         --radius-sm: 12px;
         --ring: 0 0 0 4px rgba(184, 147, 77, 0.15);
         --container: 1120px;
-      }
-      html[data-theme="light"] {
-        --bg0: #ffffff;
-        --bg1: #f8f9fb;
-        --surface: #ffffff;
-        --surface2: #f1f3f7;
-        --stroke: rgba(0, 0, 0, 0.08);
-        --text: #1a1d23;
-        --muted: rgba(26, 29, 35, 0.6);
-        --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
       }
       * {
         box-sizing: border-box;
@@ -91,15 +80,11 @@
         margin: 0 auto;
         padding: 0 20px;
       }
-
-      /* Focus */
       :focus-visible {
         outline: none;
         box-shadow: var(--ring);
         border-color: var(--accent) !important;
       }
-
-      /* Typography */
       .kicker {
         display: inline-flex;
         align-items: center;
@@ -133,46 +118,11 @@
         position: relative;
         overflow: hidden;
       }
-      .hero::before {
-        content: "";
-        position: absolute;
-        left: -260px;
-        top: -260px;
-        width: 560px;
-        height: 560px;
-        background: radial-gradient(
-          circle at 30% 30%,
-          rgba(184, 147, 77, 0.12),
-          transparent 62%
-        );
-        filter: blur(20px);
-        pointer-events: none;
-        opacity: 0.95;
-      }
-      .hero::after {
-        content: "";
-        position: absolute;
-        right: -260px;
-        top: -180px;
-        width: 560px;
-        height: 560px;
-        background: radial-gradient(
-          circle at 50% 30%,
-          rgba(74, 144, 226, 0.08),
-          transparent 60%
-        );
-        filter: blur(20px);
-        pointer-events: none;
-        opacity: 0.8;
-      }
-
-      /* Components */
       .card {
         background: var(--surface);
         border: 1px solid var(--stroke);
         border-radius: var(--radius);
         box-shadow: var(--shadow);
-        backdrop-filter: blur(10px);
       }
       .cardPad {
         padding: 18px;
@@ -195,16 +145,11 @@
       .grid-2 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      .grid-3 {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
       @media (max-width: 920px) {
-        .grid-2,
-        .grid-3 {
+        .grid-2 {
           grid-template-columns: 1fr;
         }
       }
-
       .btn {
         display: inline-flex;
         align-items: center;
@@ -218,7 +163,6 @@
         font-weight: 700;
         letter-spacing: 0.15px;
         cursor: pointer;
-        user-select: none;
         transition:
           transform 0.12s ease,
           background 0.12s ease,
@@ -232,11 +176,11 @@
         background: var(--bg1);
       }
       .btn:active {
-        transform: translateY(0px);
+        transform: translateY(0);
       }
       .btn-primary {
         background: var(--text);
-        color: #ffffff;
+        color: #fff;
         border: none;
       }
       .btn-primary:hover {
@@ -247,18 +191,12 @@
         background: transparent;
         border-color: var(--stroke);
       }
-      .btn-danger {
-        border-color: rgba(255, 77, 79, 0.2);
-        background: rgba(255, 77, 79, 0.05);
-        color: var(--danger);
-      }
       .btn-small {
         padding: 8px 10px;
         border-radius: 10px;
         font-size: 13px;
         font-weight: 750;
       }
-
       .badge {
         display: inline-flex;
         align-items: center;
@@ -270,8 +208,6 @@
         color: var(--muted);
         font-weight: 750;
         font-size: 12.5px;
-        letter-spacing: 0.2px;
-        white-space: nowrap;
       }
       .badge-ok {
         border-color: rgba(82, 196, 26, 0.2);
@@ -283,27 +219,11 @@
         color: var(--accent);
         background: rgba(184, 147, 77, 0.08);
       }
-      .badge-danger {
-        border-color: rgba(255, 77, 79, 0.2);
-        color: var(--danger);
-        background: rgba(255, 77, 79, 0.08);
-      }
-      .badge-info {
-        border-color: rgba(74, 144, 226, 0.2);
-        color: var(--accent2);
-        background: rgba(74, 144, 226, 0.08);
-      }
-
-      /* Navbar */
       .navbar {
         position: sticky;
         top: 0;
         z-index: 60;
         backdrop-filter: blur(14px);
-        background: rgba(255, 255, 255, 0.8);
-        border-bottom: 1px solid var(--stroke);
-      }
-      html[data-theme="light"] .navbar {
         background: rgba(255, 255, 255, 0.8);
         border-bottom: 1px solid var(--stroke);
       }
@@ -342,10 +262,6 @@
         color: var(--muted);
         font-weight: 800;
         font-size: 13.5px;
-        transition:
-          border-color 0.12s ease,
-          color 0.12s ease,
-          background 0.12s ease;
       }
       .navLink:hover {
         color: var(--text);
@@ -357,50 +273,6 @@
         align-items: center;
         gap: 10px;
       }
-      .hamburger {
-        display: none;
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        color: var(--text);
-        cursor: pointer;
-        font-weight: 900;
-      }
-      @media (max-width: 920px) {
-        .navLinks {
-          display: none;
-        }
-        .hamburger {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-      #mobileMenu {
-        display: none;
-        border-top: 1px solid var(--stroke);
-        background: #ffffff;
-      }
-      #mobileMenu[data-open="true"] {
-        display: block;
-      }
-      .mobileMenuInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 10px 20px 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .mobileMenuInner .navLink {
-        width: 100%;
-        border-color: var(--stroke);
-        background: var(--bg1);
-      }
-
-      /* Forms */
       label {
         display: block;
         font-weight: 850;
@@ -412,16 +284,14 @@
       select,
       textarea {
         width: 100%;
-        padding: 12px 12px;
+        padding: 12px;
         border-radius: 12px;
         background: #ffffff;
         border: 1px solid var(--stroke);
         color: var(--text);
         outline: none;
-        transition:
-          border-color 0.12s ease,
-          background 0.12s ease;
         font-size: 14.5px;
+        transition: border-color 0.12s ease;
       }
       textarea {
         min-height: 120px;
@@ -435,7 +305,6 @@
       select:focus,
       textarea:focus {
         border-color: var(--accent);
-        background: #ffffff;
         box-shadow: var(--ring);
       }
       .helpText {
@@ -454,75 +323,11 @@
           grid-template-columns: 1fr;
         }
       }
-
-      /* Tables */
-      .tableWrap {
-        overflow: auto;
-        border-radius: var(--radius);
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-      }
-      table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        min-width: 720px;
-      }
-      thead th {
-        position: sticky;
-        top: 0;
-        background: var(--bg1);
-        z-index: 1;
-        text-align: left;
-        padding: 14px 14px;
-        font-size: 12.5px;
-        letter-spacing: 0.3px;
-        text-transform: uppercase;
-        color: var(--muted);
-        border-bottom: 1px solid var(--stroke);
-      }
-      tbody td {
-        padding: 14px 14px;
-        border-bottom: 1px solid var(--stroke);
-        color: var(--text);
-        vertical-align: middle;
-      }
-      tbody tr:hover td {
-        background: var(--bg1);
-      }
-
-      /* Footer */
       footer {
         border-top: 1px solid var(--stroke);
         padding: 22px 0;
         color: var(--muted);
-        background: #ffffff;
-      }
-      .footerInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-      .footerLinks {
-        display: flex;
-        gap: 14px;
-        flex-wrap: wrap;
-      }
-
-      /* Reduced motion */
-      @media (prefers-reduced-motion: reduce) {
-        * {
-          transition: none !important;
-          scroll-behavior: auto !important;
-        }
-        .btn:hover {
-          transform: none;
-        }
+        background: #fff;
       }
     </style>
   </head>
@@ -602,7 +407,7 @@
         <section class="grid grid-2" style="align-items: start">
           <div class="card cardPad">
             <form
-              th:action="@{/todo/form}"
+              th:action="@{/todo/create}"
               th:object="${todoCreateRequestDto}"
               method="post"
               class="stack"
@@ -613,6 +418,7 @@
                 th:name="${_csrf.parameterName}"
                 th:value="${_csrf.token}"
               />
+
               <div class="row" style="flex-wrap: wrap">
                 <div>
                   <div
@@ -625,7 +431,7 @@
                     기본 정보
                   </div>
                   <div class="helpText" style="margin: 6px 0 0">
-                    제목 · 카테고리 · 기한을 입력하세요.
+                    제목 · 기한 · 완료 여부를 입력하세요.
                   </div>
                 </div>
                 <a
@@ -636,6 +442,7 @@
                 >
               </div>
 
+              <!-- 제목 / 기한 -->
               <div class="formGrid">
                 <div>
                   <label for="todoTitle">제목</label>
@@ -648,58 +455,18 @@
                   />
                 </div>
                 <div>
-                  <label for="todoCategory">카테고리</label>
-                  <select id="todoCategory" name="category">
-                    <option value="운영" selected>운영</option>
-                    <option value="점검">점검</option>
-                    <option value="공지">공지</option>
-                    <option value="청소">청소</option>
-                  </select>
-                </div>
-                <div>
                   <label for="todoDue">기한</label>
-                  <input
-                    id="todoDue"
-                    th:field="*{dueDate}"
-                    type="date"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="todoAssignee">담당자</label>
-                  <input
-                    id="todoAssignee"
-                    name="assignee"
-                    type="text"
-                    placeholder="예: 스태프 A"
-                  />
+                  <input id="todoDue" th:field="*{dueDate}" type="date" />
                 </div>
               </div>
 
-              <div class="formGrid">
-                <div>
-                  <label for="todoPriority">우선순위</label>
-                  <select id="todoPriority" name="priority">
-                    <option value="LOW">낮음</option>
-                    <option value="MEDIUM" selected>보통</option>
-                    <option value="HIGH">높음</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="todoStatus">상태</label>
-                  <select id="todoStatus" th:field="*{isDone}">
-                    <option value="false" selected>미완료</option>
-                    <option value="true">완료</option>
-                  </select>
-                </div>
-              </div>
-
+              <!-- 상세 내용 -->
               <div>
-                <label for="todoDesc">상세 설명</label>
+                <label for="todoContent">상세 내용</label>
                 <textarea
-                  id="todoDesc"
+                  id="todoContent"
                   th:field="*{content}"
-                  placeholder="작업 체크 포인트를 간단히 적어주세요. 예: 표지판 위치, 조도, 동선 혼잡도 등."
+                  placeholder="작업 체크 포인트를 간단히 적어주세요."
                 ></textarea>
               </div>
 
@@ -715,6 +482,7 @@
             </form>
           </div>
 
+          <!-- 미리보기 -->
           <div class="stack">
             <div class="card cardPad">
               <div class="row" style="flex-wrap: wrap">
@@ -734,9 +502,7 @@
                 </div>
                 <span class="badge badge-warn" id="previewState">미완료</span>
               </div>
-
               <div style="height: 14px"></div>
-
               <div
                 class="card"
                 style="
@@ -759,21 +525,13 @@
                 </div>
                 <div
                   class="helpText"
-                  style="margin: 6px 0 0; font-size: 13.5px; color: var(--text)"
-                  id="prevDesc"
+                  style="margin: 6px 0 0; font-size: 13.5px"
+                  id="prevContent"
                 >
-                  상세 설명이 여기에 표시됩니다.
+                  상세 내용이 여기에 표시됩니다.
                 </div>
                 <div style="height: 12px"></div>
-                <div class="grid grid-2" style="gap: 12px">
-                  <div class="badge" id="prevCategory">카테고리</div>
-                  <div class="badge" id="prevDue">기한</div>
-                </div>
-                <div style="height: 12px"></div>
-                <div class="row" style="justify-content: flex-start; gap: 8px">
-                  <div class="badge" id="prevPriority">우선순위</div>
-                  <div class="badge badge-info" id="prevAssignee">담당자</div>
-                </div>
+                <div class="badge" id="prevDue">기한</div>
               </div>
             </div>
 
@@ -803,14 +561,7 @@
         </section>
       </main>
 
-      <footer
-        style="
-          border-top: 1px solid var(--stroke);
-          padding: 30px 0;
-          background: #fff;
-          margin-top: 40px;
-        "
-      >
+      <footer>
         <div
           class="container"
           style="
@@ -837,48 +588,25 @@
         if (!form) return;
 
         const title = document.getElementById("todoTitle");
-        const category = document.getElementById("todoCategory");
         const due = document.getElementById("todoDue");
-        const assignee = document.getElementById("todoAssignee");
-        const priority = document.getElementById("todoPriority");
-        const status = document.getElementById("todoStatus");
-        const desc = document.getElementById("todoDesc");
+        const content = document.getElementById("todoContent");
 
         const prevTitle = document.getElementById("prevTitle");
-        const prevDesc = document.getElementById("prevDesc");
-        const prevCategory = document.getElementById("prevCategory");
+        const prevContent = document.getElementById("prevContent");
         const prevDue = document.getElementById("prevDue");
-        const prevPriority = document.getElementById("prevPriority");
-        const prevAssignee = document.getElementById("prevAssignee");
         const previewState = document.getElementById("previewState");
         if (!prevTitle || !prevDue) return;
 
         function apply() {
           prevTitle.textContent = (title.value || "할 일 제목").trim();
-          prevDesc.textContent = (
-            desc.value || "상세 설명이 여기에 표시됩니다."
+          prevContent.textContent = (
+            content.value || "상세 내용이 여기에 표시됩니다."
           ).trim();
-          prevCategory.textContent =
-            category.options[category.selectedIndex]?.text || "카테고리";
           prevDue.textContent = due.value ? due.value : "기한";
-          prevPriority.textContent =
-            priority.options[priority.selectedIndex]?.text || "우선순위";
-          prevAssignee.textContent =
-            (assignee.value || "담당자").trim() || "담당자";
-
-          const st = status.value || "OPEN";
-          previewState.className = "badge";
-          if (st === "DONE") {
-            previewState.textContent = "완료";
-            previewState.classList.add("badge-ok");
-          } else {
-            previewState.textContent = "미완료";
-            previewState.classList.add("badge-warn");
-          }
         }
 
         ["input", "change"].forEach((evt) => {
-          [title, category, due, assignee, priority, status, desc].forEach(
+          [title, due, content].forEach(
             (el) => el && el.addEventListener(evt, apply),
           );
         });

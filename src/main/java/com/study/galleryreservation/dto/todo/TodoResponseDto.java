@@ -13,7 +13,7 @@ public class TodoResponseDto {
 
     private String content;
 
-    private Boolean isDone;
+    private boolean isDone;
 
     private LocalDate dueDate;
 
