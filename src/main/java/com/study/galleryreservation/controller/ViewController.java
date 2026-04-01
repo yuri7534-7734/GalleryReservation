@@ -1,12 +1,54 @@
 package com.study.galleryreservation.controller;
 
+import com.study.galleryreservation.repository.GalleryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ViewController {
+    @Autowired
+    private GalleryRepository galleryRepository;
+
+    // 메인 페이지
     @GetMapping("/")
-    public String home() {
-        return "redirect:/todo/list?memberId=1";
+    public String index() {
+        return "index";
+    }
+
+    // 전시 목록 페이지 이동
+    @GetMapping("/gallery/list")
+    public String galleryList(Model model){
+        model.addAttribute("galleries", galleryRepository.findAll());
+        return "gallery/list";
+    }
+
+    // 로그아웃
+    @PostMapping("/member/logout")
+    public String logout(){
+        return "redirect:/index";
+    }
+
+    // 예약 내역 페이지 이동
+    @GetMapping("/reservation/list")
+    public String reservationList(){
+        return "reservation/list";
+    }
+
+
+
+
+    // 갤러리 관리(관리자 전용)
+    @GetMapping("/admin/gallery/list")
+    public String adminGalleryList(){
+        return "admin/gallery-list";
+    }
+
+    // 갤러리 등록(관리자 전용)
+    @GetMapping("/admin/gallery/form")
+    public String adminGalleryForm(){
+        return "admin/gallery-form";
     }
 }

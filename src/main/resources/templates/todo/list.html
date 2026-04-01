@@ -113,6 +113,17 @@
       }
       tbody td { padding: 14px; border-bottom: 1px solid var(--stroke); color: var(--text); vertical-align: middle; }
       tbody tr:hover td { background: var(--bg1); }
+      .flashErr {
+        margin: 0 0 16px;
+        padding: 12px 14px;
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(255,77,79,.35);
+        background: rgba(255,77,79,.08);
+        color: var(--danger);
+        font-weight: 750;
+        font-size: 14px;
+        line-height: 1.45;
+      }
       footer { border-top: 1px solid var(--stroke); padding: 22px 0; color: var(--muted); background: #fff; }
     </style>
   </head>
@@ -153,6 +164,12 @@
         </section>
 
         <section class="card cardPad">
+          <div
+            th:if="${errorMessage}"
+            class="flashErr"
+            role="alert"
+            th:text="${errorMessage}"
+          ></div>
           <div class="row" style="flex-wrap:wrap">
             <div class="stack" style="gap:6px">
               <div style="font-weight:950;letter-spacing:-.3px;font-size:16px;">검색 및 필터</div>

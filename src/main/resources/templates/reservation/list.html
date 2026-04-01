@@ -7,7 +7,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>할 일 목록 - 갤러리 예약</title>
+    <title>내 예약 - 갤러리 예약</title>
     <style>
       /* 디자인 컨셉: 화이트 큐브 갤러리 */
       :root {
@@ -519,6 +519,36 @@
         flex-wrap: wrap;
       }
 
+      /* Toast */
+      #grToast {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 9999;
+        min-width: 260px;
+        max-width: 380px;
+        padding: 16px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: #ffffff;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        color: var(--text);
+        display: none;
+      }
+      #grToast[data-show="true"] {
+        display: block;
+      }
+      #grToast strong {
+        display: block;
+        margin-bottom: 2px;
+      }
+      #grToast .toastText {
+        color: var(--muted);
+        line-height: 1.45;
+        font-weight: 700;
+        font-size: 13.5px;
+      }
+
       /* Reduced motion */
       @media (prefers-reduced-motion: reduce) {
         * {
@@ -597,10 +627,11 @@
 
       <main class="container">
         <section class="hero">
-          <div class="kicker">TODO</div>
-          <h1 class="title">운영 할 일 목록</h1>
+          <div class="kicker">MY RESERVATIONS</div>
+          <h1 class="title">내 예약 목록</h1>
           <p class="subtitle">
-            전시 운영 준비, 점검, 공지 초안을 관리하는 화면입니다.
+            확정 · 대기 · 취소 상태를 한눈에 확인하고, 필요한 경우 변경 또는
+            취소 요청을 보낼 수 있습니다.
           </p>
         </section>
 
@@ -614,10 +645,10 @@
                   font-size: 16px;
                 "
               >
-                검색 및 필터
+                예약 필터
               </div>
               <div class="helpText" style="margin: 0">
-                완료 · 미완료를 빠르게 구분하세요.
+                상태를 선택하면 목록이 즉시 갱신됩니다.
               </div>
             </div>
             <div
@@ -629,21 +660,18 @@
               "
             >
               <div>
-                <label for="tStatus">상태</label>
-                <select id="tStatus">
+                <label for="myStatus">상태</label>
+                <select id="myStatus">
                   <option value="ALL" selected>전체</option>
-                  <option value="OPEN">미완료</option>
-                  <option value="DONE">완료</option>
+                  <option value="PENDING">대기</option>
+                  <option value="SCHEDULED">확정</option>
+                  <option value="CANCELLED">취소</option>
+                  <option value="COMPLETED">완료</option>
                 </select>
               </div>
               <div>
-                <label for="tSearch">검색</label>
-                <input id="tSearch" type="text" placeholder="제목 / 카테고리" />
-              </div>
-              <div style="align-self: flex-end">
-                <a class="btn btn-primary" href="#" th:href="@{/todo/form}"
-                  >새 할 일</a
-                >
+                <label for="mySearch">검색</label>
+                <input id="mySearch" type="text" placeholder="갤러리명" />
               </div>
             </div>
           </div>
@@ -651,81 +679,163 @@
           <div style="height: 14px"></div>
 
           <div class="tableWrap">
-            <table aria-label="할 일 목록">
+            <table aria-label="내 예약 목록">
               <thead>
                 <tr>
-                  <th style="width: 120px">기한</th>
-                  <th>업무</th>
-                  <th style="width: 160px">카테고리</th>
-                  <th style="width: 180px">담당자</th>
-                  <th style="width: 140px">상태</th>
-                  <th style="width: 220px">작업</th>
+                  <th style="width: 120px">예약 번호</th>
+                  <th>갤러리</th>
+                  <th style="width: 220px">일정</th>
+                  <th style="width: 160px">상태</th>
+                  <th style="width: 240px">작업</th>
                 </tr>
               </thead>
-              <tbody id="todoRows">
-                <tr th:if="${todos == null or #lists.isEmpty(todos)}">
+              <tbody id="myRows">
+                <tr
+                  th:if="${reservations == null or #lists.isEmpty(reservations)}"
+                >
                   <td
-                    colspan="6"
+                    colspan="5"
                     class="helpText"
                     style="text-align: center; padding: 24px"
                   >
-                    등록된 할 일이 없습니다. 새 할 일을 만들어보세요.
+                    아직 예약이 없습니다. 새 예약을 만들어보세요.
                   </td>
                 </tr>
-                <tr th:each="todo : ${todos}" th:data-status="${todo.status}">
-                  <td th:text="${todo.dueDate}">2026-04-03</td>
+                <tr
+                  th:each="reservation : ${reservations}"
+                  th:data-status="${reservation.displayStatus}"
+                >
+                  <td style="font-weight: 950" th:text="${reservation.code}">
+                    R-1001
+                  </td>
                   <td>
                     <div
-                      style="
-                        font-weight: 950;
-                        letter-spacing: -0.2px;
-                        color: #111;
-                      "
-                      th:text="${todo.title}"
+                      style="font-weight: 900"
+                      th:text="${reservation.galleryName}"
                     >
-                      할 일
+                      Gallery
                     </div>
                     <div
                       class="helpText"
-                      style="
-                        margin: 4px 0 0;
-                        font-size: 12.5px;
-                        color: var(--muted);
-                      "
-                      th:text="${todo.description}"
+                      style="margin: 4px 0 0; font-size: 12.5px"
+                      th:text="${'인원: ' + reservation.guests + '명'}"
                     >
-                      설명
+                      인원: 2명
                     </div>
                   </td>
-                  <td th:text="${todo.category}">운영</td>
-                  <td
-                    th:text="${#strings.isEmpty(todo.assignee) ? '-' : todo.assignee}"
-                  >
-                    담당자
+                  <td>
+                    <div
+                      style="font-weight: 900"
+                      th:text="${reservation.reservationDate + ' ' + reservation.startTime}"
+                    >
+                      2026-04-10 19:00
+                    </div>
                   </td>
                   <td>
                     <span
-                      th:class="${todo.status == 'DONE'} ? 'badge badge-ok' : 'badge badge-warn'"
-                      th:text="${todo.status == 'DONE'} ? '완료' : '미완료'"
+                      th:class="${reservation.displayStatus == 'SCHEDULED'} ? 'badge badge-ok' : (${reservation.displayStatus == 'PENDING'} ? 'badge badge-warn' : (${reservation.displayStatus == 'CANCELLED'} ? 'badge badge-danger' : 'badge badge-info'))"
+                      th:text="${reservation.displayStatus == 'SCHEDULED'} ? '확정' : (${reservation.displayStatus == 'PENDING'} ? '대기' : (${reservation.displayStatus == 'CANCELLED'} ? '취소' : '완료'))"
                       >상태</span
                     >
                   </td>
                   <td>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                      <a
-                        class="btn btn-small btn-ghost"
-                        href="#"
-                        th:href="@{/todo/form}"
-                        >상세</a
-                      >
+                      <span th:if="${reservation.status == 'PENDING'}">
+                        <form
+                          th:action="@{/reservation/cancel/{id}(id=${reservation.id})}"
+                          method="post"
+                          style="margin: 0"
+                        >
+                          <button
+                            class="btn btn-small btn-danger"
+                            type="submit"
+                          >
+                            취소
+                          </button>
+                        </form>
+                      </span>
+                      <span th:unless="${reservation.status == 'PENDING'}">
+                        <button
+                          class="btn btn-small"
+                          type="button"
+                          disabled
+                          style="opacity: 0.4"
+                        >
+                          취소불가
+                        </button>
+                      </span>
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+
+          <div style="height: 12px"></div>
+          <div class="row" style="flex-wrap: wrap">
+            <div></div>
+            <a class="btn btn-primary" href="#" th:href="@{/reservation/form}"
+              >새 예약</a
+            >
+          </div>
         </section>
       </main>
+
+      <div
+        id="confirmModal"
+        class="card"
+        style="
+          display: none;
+          position: fixed;
+          inset: 0;
+          margin: auto;
+          width: min(520px, calc(100vw - 28px));
+          height: fit-content;
+          z-index: 1000;
+          padding: 20px;
+          background: #ffffff;
+          border: 1px solid var(--stroke);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        "
+      >
+        <div class="stack" style="gap: 14px">
+          <div class="row" style="align-items: flex-start">
+            <div>
+              <div class="badge badge-danger">확인 필요</div>
+              <div
+                style="
+                  font-weight: 950;
+                  letter-spacing: -0.3px;
+                  font-size: 18px;
+                  margin-top: 8px;
+                  color: #111;
+                "
+              >
+                이 예약을 취소할까요?
+              </div>
+              <div class="helpText" style="margin: 8px 0 0">
+                취소된 예약은 복구할 수 없습니다.
+              </div>
+            </div>
+            <button
+              class="btn btn-ghost btn-small"
+              type="button"
+              id="confirmClose"
+              aria-label="닫기"
+            >
+              닫기
+            </button>
+          </div>
+          <div class="row" style="justify-content: flex-end">
+            <button class="btn btn-ghost" type="button" id="confirmKeep">
+              계속 유지
+            </button>
+            <button class="btn btn-danger" type="button" id="confirmDo">
+              취소 확정
+            </button>
+          </div>
+        </div>
+      </div>
 
       <footer
         style="
@@ -757,26 +867,52 @@
 
     <script>
       (function () {
-        const status = document.getElementById("tStatus");
-        const search = document.getElementById("tSearch");
-        const rows = document.querySelectorAll("#todoRows tr");
-        if (!status || !search || !rows.length) return;
+        const myStatus = document.getElementById("myStatus");
+        const mySearch = document.getElementById("mySearch");
+        const rows = document.querySelectorAll("#myRows tr");
 
-        function apply() {
-          const st = status.value || "ALL";
-          const q = (search.value || "").toLowerCase().trim();
-          rows.forEach((tr) => {
-            const trSt = tr.getAttribute("data-status") || "OPEN";
-            const text = (tr.innerText || "").toLowerCase();
-            const hitSt = st === "ALL" || trSt === st;
-            const hitTx = !q || text.includes(q);
-            tr.style.display = hitSt && hitTx ? "" : "none";
-          });
+        if (myStatus && mySearch && rows.length) {
+          function apply() {
+            const s = myStatus.value || "ALL";
+            const q = (mySearch.value || "").toLowerCase().trim();
+            rows.forEach((tr) => {
+              const st = tr.getAttribute("data-status") || "SCHEDULED";
+              const text = (tr.innerText || "").toLowerCase();
+              const hitStatus = s === "ALL" || st === s;
+              const hitText = !q || text.includes(q);
+              tr.style.display = hitStatus && hitText ? "" : "none";
+            });
+          }
+          myStatus.addEventListener("change", apply);
+          mySearch.addEventListener("input", apply);
+          apply();
         }
 
-        status.addEventListener("change", apply);
-        search.addEventListener("input", apply);
-        apply();
+        const modal = document.getElementById("confirmModal");
+        const close = document.getElementById("confirmClose");
+        const keep = document.getElementById("confirmKeep");
+        const doBtn = document.getElementById("confirmDo");
+
+        function openModal() {
+          if (modal) modal.style.display = "block";
+        }
+        function closeModal() {
+          if (modal) modal.style.display = "none";
+        }
+
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest
+            ? e.target.closest("[data-open-confirm]")
+            : null;
+          if (btn) openModal();
+        });
+
+        if (close) close.addEventListener("click", closeModal);
+        if (keep) keep.addEventListener("click", closeModal);
+        if (doBtn) doBtn.addEventListener("click", closeModal);
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeModal();
+        });
       })();
     </script>
   </body>

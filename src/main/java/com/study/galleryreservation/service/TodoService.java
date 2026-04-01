@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,14 @@ import java.util.stream.Collectors;
 public class TodoService {
     private final TodoRepository todoRepository;
     private final MemberRepository memberRepository;
+    public  List<Todo>getAll(){
+        return todoRepository.findAll();
+    }
+    public TodoResponseDto findById(Long id) {
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 todo가 없습니다. id=" + id));
+        return toResponseDto(todo);
+    }
 
     //전체조회
     public List<TodoResponseDto>getAll(Long memberId){
@@ -57,15 +66,18 @@ public class TodoService {
     }
     //생성
     @Transactional
-    public TodoResponseDto create(TodoCreateRequestDto dto){
-        Member member=memberRepository.findById(dto.getMemberId())
+    public TodoResponseDto create(Long memberId,TodoCreateRequestDto dto){
+        Member member=memberRepository.findById(memberId)
                 .orElseThrow(()->new IllegalArgumentException("해당맴버가없습니다.id="+dto.getMemberId()));
+        LocalDateTime now = LocalDateTime.now();
         Todo todo=Todo.builder()
                 .member(member)
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .isDone(false)
                 .dueDate(dto.getDueDate())
+                .createdAt(now)
+                .updatedAt(now)
                 .build();
         return toResponseDto(todoRepository.save(todo));
     }
@@ -79,13 +91,16 @@ public class TodoService {
         Todo todo=todoRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("해당 Todo가 없습니다.id="+id));
 
+        LocalDateTime now = LocalDateTime.now();
         Todo updated=Todo.builder()
                 .id(todo.getId())
                 .member(todo.getMember())
                 .title(dto.getTitle())
                 .content(dto.getContent())
-                .isDone(dto.isDone())
+                .isDone(dto.getIsDone())
                 .dueDate(dto.getDueDate())
+                .createdAt(todo.getCreatedAt())
+                .updatedAt(now)
                 .build();
 
         return  toResponseDto(todoRepository.save(updated));

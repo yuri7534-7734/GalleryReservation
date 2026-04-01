@@ -7,7 +7,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>할 일 작성 - 갤러리 예약</title>
+    <title>예약하기 - 갤러리 예약</title>
     <style>
       /* 디자인 컨셉: 화이트 큐브 갤러리 */
       :root {
@@ -491,6 +491,49 @@
         background: var(--bg1);
       }
 
+      /* Thumb */
+      .thumb {
+        height: 160px;
+        border-radius: 16px;
+        border: 1px solid var(--stroke);
+        background: linear-gradient(135deg, #fdfdfd 0%, #f1f3f5 100%);
+        overflow: hidden;
+        position: relative;
+      }
+      .thumb::after {
+        content: "";
+        position: absolute;
+        inset: -30px -30px auto -30px;
+        height: 120px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(0, 0, 0, 0.02),
+          transparent
+        );
+        transform: rotate(-10deg);
+        opacity: 0.9;
+      }
+      .thumbLabel {
+        position: absolute;
+        left: 14px;
+        bottom: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .thumbTitle {
+        font-weight: 950;
+        letter-spacing: -0.4px;
+        font-size: 18px;
+        color: #111;
+      }
+      .thumbMeta {
+        color: var(--muted);
+        font-weight: 800;
+        font-size: 12.5px;
+      }
+
       /* Footer */
       footer {
         border-top: 1px solid var(--stroke);
@@ -512,6 +555,36 @@
         display: flex;
         gap: 14px;
         flex-wrap: wrap;
+      }
+
+      /* Toast */
+      #grToast {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        z-index: 9999;
+        min-width: 260px;
+        max-width: 380px;
+        padding: 16px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: #ffffff;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        color: var(--text);
+        display: none;
+      }
+      #grToast[data-show="true"] {
+        display: block;
+      }
+      #grToast strong {
+        display: block;
+        margin-bottom: 2px;
+      }
+      #grToast .toastText {
+        color: var(--muted);
+        line-height: 1.45;
+        font-weight: 700;
+        font-size: 13.5px;
       }
 
       /* Reduced motion */
@@ -592,27 +665,21 @@
 
       <main class="container">
         <section class="hero">
-          <div class="kicker">TODO</div>
-          <h1 class="title">할 일 작성</h1>
+          <div class="kicker">RESERVATION</div>
+          <h1 class="title">전시 예약</h1>
           <p class="subtitle">
-            전시 운영 준비, 점검, 공지 초안 등 업무를 체계적으로 관리합니다.
+            원하는 갤러리를 선택하고 날짜 · 시간 · 인원을 입력하세요.
           </p>
         </section>
 
         <section class="grid grid-2" style="align-items: start">
           <div class="card cardPad">
             <form
-              th:action="@{/todo/form}"
-              th:object="${todoCreateRequestDto}"
+              th:action="@{/reservation/form}"
+              th:object="${reservationCreateRequestDto}"
               method="post"
               class="stack"
-              id="todoForm"
             >
-              <input
-                type="hidden"
-                th:name="${_csrf.parameterName}"
-                th:value="${_csrf.token}"
-              />
               <div class="row" style="flex-wrap: wrap">
                 <div>
                   <div
@@ -622,84 +689,87 @@
                       font-size: 16px;
                     "
                   >
-                    기본 정보
+                    예약 정보
                   </div>
                   <div class="helpText" style="margin: 6px 0 0">
-                    제목 · 카테고리 · 기한을 입력하세요.
+                    필수 항목을 입력하면 바로 제출할 수 있습니다.
                   </div>
                 </div>
                 <a
                   class="btn btn-ghost btn-small"
                   href="#"
-                  th:href="@{/todo/list}"
-                  >목록으로</a
+                  th:href="@{/reservation/list}"
+                  >내 예약</a
                 >
               </div>
 
               <div class="formGrid">
                 <div>
-                  <label for="todoTitle">제목</label>
-                  <input
-                    id="todoTitle"
-                    th:field="*{title}"
-                    type="text"
-                    placeholder="예: 입장 동선 점검"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="todoCategory">카테고리</label>
-                  <select id="todoCategory" th:field="*{category}" required>
-                    <option value="운영" selected>운영</option>
-                    <option value="점검">점검</option>
-                    <option value="공지">공지</option>
-                    <option value="청소">청소</option>
+                  <label for="gallerySelect">갤러리</label>
+                  <select id="gallerySelect" th:field="*{galleryId}" required>
+                    <option
+                      th:each="gallery : ${galleries}"
+                      th:value="${gallery.id}"
+                      th:text="${gallery.name}"
+                    >
+                      Gallery
+                    </option>
                   </select>
                 </div>
                 <div>
-                  <label for="todoDue">기한</label>
+                  <label for="reservationType">관람 유형</label>
+                  <select id="reservationType" th:field="*{type}" required>
+                    <option value="STANDARD" selected>일반 관람</option>
+                    <option value="GUIDED">가이드 동행</option>
+                    <option value="PRIVATE">프라이빗</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="dateInput">관람 날짜</label>
                   <input
-                    id="todoDue"
-                    th:field="*{dueDate}"
+                    id="dateInput"
+                    th:field="*{date}"
                     type="date"
                     required
                   />
                 </div>
                 <div>
-                  <label for="todoAssignee">담당자</label>
+                  <label for="timeSelect">시간</label>
+                  <select id="timeSelect" th:field="*{time}" required>
+                    <option value="10:00" selected>10:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="19:00">19:00</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="guestsInput">인원</label>
                   <input
-                    id="todoAssignee"
-                    th:field="*{assignee}"
-                    type="text"
-                    placeholder="예: 스태프 A"
+                    id="guestsInput"
+                    th:field="*{guests}"
+                    type="number"
+                    min="1"
+                    step="1"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="contactInput">연락처 (선택)</label>
+                  <input
+                    id="contactInput"
+                    th:field="*{contact}"
+                    type="tel"
+                    placeholder="010-0000-0000"
                   />
                 </div>
               </div>
 
-              <div class="formGrid">
-                <div>
-                  <label for="todoPriority">우선순위</label>
-                  <select id="todoPriority" th:field="*{priority}">
-                    <option value="LOW">낮음</option>
-                    <option value="MEDIUM" selected>보통</option>
-                    <option value="HIGH">높음</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="todoStatus">상태</label>
-                  <select id="todoStatus" th:field="*{status}">
-                    <option value="OPEN" selected>미완료</option>
-                    <option value="DONE">완료</option>
-                  </select>
-                </div>
-              </div>
-
               <div>
-                <label for="todoDesc">상세 설명</label>
+                <label for="noteInput">요청 사항 (선택)</label>
                 <textarea
-                  id="todoDesc"
-                  th:field="*{description}"
-                  placeholder="작업 체크 포인트를 간단히 적어주세요. 예: 표지판 위치, 조도, 동선 혼잡도 등."
+                  id="noteInput"
+                  th:field="*{note}"
+                  placeholder="예: 조용한 좌석, 휠체어 동반 등"
                 ></textarea>
               </div>
 
@@ -707,10 +777,28 @@
                 class="row"
                 style="justify-content: flex-end; flex-wrap: wrap"
               >
-                <a class="btn btn-ghost" href="#" th:href="@{/todo/list}"
-                  >취소</a
+                <a class="btn btn-ghost" href="#" th:href="@{/gallery/list}"
+                  >전시 목록</a
                 >
-                <button class="btn btn-primary" type="submit">등록</button>
+                <button class="btn btn-primary" type="submit">예약 제출</button>
+              </div>
+
+              <div
+                class="card"
+                style="
+                  box-shadow: none;
+                  background: var(--bg1);
+                  padding: 14px;
+                  border-color: var(--stroke);
+                "
+              >
+                <div style="display: flex; gap: 10px; align-items: flex-start">
+                  <span class="badge badge-info">안내</span>
+                  <div class="helpText" style="margin: 0">
+                    제출 후 예약 상태는 대기 &rarr; 확정 순서로 변경됩니다. 확정
+                    후 입장 시간에 맞춰 준비해 주세요.
+                  </div>
+                </div>
               </div>
             </form>
           </div>
@@ -723,56 +811,152 @@
                     style="
                       font-weight: 950;
                       letter-spacing: -0.3px;
-                      font-size: 16.5px;
+                      font-size: 16px;
                     "
                   >
-                    미리보기
+                    예약 요약
                   </div>
                   <div class="helpText" style="margin: 6px 0 0">
-                    입력값이 카드 형태로 실시간 표시됩니다.
+                    입력값이 실시간으로 반영됩니다.
                   </div>
                 </div>
-                <span class="badge badge-warn" id="previewState">미완료</span>
+                <span class="badge badge-warn" id="summaryStatus">대기</span>
               </div>
 
               <div style="height: 14px"></div>
 
-              <div
-                class="card"
-                style="
-                  box-shadow: none;
-                  background: var(--bg1);
-                  padding: 14px;
-                  border-color: var(--stroke);
-                "
-              >
-                <div
-                  style="
-                    font-weight: 1000;
-                    letter-spacing: -0.35px;
-                    font-size: 18px;
-                    color: #111;
-                  "
-                  id="prevTitle"
-                >
-                  할 일 제목
+              <div class="stack" style="gap: 10px">
+                <div class="row" style="align-items: flex-start">
+                  <div>
+                    <div
+                      class="helpText"
+                      style="
+                        margin: 0;
+                        text-transform: uppercase;
+                        letter-spacing: 0.3px;
+                        font-size: 12px;
+                        color: var(--accent);
+                        font-weight: 800;
+                      "
+                    >
+                      갤러리
+                    </div>
+                    <div
+                      style="
+                        font-weight: 950;
+                        letter-spacing: -0.3px;
+                        margin-top: 8px;
+                      "
+                      id="summaryGallery"
+                    >
+                      Monochrome Hall
+                    </div>
+                  </div>
+                  <span class="badge badge-ok" id="summaryCap">최대 35명</span>
                 </div>
-                <div
-                  class="helpText"
-                  style="margin: 6px 0 0; font-size: 13.5px; color: var(--text)"
-                  id="prevDesc"
-                >
-                  상세 설명이 여기에 표시됩니다.
-                </div>
-                <div style="height: 12px"></div>
+
                 <div class="grid grid-2" style="gap: 12px">
-                  <div class="badge" id="prevCategory">카테고리</div>
-                  <div class="badge" id="prevDue">기한</div>
+                  <div
+                    class="card"
+                    style="
+                      box-shadow: none;
+                      background: var(--bg1);
+                      padding: 12px;
+                      border-color: var(--stroke);
+                    "
+                  >
+                    <div
+                      class="helpText"
+                      style="
+                        margin: 0;
+                        text-transform: uppercase;
+                        letter-spacing: 0.3px;
+                        font-size: 12px;
+                        color: var(--accent);
+                        font-weight: 800;
+                      "
+                    >
+                      일정
+                    </div>
+                    <div
+                      id="summaryWhen"
+                      style="
+                        font-weight: 950;
+                        letter-spacing: -0.3px;
+                        margin-top: 8px;
+                      "
+                    >
+                      날짜 / 시간 선택
+                    </div>
+                  </div>
+                  <div
+                    class="card"
+                    style="
+                      box-shadow: none;
+                      background: var(--bg1);
+                      padding: 12px;
+                      border-color: var(--stroke);
+                    "
+                  >
+                    <div
+                      class="helpText"
+                      style="
+                        margin: 0;
+                        text-transform: uppercase;
+                        letter-spacing: 0.3px;
+                        font-size: 12px;
+                        color: var(--accent);
+                        font-weight: 800;
+                      "
+                    >
+                      인원
+                    </div>
+                    <div
+                      id="summaryGuests"
+                      style="
+                        font-weight: 950;
+                        letter-spacing: -0.3px;
+                        margin-top: 8px;
+                      "
+                    >
+                      2명
+                    </div>
+                  </div>
                 </div>
-                <div style="height: 12px"></div>
-                <div class="row" style="justify-content: flex-start; gap: 8px">
-                  <div class="badge" id="prevPriority">우선순위</div>
-                  <div class="badge badge-info" id="prevAssignee">담당자</div>
+
+                <div
+                  class="card"
+                  style="
+                    box-shadow: none;
+                    background: var(--bg1);
+                    padding: 12px;
+                    border-color: var(--stroke);
+                  "
+                >
+                  <div
+                    class="helpText"
+                    style="
+                      margin: 0;
+                      text-transform: uppercase;
+                      letter-spacing: 0.3px;
+                      font-size: 12px;
+                      color: var(--accent);
+                      font-weight: 800;
+                    "
+                  >
+                    관람 유형 안내
+                  </div>
+                  <div
+                    id="summaryNote"
+                    class="helpText"
+                    style="
+                      margin: 8px 0 0;
+                      font-size: 13.5px;
+                      color: var(--text);
+                    "
+                  >
+                    예약 확정 후, 입장 시간에 맞춰 준비해 주세요.
+                  </div>
                 </div>
               </div>
             </div>
@@ -789,14 +973,15 @@
                   font-weight: 800;
                 "
               >
-                작성 팁
+                관람 가이드
               </h2>
               <div
                 class="helpText"
                 style="margin: 0; line-height: 1.8; color: var(--text)"
               >
-                "무엇을 · 어디까지 · 어떤 결과를" 한 문장에 담으면, 다음
-                담당자가 이어서 처리하기 쉬워집니다.
+                1. 시작 5분 전까지 도착해 주세요.<br />
+                2. 전시 구역에서는 촬영 제한이 있을 수 있습니다.<br />
+                3. 안내에 따라 조용히 이동해 주세요.
               </div>
             </div>
           </div>
@@ -833,54 +1018,59 @@
 
     <script>
       (function () {
-        const form = document.getElementById("todoForm");
-        if (!form) return;
+        const gallerySelect = document.getElementById("gallerySelect");
+        const typeSelect = document.getElementById("reservationType");
+        const dateInput = document.getElementById("dateInput");
+        const timeSelect = document.getElementById("timeSelect");
+        const guestsInput = document.getElementById("guestsInput");
 
-        const title = document.getElementById("todoTitle");
-        const category = document.getElementById("todoCategory");
-        const due = document.getElementById("todoDue");
-        const assignee = document.getElementById("todoAssignee");
-        const priority = document.getElementById("todoPriority");
-        const status = document.getElementById("todoStatus");
-        const desc = document.getElementById("todoDesc");
+        const sGallery = document.getElementById("summaryGallery");
+        const sWhen = document.getElementById("summaryWhen");
+        const sGuests = document.getElementById("summaryGuests");
+        const sCap = document.getElementById("summaryCap");
+        const sStatus = document.getElementById("summaryStatus");
+        const sNote = document.getElementById("summaryNote");
+        if (!gallerySelect || !guestsInput || !sGallery || !sWhen) return;
 
-        const prevTitle = document.getElementById("prevTitle");
-        const prevDesc = document.getElementById("prevDesc");
-        const prevCategory = document.getElementById("prevCategory");
-        const prevDue = document.getElementById("prevDue");
-        const prevPriority = document.getElementById("prevPriority");
-        const prevAssignee = document.getElementById("prevAssignee");
-        const previewState = document.getElementById("previewState");
-        if (!prevTitle || !prevDue) return;
+        const capacityMap = { 1: 35, 2: 50, 3: 28, 4: 18, 5: 24, 6: 42 };
 
         function apply() {
-          prevTitle.textContent = (title.value || "할 일 제목").trim();
-          prevDesc.textContent = (
-            desc.value || "상세 설명이 여기에 표시됩니다."
-          ).trim();
-          prevCategory.textContent =
-            category.options[category.selectedIndex]?.text || "카테고리";
-          prevDue.textContent = due.value ? due.value : "기한";
-          prevPriority.textContent =
-            priority.options[priority.selectedIndex]?.text || "우선순위";
-          prevAssignee.textContent =
-            (assignee.value || "담당자").trim() || "담당자";
+          const gId = gallerySelect.value;
+          const gText =
+            gallerySelect.options[gallerySelect.selectedIndex]?.text ||
+            "갤러리";
+          const when = [dateInput.value, timeSelect.value]
+            .filter(Boolean)
+            .join(" ");
+          const guests = guestsInput.value || "1";
 
-          const st = status.value || "OPEN";
-          previewState.className = "badge";
-          if (st === "DONE") {
-            previewState.textContent = "완료";
-            previewState.classList.add("badge-ok");
-          } else {
-            previewState.textContent = "미완료";
-            previewState.classList.add("badge-warn");
-          }
+          sGallery.textContent = gText;
+          sWhen.textContent = when || "날짜 / 시간 선택";
+          sGuests.textContent = guests + "명";
+
+          const cap = capacityMap[gId] || 0;
+          if (cap > 0) sCap.textContent = "최대 " + cap + "명";
+
+          const t = typeSelect ? typeSelect.value : "STANDARD";
+          sNote.textContent =
+            t === "PRIVATE"
+              ? "프라이빗 관람입니다. 안내에 따라 조용히 진행됩니다."
+              : t === "GUIDED"
+                ? "가이드 동행 관람입니다. 체험 포인트를 중심으로 안내됩니다."
+                : "예약 확정 후, 입장 시간에 맞춰 준비해 주세요.";
+
+          sStatus.textContent = "대기";
+          sStatus.className = "badge badge-warn";
         }
 
         ["input", "change"].forEach((evt) => {
-          [title, category, due, assignee, priority, status, desc].forEach(
-            (el) => el && el.addEventListener(evt, apply),
-          );
+          [
+            gallerySelect,
+            typeSelect,
+            dateInput,
+            timeSelect,
+            guestsInput,
+          ].forEach((el) => el && el.addEventListener(evt, apply));
         });
         apply();
       })();
