@@ -24,6 +24,8 @@ public class ViewController {
         return "gallery/list";
     }
 
+
+
     // 예약 내역 페이지 이동
     @GetMapping("/reservation/list")
     public String reservationList(){
