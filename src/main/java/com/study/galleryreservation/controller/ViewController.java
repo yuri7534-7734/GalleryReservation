@@ -40,17 +40,4 @@ public class ViewController {
     public String reservationList(){
         return "reservation/list";
     }
-
-    // 할일 페이지 이동
-    @GetMapping("/todo/list")
-    public String todoList(){
-        return "todo/list";
-    }
-
-    // 새 할일 페이지 이동
-    @GetMapping("/todo/form")
-    public String todoForm(Model model){
-        model.addAttribute("todoCreateRequestDto", new TodoCreateRequestDto());
-        return "todo/form";
-    }
 }
