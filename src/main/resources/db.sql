@@ -51,7 +51,6 @@ CREATE TABLE gallery (
     floor_zone  VARCHAR(10)  NOT NULL DEFAULT '1',                  -- 층/구역 코드
     description TEXT,                                                 -- 갤러리 소개
     capacity    INT          NOT NULL,                                -- 최대 수용 인원
-    floor_zone  INT          DEFAULT "1",
     is_active   BOOLEAN      NOT NULL DEFAULT TRUE,                   -- 운영 여부 (true=운영중, false=비활성)
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,      -- 등록 일시
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP       -- 수정 일시 (UPDATE 시 트리거로 자동 갱신)
