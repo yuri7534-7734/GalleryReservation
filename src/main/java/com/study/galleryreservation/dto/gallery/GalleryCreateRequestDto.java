@@ -10,6 +10,7 @@ import lombok.*;
 public class GalleryCreateRequestDto {
     private String name;
     private String location;
+    private String floorZone;
     private String description;
     private Integer capacity;
     private boolean isActive;
@@ -19,6 +20,7 @@ public class GalleryCreateRequestDto {
         return Gallery.builder()
                 .name(name)
                 .location(location)
+                .floorZone(floorZone != null && !floorZone.isBlank() ? floorZone : "1")
                 .description(description)
                 .capacity(capacity)
                 .isActive(isActive)

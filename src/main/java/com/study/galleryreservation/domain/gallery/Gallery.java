@@ -30,6 +30,9 @@ public class Gallery {
     @Column(name = "location")
     private String location;
 
+    @Column(name = "floor_zone", nullable = false, length = 10)
+    private String floorZone;
+
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
