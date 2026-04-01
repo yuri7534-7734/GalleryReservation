@@ -7,12 +7,12 @@ import com.study.galleryreservation.dto.todo.TodoUpdateRequestDto;
 import com.study.galleryreservation.repository.MemberRepository;
 import com.study.galleryreservation.service.TodoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,91 +20,90 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class TodoController {
     private final TodoService todoService;
     private final MemberRepository memberRepository;
+
     @GetMapping("/list")
     public String list(
-            @RequestParam(required = false)Long memberId,
-            @RequestParam(required = false)String keyword,
-            @RequestParam(required = false)Boolean isDone,
-            Model model){
-        if(memberId == null){
-            model.addAttribute("todos",todoService.getAll());
-        }
-        else if (keyword!=null&&!keyword.isBlank()){
-            model.addAttribute("todos",todoService.search(memberId,keyword));
+            @RequestParam(required = false) Long memberId,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Boolean isDone,
+            Model model) {
+        if (memberId == null) {
+            model.addAttribute("todos", todoService.getAll());
+        } else if (keyword != null && !keyword.isBlank()) {
+            model.addAttribute("todos", todoService.search(memberId, keyword));
         } else if (isDone != null) {
-            model.addAttribute("todos",todoService.getAllByIsDone(memberId,isDone));
+            model.addAttribute("todos", todoService.getAllByIsDone(memberId, isDone));
+        } else {
+            model.addAttribute("todos", todoService.getAll(memberId));
         }
-else {
-    model.addAttribute("todos",todoService.getAll(memberId));
-        }
-return "todo/list";
+        return "todo/list";
     }
+
     @GetMapping("/form")
-    public String form(Model model){
-        model.addAttribute("todoCreateRequestDto",new TodoCreateRequestDto());
+    public String form(Model model) {
+        model.addAttribute("todoCreateRequestDto", new TodoCreateRequestDto());
         return "todo/form";
     }
+
     @PostMapping("/create")
-    public String create(@ModelAttribute TodoCreateRequestDto dto,
-                         @AuthenticationPrincipal UserDetails userDetails) {
-        Member member = memberRepository.findByUsername(userDetails.getUsername())
+    public String create(@ModelAttribute TodoCreateRequestDto dto, Principal principal) {
+        Member member = memberRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalArgumentException("로그인 사용자를 찾을 수 없습니다."));
         todoService.create(member.getId(), dto);
         return "redirect:/todo/list";
     }
+
     @GetMapping("/update/{id}")
     public String updateForm(@PathVariable Long id,
-                             @AuthenticationPrincipal UserDetails userDetails,
+                             Principal principal,
                              Model model,
-    RedirectAttributes redirectAttributes){
-        Member member=memberRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(()->new IllegalArgumentException("로그인 사용자를 찾을 수 없습니다"));
-        TodoResponseDto todo =todoService.findById(id);
-        if(!member.getId().equals(todo.getMemberId())){
-            redirectAttributes.addFlashAttribute("errorMessage","본인의 할 일만 수정할 수 있습니다.");
-        return "redirect:/todo/list";
+                             RedirectAttributes redirectAttributes) {
+        Member member = memberRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new IllegalArgumentException("로그인 사용자를 찾을 수 없습니다"));
+        TodoResponseDto todo = todoService.findById(id);
+        if (!member.getId().equals(todo.getMemberId())) {
+            redirectAttributes.addFlashAttribute("errorMessage", "본인의 할 일만 수정할 수 있습니다.");
+            return "redirect:/todo/list";
         }
 
-
-        TodoUpdateRequestDto todoUpdateRequestDto=TodoUpdateRequestDto.builder()
+        TodoUpdateRequestDto todoUpdateRequestDto = TodoUpdateRequestDto.builder()
                 .title(todo.getTitle())
                 .content(todo.getContent())
                 .dueDate(todo.getDueDate())
                 .isDone(todo.isDone())
                 .build();
-        model.addAttribute("todo",todo); //id등 기타정보용
-        model.addAttribute("todoUpdateRequestDto",todoUpdateRequestDto); //폼 바인딩용
+        model.addAttribute("todo", todo);
+        model.addAttribute("todoUpdateRequestDto", todoUpdateRequestDto);
         return "todo/update";
     }
+
     @PostMapping("/update/{id}")
     public String update(@PathVariable Long id,
                          @ModelAttribute TodoUpdateRequestDto dto,
-                         @AuthenticationPrincipal UserDetails userDetails,
-                         RedirectAttributes redirectAttributes
-    ){
-        Member member=memberRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(()->new IllegalArgumentException("로그인 사용자를 찾을 수 없습니다."));
-        try{
-            todoService.update(id,member.getId(),dto);
-        }catch(IllegalArgumentException e){
-            redirectAttributes.addFlashAttribute("errorMessage",e.getMessage());
-            return"redirect:/todo/list";
+                         Principal principal,
+                         RedirectAttributes redirectAttributes) {
+        Member member = memberRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new IllegalArgumentException("로그인 사용자를 찾을 수 없습니다."));
+        try {
+            todoService.update(id, member.getId(), dto);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/todo/list";
         }
-
-        return"redirect:/todo/list";
+        return "redirect:/todo/list";
     }
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Long id,
-                         @AuthenticationPrincipal UserDetails userDetails,
-                         RedirectAttributes redirectAttributes){
-        Member member=memberRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(()->new IllegalArgumentException("로그인사용자를 찾을 수 없습니다."));
-        try{
-            todoService.delete(id,member.getId());
-        }catch (IllegalArgumentException e){
-            redirectAttributes.addFlashAttribute("errorMessage",e.getMessage());
-        return "redirect:/todo/list";
+                         Principal principal,
+                         RedirectAttributes redirectAttributes) {
+        Member member = memberRepository.findByUsername(principal.getName())
+                .orElseThrow(() -> new IllegalArgumentException("로그인사용자를 찾을 수 없습니다."));
+        try {
+            todoService.delete(id, member.getId());
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/todo/list";
         }
         return "redirect:/todo/list";
     }

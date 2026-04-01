@@ -680,6 +680,11 @@
               method="post"
               class="stack"
             >
+              <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+              />
               <div class="row" style="flex-wrap: wrap">
                 <div>
                   <div
@@ -718,7 +723,7 @@
                 </div>
                 <div>
                   <label for="reservationType">관람 유형</label>
-                  <select id="reservationType" th:field="*{type}" required>
+                  <select id="reservationType" name="type">
                     <option value="STANDARD" selected>일반 관람</option>
                     <option value="GUIDED">가이드 동행</option>
                     <option value="PRIVATE">프라이빗</option>
@@ -728,14 +733,14 @@
                   <label for="dateInput">관람 날짜</label>
                   <input
                     id="dateInput"
-                    th:field="*{date}"
+                    th:field="*{reservationDate}"
                     type="date"
                     required
                   />
                 </div>
                 <div>
                   <label for="timeSelect">시간</label>
-                  <select id="timeSelect" th:field="*{time}" required>
+                  <select id="timeSelect" th:field="*{startTime}" required>
                     <option value="10:00" selected>10:00</option>
                     <option value="13:00">13:00</option>
                     <option value="16:00">16:00</option>
@@ -746,18 +751,17 @@
                   <label for="guestsInput">인원</label>
                   <input
                     id="guestsInput"
-                    th:field="*{guests}"
+                    name="guests"
                     type="number"
                     min="1"
                     step="1"
-                    required
                   />
                 </div>
                 <div>
                   <label for="contactInput">연락처 (선택)</label>
                   <input
                     id="contactInput"
-                    th:field="*{contact}"
+                    name="contact"
                     type="tel"
                     placeholder="010-0000-0000"
                   />
@@ -768,7 +772,7 @@
                 <label for="noteInput">요청 사항 (선택)</label>
                 <textarea
                   id="noteInput"
-                  th:field="*{note}"
+                  name="note"
                   placeholder="예: 조용한 좌석, 휠체어 동반 등"
                 ></textarea>
               </div>
