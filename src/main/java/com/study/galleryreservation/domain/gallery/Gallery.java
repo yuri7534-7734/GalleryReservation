@@ -43,13 +43,15 @@ public class Gallery {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @Column(name = "start_time")
-    private LocalTime startTime;
+    @Column(name = "start_time", nullable = false)
+    @Builder.Default
+    private LocalTime startTime = LocalTime.of(10, 0);
 
-    @Column(name = "end_time")
-    private LocalTime endTime;
+    @Column(name = "end_time", nullable = false)
+    @Builder.Default
+    private LocalTime endTime = LocalTime.of(18, 0);
 
-    @Column(name = "cover_image_url")
+    @Column(name = "cover_image_url", length = 500)
     private String coverImageUrl;
 
     @Column(name = "created_at", nullable = false)

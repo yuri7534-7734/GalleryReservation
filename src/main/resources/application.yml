@@ -10,8 +10,12 @@ spring:
 
   datasource:
     #    url: jdbc:postgresql://aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres
-    url: jdbc:postgresql://aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0&preferQueryMode=simple&tcpKeepAlive=true
-    username: postgres.towtayadnnrcauuedujw
+    # url: jdbc:postgresql://aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0&preferQueryMode=simple&tcpKeepAlive=true
+    #    url: jdbc:postgresql://aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres
+    #    username: postgres.towtayadnnrcauuedujw
+    # 6543 트랜잭션 풀러 + Hibernate 시 "prepared statement S_1 already exists" 방지
+    url: jdbc:postgresql://aws-1-ap-south-1.pooler.supabase.com:6543/postgres?prepareThreshold=0&preferQueryMode=simple&tcpKeepAlive=true
+    username: postgres.efzhpdppgxecjiywedmg
     password: "kosmo123!@#"
     driver-class-name: org.postgresql.Driver
     hikari:
