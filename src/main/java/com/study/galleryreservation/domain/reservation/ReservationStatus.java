@@ -12,6 +12,4 @@ public enum ReservationStatus {
     CANCELLED("예약 취소");  // 취소 (예약자 취소)
 
     private String value;
-
-
 }
