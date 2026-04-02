@@ -7,12 +7,16 @@ import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
+import com.study.galleryreservation.repository.ReservationRepository;
+import com.study.galleryreservation.service.GalleryService;
 import com.study.galleryreservation.service.ReservationService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -22,7 +26,11 @@ import java.util.List;
 public class ReservationController {
 
     private final GalleryRepository galleryRepository;
+    private final GalleryService galleryService;
+
+    private final ReservationRepository reservationRepository;
     private final ReservationService reservationService;
+
 
 
     //예약 누르면 갤러리 전시 예약
@@ -40,7 +48,7 @@ public class ReservationController {
     public String postForm(@ModelAttribute ReservationCreateRequestDto requestDto,
                            HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        reservationService.save(requestDto, sessionUser.getEmail());
+        galleryService.save(requestDto, sessionUser.getEmail());
         return "redirect:/reservation/list";
     }
 

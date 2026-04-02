@@ -61,7 +61,7 @@ public class Gallery {
     private LocalDateTime updatedAt;
 
     public void update(String name, String location, String floorZone,
-                       String description, Integer capacity, Boolean active) {
+                       String description, Integer capacity, Boolean active, String coverImageUrl) {
         this.name = name;
         this.location = location;
         if (floorZone != null && !floorZone.isBlank()) {
@@ -70,6 +70,10 @@ public class Gallery {
         this.description = description;
         this.capacity = capacity;
         this.isActive = active != null && active;
+        if (coverImageUrl != null) {
+            String c = coverImageUrl.trim();
+            this.coverImageUrl = c.isEmpty() ? null : c;
+        }
         this.updatedAt = LocalDateTime.now();
     }
 

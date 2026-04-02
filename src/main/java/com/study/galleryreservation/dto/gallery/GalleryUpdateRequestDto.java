@@ -16,6 +16,7 @@ public class GalleryUpdateRequestDto {
     private String description;
     private Integer capacity;
     private Boolean active;
+    private String coverImageUrl;
 
     public static GalleryUpdateRequestDto from(Gallery gallery) {
         return GalleryUpdateRequestDto.builder()
@@ -25,6 +26,7 @@ public class GalleryUpdateRequestDto {
                 .description(gallery.getDescription())
                 .capacity(gallery.getCapacity())
                 .active(gallery.isActive())
+                .coverImageUrl(gallery.getCoverImageUrl())
                 .build();
     }
 }

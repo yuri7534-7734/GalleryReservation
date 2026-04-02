@@ -81,7 +81,7 @@ public class GalleryService {
         Gallery gallery = galleryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
         gallery.update(dto.getName(), dto.getLocation(), dto.getFloorZone(),
-                dto.getDescription(), dto.getCapacity(), dto.getActive());
+                dto.getDescription(), dto.getCapacity(), dto.getActive(), dto.getCoverImageUrl());
     }
 
     // 갤러리 삭제(관리자 전용)

@@ -16,11 +16,30 @@
         .pageHeader { padding: 40px 0 32px; margin-bottom: 40px; }
         .container { padding: 0 16px; }
 
-        /* Thumb preview */
-        .thumb { height: 200px; border: 1px solid var(--stroke); background: #111111; overflow: hidden; position: relative; }
-        .thumbLabel { position: absolute; left: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
-        .thumbTitle { font-weight: 900; font-size: 18px; color: #ffffff; letter-spacing: -.3px; }
-        .thumbMeta { color: rgba(255,255,255,.65); font-weight: 600; font-size: 12.5px; }
+        /* Thumb preview: 배경 이미지 + 어두운 그라데이션 + 글자 */
+        .thumb {
+            height: 200px;
+            border: 1px solid var(--stroke);
+            background: #111111;
+            overflow: hidden;
+            position: relative;
+        }
+        .thumbBg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .thumbShade {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.2) 55%, transparent 100%);
+            pointer-events: none;
+        }
+        .thumbLabel { position: absolute; left: 16px; bottom: 16px; right: 16px; z-index: 1; display: flex; flex-direction: column; gap: 6px; }
+        .thumbTitle { font-weight: 900; font-size: 18px; color: #ffffff; letter-spacing: -.3px; text-shadow: 0 1px 12px rgba(0,0,0,0.5); }
+        .thumbMeta { color: rgba(255,255,255,.85); font-weight: 600; font-size: 12.5px; text-shadow: 0 1px 8px rgba(0,0,0,0.45); }
 
         /* Toggle */
         .toggleWrap { display: flex; align-items: center; gap: 12px; padding: 11px 13px; border: 1px solid var(--stroke-dark); background: #fff; }
@@ -173,6 +192,18 @@
                         </div>
                     </div>
 
+                    <!-- 커버 이미지 URL -->
+                    <div>
+                        <label for="coverImageUrl">커버 이미지 URL (선택)</label>
+                        <input
+                                id="coverImageUrl"
+                                th:field="*{coverImageUrl}"
+                                type="url"
+                                placeholder="https://example.com/cover.jpg"
+                        />
+                        <div class="helpText">목록·상세 카드 썸네일에 사용됩니다. 비우면 어두운 배경만 보입니다.</div>
+                    </div>
+
                     <!-- 갤러리 소개 -->
                     <div>
                         <label for="description">갤러리 소개</label>
@@ -203,6 +234,8 @@
                     </div>
 
                     <div class="thumb" id="previewThumb">
+                        <div class="thumbBg" id="previewThumbBg"></div>
+                        <div class="thumbShade"></div>
                         <div class="thumbLabel">
                             <div class="thumbTitle" id="pName" th:text="${gallery.name}">갤러리명</div>
                             <div class="thumbMeta" id="pMeta"
@@ -277,13 +310,41 @@
       const locationEl = document.getElementById("location");
       const capacityEl = document.getElementById("capacity");
       const descEl     = document.getElementById("description");
-      const activeEl   = document.getElementById("active");
+      const coverEl    = document.getElementById("coverImageUrl");
+      const activeEl   = document.getElementById("activeToggle");
 
       const pName    = document.getElementById("pName");
       const pMeta    = document.getElementById("pMeta");
       const pDesc    = document.getElementById("pDesc");
       const badge    = document.getElementById("previewBadge");
       const togLabel = document.getElementById("toggleLabel");
+      const thumbBg  = document.getElementById("previewThumbBg");
+
+      function normalizeImageUrl(raw) {
+        if (!raw) return "";
+        const u = String(raw).trim();
+        if (!u) return "";
+        if (u.startsWith("http://") || u.startsWith("https://") || u.startsWith("//")) return u;
+        if (u.startsWith("/")) return u;
+        return "/" + u;
+      }
+
+      function applyThumbBackground() {
+        if (!thumbBg) return;
+        const v = coverEl && coverEl.value != null ? coverEl.value.trim() : "";
+        const url = normalizeImageUrl(v);
+        if (url) {
+          thumbBg.style.backgroundImage =
+            "linear-gradient(to top, rgba(0,0,0,0.55), transparent), url(" + JSON.stringify(url) + ")";
+          thumbBg.style.backgroundSize = "cover, cover";
+          thumbBg.style.backgroundPosition = "center";
+        } else {
+          thumbBg.style.backgroundImage = "";
+          thumbBg.style.backgroundSize = "";
+        }
+      }
+
+      applyThumbBackground();
 
       /* 토글 텍스트 */
       function updateToggle() {
@@ -312,11 +373,16 @@
           (capacityEl.value || "0") +
           "석";
         pDesc.textContent = descEl.value.trim() || "소개글이 여기에 표시됩니다.";
+        applyThumbBackground();
       }
 
-      [nameEl, locationEl, capacityEl, descEl].forEach((el) =>
-        el.addEventListener("input", updatePreview)
-      );
+      [nameEl, locationEl, capacityEl, descEl].forEach(function (el) {
+        el.addEventListener("input", updatePreview);
+      });
+      if (coverEl) {
+        coverEl.addEventListener("input", applyThumbBackground);
+        coverEl.addEventListener("change", applyThumbBackground);
+      }
       updatePreview();
     })();
 </script>

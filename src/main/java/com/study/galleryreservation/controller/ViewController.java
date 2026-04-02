@@ -24,4 +24,9 @@ public class ViewController {
         return "gallery/list";
     }
 
+    @GetMapping("/reservation/reservation/detail")
+    public String reservationDetail(){
+        return "reservation/reservation-detail";
+    }
+
 }
