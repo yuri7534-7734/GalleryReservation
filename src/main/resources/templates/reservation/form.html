@@ -649,11 +649,6 @@
                 method="post"
                 style="margin: 0"
               >
-                <input
-                  type="hidden"
-                  th:name="${_csrf.parameterName}"
-                  th:value="${_csrf.token}"
-                />
                 <button type="submit" class="btn btn-ghost btn-small">
                   로그아웃
                 </button>
@@ -680,11 +675,6 @@
               method="post"
               class="stack"
             >
-              <input
-                type="hidden"
-                th:name="${_csrf.parameterName}"
-                th:value="${_csrf.token}"
-              />
               <div class="row" style="flex-wrap: wrap">
                 <div>
                   <div
@@ -717,16 +707,10 @@
                       th:value="${gallery.id}"
                       th:text="${gallery.name}"
                     >
+                      <!--                        th:data-start="${gallery.startDate}"-->
+                      <!--                        th:data-end="${gallery.endDate}"-->
                       Gallery
                     </option>
-                  </select>
-                </div>
-                <div>
-                  <label for="reservationType">관람 유형</label>
-                  <select id="reservationType" name="type">
-                    <option value="STANDARD" selected>일반 관람</option>
-                    <option value="GUIDED">가이드 동행</option>
-                    <option value="PRIVATE">프라이빗</option>
                   </select>
                 </div>
                 <div>
@@ -739,42 +723,51 @@
                   />
                 </div>
                 <div>
-                  <label for="timeSelect">시간</label>
-                  <select id="timeSelect" th:field="*{startTime}" required>
+                  <label for="startTimeSelect">시작 시간</label>
+                  <select id="startTimeSelect" th:field="*{startTime}" required>
                     <option value="10:00" selected>10:00</option>
+                    <option value="11:00">11:00</option>
                     <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
                     <option value="16:00">16:00</option>
                     <option value="19:00">19:00</option>
                   </select>
                 </div>
                 <div>
-                  <label for="guestsInput">인원</label>
+                  <label for="endTimeSelect">종료 시간</label>
+                  <select id="endTimeSelect" th:field="*{endTime}" required>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="20:00">20:00</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="guestsInput">인원수</label>
                   <input
                     id="guestsInput"
-                    name="guests"
+                    th:field="*{guests}"
                     type="number"
                     min="1"
+                    max="100"
                     step="1"
+                    placeholder="예: 2"
+                    required
                   />
                 </div>
                 <div>
                   <label for="contactInput">연락처 (선택)</label>
                   <input
                     id="contactInput"
-                    name="contact"
+                    th:field="*{contact}"
                     type="tel"
                     placeholder="010-0000-0000"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label for="noteInput">요청 사항 (선택)</label>
-                <textarea
-                  id="noteInput"
-                  name="note"
-                  placeholder="예: 조용한 좌석, 휠체어 동반 등"
-                ></textarea>
               </div>
 
               <div
@@ -853,10 +846,10 @@
                       "
                       id="summaryGallery"
                     >
-                      Monochrome Hall
+                      갤러리를 선택하세요
                     </div>
                   </div>
-                  <span class="badge badge-ok" id="summaryCap">최대 35명</span>
+                  <span class="badge badge-warn">대기</span>
                 </div>
 
                 <div class="grid grid-2" style="gap: 12px">
@@ -880,17 +873,17 @@
                         font-weight: 800;
                       "
                     >
-                      일정
+                      관람 날짜
                     </div>
                     <div
-                      id="summaryWhen"
+                      id="summaryDate"
                       style="
                         font-weight: 950;
                         letter-spacing: -0.3px;
                         margin-top: 8px;
                       "
                     >
-                      날짜 / 시간 선택
+                      날짜 선택
                     </div>
                   </div>
                   <div
@@ -913,7 +906,40 @@
                         font-weight: 800;
                       "
                     >
-                      인원
+                      관람 시간
+                    </div>
+                    <div
+                      id="summaryTime"
+                      style="
+                        font-weight: 950;
+                        letter-spacing: -0.3px;
+                        margin-top: 8px;
+                      "
+                    >
+                      시간 선택
+                    </div>
+                  </div>
+                  <div
+                    class="card"
+                    style="
+                      box-shadow: none;
+                      background: var(--bg1);
+                      padding: 12px;
+                      border-color: var(--stroke);
+                    "
+                  >
+                    <div
+                      class="helpText"
+                      style="
+                        margin: 0;
+                        text-transform: uppercase;
+                        letter-spacing: 0.3px;
+                        font-size: 12px;
+                        color: var(--accent);
+                        font-weight: 800;
+                      "
+                    >
+                      인원수
                     </div>
                     <div
                       id="summaryGuests"
@@ -923,7 +949,40 @@
                         margin-top: 8px;
                       "
                     >
-                      2명
+                      -
+                    </div>
+                  </div>
+                  <div
+                    class="card"
+                    style="
+                      box-shadow: none;
+                      background: var(--bg1);
+                      padding: 12px;
+                      border-color: var(--stroke);
+                    "
+                  >
+                    <div
+                      class="helpText"
+                      style="
+                        margin: 0;
+                        text-transform: uppercase;
+                        letter-spacing: 0.3px;
+                        font-size: 12px;
+                        color: var(--accent);
+                        font-weight: 800;
+                      "
+                    >
+                      연락처
+                    </div>
+                    <div
+                      id="summaryContact"
+                      style="
+                        font-weight: 950;
+                        letter-spacing: -0.3px;
+                        margin-top: 8px;
+                      "
+                    >
+                      -
                     </div>
                   </div>
                 </div>
@@ -948,10 +1007,9 @@
                       font-weight: 800;
                     "
                   >
-                    관람 유형 안내
+                    안내
                   </div>
                   <div
-                    id="summaryNote"
                     class="helpText"
                     style="
                       margin: 8px 0 0;
@@ -959,7 +1017,7 @@
                       color: var(--text);
                     "
                   >
-                    예약 확정 후, 입장 시간에 맞춰 준비해 주세요.
+                    예약 확정 후, 시작 시간 5분 전까지 도착해 주세요.
                   </div>
                 </div>
               </div>
@@ -1023,57 +1081,45 @@
     <script>
       (function () {
         const gallerySelect = document.getElementById("gallerySelect");
-        const typeSelect = document.getElementById("reservationType");
         const dateInput = document.getElementById("dateInput");
-        const timeSelect = document.getElementById("timeSelect");
+        const startTimeSelect = document.getElementById("startTimeSelect");
+        const endTimeSelect = document.getElementById("endTimeSelect");
         const guestsInput = document.getElementById("guestsInput");
+        const contactInput = document.getElementById("contactInput");
 
         const sGallery = document.getElementById("summaryGallery");
-        const sWhen = document.getElementById("summaryWhen");
+        const sDate = document.getElementById("summaryDate");
+        const sTime = document.getElementById("summaryTime");
         const sGuests = document.getElementById("summaryGuests");
-        const sCap = document.getElementById("summaryCap");
-        const sStatus = document.getElementById("summaryStatus");
-        const sNote = document.getElementById("summaryNote");
-        if (!gallerySelect || !guestsInput || !sGallery || !sWhen) return;
-
-        const capacityMap = { 1: 35, 2: 50, 3: 28, 4: 18, 5: 24, 6: 42 };
+        const sContact = document.getElementById("summaryContact");
+        if (!gallerySelect || !sGallery) return;
 
         function apply() {
-          const gId = gallerySelect.value;
           const gText =
             gallerySelect.options[gallerySelect.selectedIndex]?.text ||
-            "갤러리";
-          const when = [dateInput.value, timeSelect.value]
-            .filter(Boolean)
-            .join(" ");
-          const guests = guestsInput.value || "1";
+            "갤러리를 선택하세요";
+          const date = dateInput.value || "날짜 선택";
+          const start = startTimeSelect.value || "";
+          const end = endTimeSelect.value || "";
+          const timeText = start && end ? start + " ~ " + end : "시간 선택";
+          const guests = guestsInput.value ? guestsInput.value + "명" : "-";
+          const contact = contactInput.value || "-";
 
           sGallery.textContent = gText;
-          sWhen.textContent = when || "날짜 / 시간 선택";
-          sGuests.textContent = guests + "명";
-
-          const cap = capacityMap[gId] || 0;
-          if (cap > 0) sCap.textContent = "최대 " + cap + "명";
-
-          const t = typeSelect ? typeSelect.value : "STANDARD";
-          sNote.textContent =
-            t === "PRIVATE"
-              ? "프라이빗 관람입니다. 안내에 따라 조용히 진행됩니다."
-              : t === "GUIDED"
-                ? "가이드 동행 관람입니다. 체험 포인트를 중심으로 안내됩니다."
-                : "예약 확정 후, 입장 시간에 맞춰 준비해 주세요.";
-
-          sStatus.textContent = "대기";
-          sStatus.className = "badge badge-warn";
+          sDate.textContent = date;
+          sTime.textContent = timeText;
+          sGuests.textContent = guests;
+          sContact.textContent = contact;
         }
 
         ["input", "change"].forEach((evt) => {
           [
             gallerySelect,
-            typeSelect,
             dateInput,
-            timeSelect,
+            startTimeSelect,
+            endTimeSelect,
             guestsInput,
+            contactInput,
           ].forEach((el) => el && el.addEventListener(evt, apply));
         });
         apply();

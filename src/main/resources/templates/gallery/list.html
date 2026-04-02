@@ -460,7 +460,7 @@
               <article
                 th:each="gallery : ${galleries}"
                 class="card cardPad"
-                th:data-region="${gallery.location}"
+                th:data-floor-zone="${gallery.floorZone}"
                 th:data-cap="${gallery.capacity}"
                 th:data-status="${gallery.isActive}"
               >
@@ -475,7 +475,7 @@
                       </div>
                       <div
                         class="thumbMeta"
-                        th:text="${gallery.location + ' · ' + gallery.capacity + '석'}"
+                        th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : '층') + ' · ' + gallery.location + ' · ' + gallery.capacity + '석'}"
                       >
                         위치 · 석수
                       </div>
@@ -520,11 +520,11 @@
             .querySelectorAll("#galleryCardGrid article")
             .forEach((card) => {
               const text = (card.innerText || "").toLowerCase();
-              const cr = card.getAttribute("data-region") || "ALL";
+              const fz = card.getAttribute("data-floor-zone") || "";
               const cCap = Number(card.getAttribute("data-cap") || 0);
 
               const hitText = !query || text.includes(query);
-              const hitRegion = r === "ALL" || String(cr).includes(r);
+              const hitRegion = r === "ALL" || fz === r;
               const hitCap = cCap >= cap;
               card.style.display = hitText && hitRegion && hitCap ? "" : "none";
             });

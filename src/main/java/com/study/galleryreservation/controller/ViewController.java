@@ -27,17 +27,4 @@ public class ViewController {
         return "gallery/list";
     }
 
-    // 예약 폼 페이지 이동
-    @GetMapping("/reservation/form")
-    public String reservationForm(Model model){
-        model.addAttribute("reservationCreateRequestDto", new ReservationCreateRequestDto());
-        model.addAttribute("galleries", galleryRepository.findAll());
-        return "reservation/form";
-    }
-
-    // 예약 내역 페이지 이동
-    @GetMapping("/reservation/list")
-    public String reservationList(){
-        return "reservation/list";
-    }
 }
