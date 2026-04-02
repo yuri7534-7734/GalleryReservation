@@ -681,7 +681,8 @@
         <section class="grid grid-2" style="align-items: start">
           <div class="stack">
             <div class="card cardPad">
-              <div class="thumb" style="height: 240px">
+              <div class="thumb"
+                   th:style="${'height:240px;' + (gallery != null and gallery.coverImageUrl != null and !#strings.isEmpty(gallery.coverImageUrl) ? 'background-image:url(' + gallery.coverImageUrl + ');background-size:cover;background-position:center;' : '')}">
                 <div class="thumbLabel">
                   <div
                     class="thumbTitle"

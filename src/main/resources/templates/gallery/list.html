@@ -468,7 +468,8 @@
                   th:href="@{/gallery/detail(id=${gallery.id})}"
                   style="text-decoration: none"
                 >
-                  <div class="thumb">
+                  <div class="thumb"
+                       th:style="${gallery.coverImageUrl != null and !#strings.isEmpty(gallery.coverImageUrl) ? 'background-image:url(' + gallery.coverImageUrl + ');background-size:cover;background-position:center;' : ''}">
                     <div class="thumbLabel">
                       <div class="thumbTitle" th:text="${gallery.name}">
                         갤러리명

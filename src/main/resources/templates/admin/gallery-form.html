@@ -659,6 +659,13 @@
           </p>
         </section>
 
+        <div th:if="${errorMessage}"
+             style="background:rgba(255,77,79,.08);border:1px solid rgba(255,77,79,.2);
+                    color:#ff4d4f;border-radius:12px;padding:14px 16px;margin-bottom:16px;
+                    font-weight:700;font-size:14px;"
+             th:text="${errorMessage}">
+        </div>
+
         <section class="grid grid-2">
           <div class="card cardPad">
             <form
@@ -755,7 +762,7 @@
                 <label for="gCover">커버 이미지 URL (선택)</label>
                 <input
                   id="gCover"
-                  name="coverUrl"
+                  name="coverImageUrl"
                   type="url"
                   placeholder="https://example.com/cover.jpg"
                 />
