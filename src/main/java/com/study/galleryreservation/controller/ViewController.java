@@ -1,8 +1,5 @@
 package com.study.galleryreservation.controller;
 
-import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
-import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
-import com.study.galleryreservation.dto.todo.TodoCreateRequestDto;
 import com.study.galleryreservation.repository.GalleryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
