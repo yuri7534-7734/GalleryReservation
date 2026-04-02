@@ -56,4 +56,11 @@ public class GalleryController {
         galleryService.save(requestDto, sessionUser.getEmail());
         return "redirect:/reservation/list";
     }
+    //갤러리 예약 폼
+    @GetMapping("/gallery/form")
+    public String getForm(Model model) {
+        model.addAttribute("reservationCreateRequestDto", new ReservationCreateRequestDto());
+        model.addAttribute("galleries", galleryRepository.findAll());
+        return "reservation/form";
+    }
 }

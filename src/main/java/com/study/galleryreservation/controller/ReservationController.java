@@ -21,13 +21,7 @@ public class ReservationController {
     private final GalleryRepository galleryRepository;
     private final ReservationService reservationService;
 
-    @GetMapping("/form")
-    public String getForm(Model model) {
-        model.addAttribute("reservationCreateRequestDto", new ReservationCreateRequestDto());
-        model.addAttribute("galleries", galleryRepository.findAll());
-        return "reservation/form";
-    }
-
+    //예약 누르면 갤러리 전시 예약
     @GetMapping("/list")
     public String reservationList(Model model, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");

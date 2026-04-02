@@ -25,29 +25,33 @@
       /* ── 왼쪽: 이미지 + 정보 ── */
       .detailLeft { border-right: 1px solid var(--stroke); }
 
+      /* 히어로: 이미지가 박스를 여백 없이 채움 (비율 유지, 긴 쪽 기준으로 맞추면서 cover) */
       .detailHero {
         position: relative;
         height: 600px;
         overflow: hidden;
         background: #111111;
       }
-      .detailHeroBg {
+      .detailHeroImg {
         position: absolute;
         inset: 0;
-        background-size: cover;
-        background-position: center top;
-        background-color: #1a1a1a;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        z-index: 0;
       }
       .detailHeroOverlay {
         position: absolute;
         inset: 0;
+        z-index: 1;
         background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.15) 100%);
       }
       .detailHeroContent {
         position: absolute;
         bottom: 0; left: 0; right: 0;
         padding: 32px 40px;
-        z-index: 1;
+        z-index: 2;
       }
       .detailBreadcrumb {
         font-size: 12px;
@@ -116,7 +120,21 @@
       .reserveSubtitle { font-size: 13px; color: var(--muted); margin: 0 0 28px; line-height: 1.6; }
 
       .reserveInfoBox { background: var(--bg1); border: 1px solid var(--stroke); padding: 14px 16px; font-size: 13.5px; color: var(--muted); line-height: 1.7; }
-      .reserveActions { display: flex; gap: 8px; justify-content: flex-end; }
+      .reserveActions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+
+      .detailHeroBackBtn {
+        border-color: rgba(255,255,255,.35);
+        color: rgba(255,255,255,.92);
+        background: rgba(255,255,255,.1);
+        backdrop-filter: blur(6px);
+      }
+      .detailHeroBackBtn:hover {
+        background: rgba(255,255,255,.18);
+        border-color: rgba(255,255,255,.5);
+        color: #ffffff;
+      }
+
+      .detailLeft { min-width: 0; }
 
       .noticePanel { background: var(--bg1); border: 1px solid var(--stroke); padding: 18px 20px; margin-top: 16px; }
       .noticePanelTitle { font-size: 11px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
@@ -126,7 +144,7 @@
       @media (max-width: 960px) {
         .detailLayout { grid-template-columns: 1fr; }
         .detailLeft { border-right: none; }
-        .detailHero { height: 280px; }
+        .detailHero { height: min(52vh, 380px); }
         .detailHeroContent { padding: 24px 28px; }
         .infoBlock { padding: 24px 28px; }
         .detailRight { position: static; max-height: none; padding: 32px 28px; }
@@ -199,87 +217,50 @@
 
       <main>
         <div class="detailLayout">
-
-        <section class="grid grid-2" style="align-items: start">
-          <div class="stack">
-            <div class="card cardPad">
-              <div class="thumb"
-                   th:style="${'height:240px;' + (gallery != null and gallery.coverImageUrl != null and !#strings.isEmpty(gallery.coverImageUrl) ? 'background-image:url(' + gallery.coverImageUrl + ');background-size:cover;background-position:center;' : '')}">
-                <div class="thumbLabel">
-                  <div
-                    class="thumbTitle"
-                    th:text="${gallery != null ? gallery.description : '단색 전시 · 30분 코스'}"
-                  >
-                    단색 전시 · 30분 코스
-                  </div>
-                  <div
-                    class="thumbMeta"
-                    th:text="${gallery != null ? (gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : '층') + ' · ' + gallery.location + ' · ' + gallery.capacity + '석' : '2층 · West Wing · 35석'}"
-                  >
-                    2층 · West Wing · 35석
-                  </div>
-                </div>
-              </div>
-              <div style="height: 14px"></div>
-
-              <div class="grid grid-2">
-                <div
-                  class="card"
-                  style="
-                    box-shadow: none;
-                    background: var(--bg1);
-                    padding: 14px;
-                    border-color: var(--stroke);
-                  "
-                >
-                  <div
-                    class="helpText"
-                    style="
-                      margin: 0;
-                      text-transform: uppercase;
-                      letter-spacing: 0.3px;
-                      font-size: 12px;
-                      color: var(--accent);
-                      font-weight: 800;
-                    "
-                  >
-                    운영 시간
-                  </div>
-                  <div
-                    style="
-                      font-weight: 950;
-                      letter-spacing: -0.3px;
-                      margin-top: 8px;
-                    "
-                    th:text="${#strings.concat(#temporals.format(gallery.startTime, 'HH:mm'), ' - ', #temporals.format(gallery.endTime, 'HH:mm'))}"
-                  >
-                    10:00 - 18:00
-                  </div>
-
-                </div>
+          <div class="detailLeft">
+            <div class="detailHero">
+              <!-- coverImageUrl 이 있으면: Java에서 만든 주소로 이미지 한 장 표시 -->
+              <img
+                th:if="${gallery != null and gallery.coverImageUrlForDisplay != null}"
+                class="detailHeroImg"
+                th:src="${gallery.coverImageUrlForDisplay}"
+                alt=""
+              />
+              <div class="detailHeroOverlay"></div>
+              <div class="detailHeroContent">
+                <nav class="detailBreadcrumb" aria-label="breadcrumb">
+                  <a th:href="@{/gallery/list}">전시 목록</a>
+                  <span aria-hidden="true">/</span>
+                  <span th:text="${gallery != null ? gallery.name : '전시'}">전시</span>
+                </nav>
                 <h1 class="detailHeroTitle" th:text="${gallery != null ? gallery.name : '전시 공간'}">전시 공간</h1>
                 <div class="detailHeroMeta">
-                  <span th:class="${gallery != null and gallery.isActive} ? 'badge badge-ok' : 'badge badge-danger'"
-                        th:text="${gallery != null and gallery.isActive} ? '운영중' : '마감'">운영중</span>
-                  <span th:if="${gallery != null}"
-                        th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : gallery.floorZone) + ' · ' + gallery.location + ' · ' + gallery.capacity + '석'}">
-                  </span>
+                  <span
+                    th:class="${gallery != null and gallery.isActive} ? 'badge badge-ok' : 'badge badge-danger'"
+                    th:text="${gallery != null and gallery.isActive} ? '운영중' : '마감'"
+                    >운영중</span>
+                  <span
+                    th:if="${gallery != null}"
+                    th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : gallery.floorZone) + ' · ' + (gallery.location != null ? gallery.location : '') + ' · ' + gallery.capacity + '석'}"
+                  ></span>
                 </div>
                 <div class="detailHeroActions">
-                  <a class="btn btn-small"
-                     style="border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.85);background:rgba(255,255,255,.08);backdrop-filter:blur(4px)"
-                     th:href="@{/gallery/list}">← 목록으로</a>
+                  <a class="btn btn-small detailHeroBackBtn" th:href="@{/gallery/list}">← 목록으로</a>
                 </div>
               </div>
             </div>
 
-            <!-- 전시 정보 -->
             <div class="infoBlock">
               <div class="infoBlockTitle">전시 정보</div>
               <div class="infoGrid">
                 <div class="infoItem">
                   <div class="infoItemLabel">운영 시간</div>
-                  <div class="infoItemValue">10:00 — 18:00</div>
+                  <div
+                    class="infoItemValue"
+                    th:text="${gallery != null ? #strings.concat(#temporals.format(gallery.startTime, 'HH:mm'), ' — ', #temporals.format(gallery.endTime, 'HH:mm')) : '—'}"
+                  >
+                    10:00 — 18:00
+                  </div>
                 </div>
                 <div class="infoItem">
                   <div class="infoItemLabel">수용 인원</div>
@@ -291,19 +272,23 @@
                 </div>
                 <div class="infoItem">
                   <div class="infoItemLabel">층 / 구역</div>
-                  <div class="infoItemValue"
-                    th:text="${gallery != null ? (gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : gallery.floorZone) : '—'}">—</div>
+                  <div
+                    class="infoItemValue"
+                    th:text="${gallery != null ? (gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : gallery.floorZone) : '—'}"
+                  >
+                    —
+                  </div>
                 </div>
               </div>
-              <p class="descText"
-                 th:text="${gallery != null ? gallery.description : '빛이 부드럽게 스며드는 전시 공간에서 천천히 감상하세요.'}">
+              <p class="descText" th:text="${gallery != null ? gallery.description : '빛이 부드럽게 스며드는 전시 공간에서 천천히 감상하세요.'}">
                 빛이 부드럽게 스며드는 전시 공간에서 천천히 감상하세요.
               </p>
             </div>
 
-            <!-- 관람 안내 -->
             <div class="infoBlock">
-              <div class="infoBlockTitle">관람 안내 <span class="badge badge-info" style="margin-left:8px;vertical-align:middle">Guided</span></div>
+              <div class="infoBlockTitle">
+                관람 안내 <span class="badge badge-info" style="margin-left: 8px; vertical-align: middle">Guided</span>
+              </div>
               <div class="stepList">
                 <div class="stepItem">
                   <div class="stepNum">1</div>
@@ -328,93 +313,80 @@
                 </div>
               </div>
             </div>
+          </div>
 
-          </div><!-- /detailLeft -->
-
-          <!-- ── 오른쪽: 예약 폼 ── -->
           <div class="detailRight">
             <div class="reserveEyebrow">Reservation</div>
             <div class="reserveTitle">전시 예약</div>
-            <div class="reserveSubtitle">날짜와 시간을 선택하고<br/>인원을 지정하세요.</div>
+            <div class="reserveSubtitle">날짜와 시간을 선택하고<br />인원을 지정하세요.</div>
 
             <form th:action="@{/gallery/detail}" method="post" class="stack">
-              <input type="hidden" name="galleryId" th:value="${gallery != null ? gallery.id : 1}"/>
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+              <input type="hidden" name="galleryId" th:value="${gallery != null ? gallery.id : ''}" />
+
               <div class="formGrid">
                 <div>
                   <label for="rDate">관람 날짜</label>
-
-                  <input id="rDate" name="date" type="date" required />
-                </div>
-                <div class="formGrid">
-                  <div>
-                    <label for="rTime">시간</label>
-                    <select id="rTime" name="time" required>
-                      <th:block th:if="${visitTimeSlots != null and !visitTimeSlots.isEmpty()}">
-                        <option
-                          th:each="t : ${visitTimeSlots}"
-                          th:value="${#temporals.format(t, 'HH:mm')}"
-                          th:text="${#temporals.format(t, 'HH:mm')}"
-                        >
-                          10:00
-                        </option>
-                      </th:block>
-                      <th:block th:if="${visitTimeSlots == null or visitTimeSlots.isEmpty()}">
-                        <option value="10:00">10:00</option>
-                        <option value="13:00">13:00</option>
-                        <option value="16:00">16:00</option>
-                      </th:block>
-                    </select>
-                  </div>
-                  <div>
-                    <label for="rGuests">인원</label>
-                    <input
-                      id="rGuests"
-                      name="guests"
-                      type="number"
-                      min="1"
-                      step="1"
-                      value="2"
-                      required
-                    />
-                  </div>
-
+                  <input id="rDate" name="reservationDate" type="date" required />
                 </div>
                 <div>
                   <label for="rStartTime">시작 시간</label>
                   <select id="rStartTime" name="startTime" required>
-                    <option value="10:00">10:00</option>
-                    <option value="11:00">11:00</option>
-                    <option value="13:00">13:00</option>
-                    <option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="16:00">16:00</option>
-                    <option value="19:00">19:00</option>
+                    <th:block th:if="${visitTimeSlots != null and !visitTimeSlots.isEmpty()}">
+                      <option
+                        th:each="t : ${visitTimeSlots}"
+                        th:value="${#temporals.format(t, 'HH:mm')}"
+                        th:text="${#temporals.format(t, 'HH:mm')}"
+                      >
+                        10:00
+                      </option>
+                    </th:block>
+                    <th:block th:if="${visitTimeSlots == null or visitTimeSlots.isEmpty()}">
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="13:00">13:00</option>
+                    </th:block>
                   </select>
                 </div>
                 <div>
                   <label for="rEndTime">종료 시간</label>
                   <select id="rEndTime" name="endTime" required>
-                    <option value="11:00">11:00</option>
-                    <option value="12:00">12:00</option>
-                    <option value="14:00">14:00</option>
-                    <option value="15:00">15:00</option>
-                    <option value="16:00">16:00</option>
-                    <option value="17:00">17:00</option>
-                    <option value="20:00">20:00</option>
+                    <th:block th:if="${visitTimeSlots != null and !visitTimeSlots.isEmpty()}">
+                      <option
+                        th:each="t : ${visitTimeSlots}"
+                        th:value="${#temporals.format(t, 'HH:mm')}"
+                        th:text="${#temporals.format(t, 'HH:mm')}"
+                      >
+                        11:00
+                      </option>
+                    </th:block>
+                    <th:block th:if="${visitTimeSlots == null or visitTimeSlots.isEmpty()}">
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="14:00">14:00</option>
+                    </th:block>
                   </select>
                 </div>
                 <div>
                   <label for="rGuests">인원</label>
-                  <input id="rGuests" name="guests" type="number" min="1" step="1" value="2" required/>
+                  <input
+                    id="rGuests"
+                    name="guests"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value="2"
+                    required
+                  />
                 </div>
-                <div style="grid-column: 1 / -1;">
-                  <label for="rContact">연락처 (선택)</label>
-                  <input id="rContact" name="contact" type="tel" placeholder="010-0000-0000"/>
+                <div style="grid-column: 1 / -1">
+                  <label for="rContact">연락처</label>
+                  <input id="rContact" name="contact" type="tel" placeholder="010-0000-0000" />
                 </div>
               </div>
 
               <div class="reserveInfoBox">
-                <strong style="color:var(--text);font-weight:900">안내</strong> — 제출 후 예약 상태는 대기 상태로 등록되며, 관리자 확인 후 확정 또는 거절됩니다.
+                <strong style="color: var(--text); font-weight: 900">안내</strong> — 제출 후 예약 상태는 대기 상태로 등록되며, 관리자 확인 후 확정 또는 거절됩니다.
               </div>
 
               <div class="reserveActions">
@@ -428,9 +400,8 @@
               <div class="noticeItem">입장은 시작 5분 전까지 가능합니다. 지각 시 입장이 제한될 수 있습니다.</div>
               <div class="noticeItem">전시 구역에서는 소음 및 촬영 제한이 있을 수 있습니다. 현장 안내를 따라주세요.</div>
             </div>
-          </div><!-- /detailRight -->
-
-        </div><!-- /detailLayout -->
+          </div>
+        </div>
       </main>
 
       <footer>

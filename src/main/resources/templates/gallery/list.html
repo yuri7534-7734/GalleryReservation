@@ -22,26 +22,41 @@
       #applyFilter { border-color: #111111; background: #ffffff; color: #111111; }
       #applyFilter:hover { background: #111111; color: #ffffff; border-color: #111111; }
 
-      .galleryPanel { padding: 28px 24px; }
       .galleryMeta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
       .galleryMetaTitle { font-size: 14px; font-weight: 900; letter-spacing: -0.2px; }
       .galleryMetaSub { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
 
-      .galleryGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1px; background: var(--stroke); border: 1px solid var(--stroke); }
-      .galleryCard { background: var(--bg0); overflow: hidden; cursor: pointer; transition: background 0.14s; }
+      .galleryPanel { padding: 28px 24px; min-width: 0; }
+      .galleryGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1px; align-items: stretch; background: var(--stroke); border: 1px solid var(--stroke); }
+      .galleryCard { background: var(--bg0); overflow: hidden; cursor: pointer; transition: background 0.14s; min-width: 0; height: 100%; display: flex; flex-direction: column; }
       .galleryCard:hover { background: var(--bg1); }
-      .galleryCard a { display: block; text-decoration: none; height: 100%; }
-      .galleryThumb { aspect-ratio: 4 / 3; background: #1a1a1a; position: relative; overflow: hidden; }
-      .galleryThumbBg { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+      .galleryCard a { display: flex; flex-direction: column; text-decoration: none; color: inherit; flex: 1; min-height: 0; }
+      .galleryThumb { aspect-ratio: 4 / 3; background: #1a1a1a; position: relative; overflow: hidden; flex-shrink: 0; }
+      .galleryThumbBg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
       .galleryCard:hover .galleryThumbBg { transform: scale(1.03); }
-      .galleryThumbOverlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 55%, transparent 100%); }
-      .galleryThumbLabel { position: absolute; left: 16px; bottom: 14px; right: 16px; }
+      .galleryThumbOverlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.12) 55%, transparent 100%); pointer-events: none; }
+      .galleryThumbLabel { position: absolute; left: 16px; bottom: 14px; right: 16px; z-index: 2; pointer-events: none; }
       .galleryThumbName { font-weight: 900; font-size: 16px; color: #ffffff; letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 5px; }
-      .galleryThumbMeta { font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600; }
-      .galleryCardBody { padding: 16px; }
-      .galleryCardDesc { font-size: 13.5px; font-weight: 600; color: var(--text); letter-spacing: -0.1px; margin-bottom: 10px; line-height: 1.4; }
+      .galleryThumbMeta { font-size: 12px; color: rgba(255,255,255,0.75); font-weight: 600; line-height: 1.35; }
+      .galleryCardBody {
+        padding: 16px;
+        border-top: 1px solid var(--stroke);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        box-sizing: border-box;
+      }
+      .galleryCardDesc {
+        font-size: 13.5px; font-weight: 600; color: var(--text); letter-spacing: -0.1px; line-height: 1.45;
+        flex: 0 1 auto;
+        min-height: 0;
+        margin-bottom: 5px;
+        display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+      }
+      .galleryCardBadge { flex-shrink: 0; margin-top: auto; align-self: flex-start; }
 
-      .emptyState { padding: 64px 24px; text-align: center; color: var(--muted); grid-column: 1 / -1; }
+      .emptyState { padding: 48px 24px; text-align: center; color: var(--muted); margin-top: 1px; border: 1px solid var(--stroke); background: var(--bg1); }
       .emptyStateTitle { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
 
       @media (max-width: 900px) {
@@ -127,7 +142,7 @@
         </div>
 
         <!-- CONTENT -->
-        <div class="container" style="padding-left:0;padding-right:0">
+        <div class="container">
           <div class="contentArea">
             <!-- FILTER SIDEBAR -->
             <aside class="filterPanel">
@@ -173,34 +188,38 @@
                   th:data-cap="${gallery.capacity}"
                   th:data-status="${gallery.isActive}"
                 >
-
-                  <div class="thumb"
-                       th:style="${gallery.coverImageUrl != null and !#strings.isEmpty(gallery.coverImageUrl) ? 'background-image:url(' + gallery.coverImageUrl + ');background-size:cover;background-position:center;' : ''}">
-                    <div class="thumbLabel">
-                      <div class="thumbTitle" th:text="${gallery.name}">
-                        갤러리명
-
-                      </div>
-
+                  <a th:href="@{/gallery/detail(id=${gallery.id})}">
+                    <div class="galleryThumb">
+                      <img
+                        th:if="${gallery.coverImageUrlForDisplay != null}"
+                        th:src="${gallery.coverImageUrlForDisplay}"
+                        class="galleryThumbBg"
+                        alt=""
+                      />
                       <div class="galleryThumbOverlay"></div>
                       <div class="galleryThumbLabel">
                         <div class="galleryThumbName" th:text="${gallery.name}">갤러리명</div>
-                        <div class="galleryThumbMeta"
-                             th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : '층') + ' · ' + gallery.location + ' · ' + gallery.capacity + '석'}">
+                        <div
+                          class="galleryThumbMeta"
+                          th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : '층') + ' · ' + (gallery.location != null ? gallery.location : '') + ' · ' + gallery.capacity + '석'}"
+                        >
                           위치 · 석수
                         </div>
                       </div>
                     </div>
                     <div class="galleryCardBody">
                       <div class="galleryCardDesc" th:text="${gallery.description}">소개</div>
-                      <span th:class="${gallery.isActive} ? 'badge badge-ok' : 'badge badge-danger'"
-                            th:text="${gallery.isActive} ? '운영중' : '마감'">상태</span>
+                      <span class="galleryCardBadge" th:classappend="${gallery.isActive} ? ' badge badge-ok' : ' badge badge-danger'" th:text="${gallery.isActive} ? '운영중' : '마감'">상태</span>
                     </div>
                   </a>
                 </article>
               </div>
 
-              <div class="emptyState" id="emptyState" style="display:none">
+              <div
+                class="emptyState"
+                id="emptyState"
+                th:style="${galleries == null or #lists.isEmpty(galleries)} ? 'display:block' : 'display:none'"
+              >
                 <div class="emptyStateTitle">조건에 맞는 전시 공간이 없습니다.</div>
                 <div class="helpText">필터 조건을 변경해 다시 시도해보세요.</div>
               </div>
@@ -271,6 +290,7 @@
         [q, minCap].forEach((el) => el.addEventListener("input", apply));
         region.addEventListener("change", apply);
         if (applyBtn) applyBtn.addEventListener("click", apply);
+        apply();
       })();
     </script>
   </body>
