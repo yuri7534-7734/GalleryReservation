@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class MemberLoginRequestDto {
     private String username;
+
     private String password;
     private String email;
     private MemberRole role;

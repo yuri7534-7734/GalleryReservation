@@ -1,5 +1,7 @@
 package com.study.galleryreservation.dto.todo;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,7 +16,8 @@ import java.time.LocalDate;
 // @NoArgsConstructor + @AllArgsConstructor를 쓰는 게 일반적입니다
 
 public class TodoUpdateRequestDto {
-
+@NotBlank
+@Size(max = 200,message = "제목은 200자 이하여야합니다.")
     private String title;
 
     private String content;
