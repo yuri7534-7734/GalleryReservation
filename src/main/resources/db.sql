@@ -1,3 +1,10 @@
+DROP TABLE IF EXISTS reservation CASCADE;
+DROP TABLE IF EXISTS todo CASCADE;
+DROP TABLE IF EXISTS gallery CASCADE;
+DROP TABLE IF EXISTS member CASCADE;
+DROP TABLE IF EXISTS sns_user CASCADE;
+DROP FUNCTION IF EXISTS set_updated_at CASCADE;
+
 -- updated_at 자동 갱신용 함수/트리거 (PostgreSQL은 ON UPDATE CURRENT_TIMESTAMP 문법이 없음)
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
@@ -52,6 +59,9 @@ CREATE TABLE gallery (
     description TEXT,                                                 -- 갤러리 소개
     capacity    INT          NOT NULL,                                -- 최대 수용 인원
     is_active   BOOLEAN      NOT NULL DEFAULT TRUE,                   -- 운영 여부 (true=운영중, false=비활성)
+    start_time        TIME          NOT NULL DEFAULT TIME '10:00',    -- 갤러리 운영 시작 시간 (기본값 10:00)
+    end_time          TIME          NOT NULL DEFAULT TIME '18:00',    -- 갤러리 운영 종료 시간 (기본값 18:00)
+    cover_image_url   VARCHAR(500),                                   -- 갤러리 대표 이미지 URL
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,      -- 등록 일시
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP       -- 수정 일시 (UPDATE 시 트리거로 자동 갱신)
 );
