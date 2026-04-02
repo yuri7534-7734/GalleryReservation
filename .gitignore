@@ -1,6 +1,8 @@
 HELP.md
 .gradle
 build/
+### Eclipse / VS Code Java / 일부 IDE 컴파일 출력 ###
+bin/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
