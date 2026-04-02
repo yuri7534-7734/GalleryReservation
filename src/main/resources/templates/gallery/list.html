@@ -69,10 +69,27 @@
             <span>Art Museum</span>
           </a>
           <div class="navLinks">
-            <a class="navLink active" th:href="@{/gallery/list}">전시·관람</a>
-            <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/reservation/list}">내 예약</a>
-            <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/todo/list}">할 일</a>
-            <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/gallery/list}">관리자</a>
+
+            <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
+            <a
+              class="navLink"
+              sec:authorize="isAuthenticated()"
+              th:href="@{/reservation/list}"
+              >내 예약</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/todo/list}"
+              >할 일</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/admin/gallery/list}"
+              >관리자</a
+            >
+
           </div>
           <div class="navActions">
             <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px">
@@ -156,21 +173,13 @@
                   th:data-cap="${gallery.capacity}"
                   th:data-status="${gallery.isActive}"
                 >
-                  <a th:href="@{/gallery/detail(id=${gallery.id})}">
-                    <div class="galleryThumb"
-                         th:style="${gallery.coverImageUrl != null and !#strings.isEmpty(gallery.coverImageUrl)
-               ? 'background-image:url(' + gallery.coverImageUrl + ');background-size:cover;background-position:center;'
-               : 'background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);'}">
 
-                      <!-- 이미지 없을 때만 SVG 아이콘 표시 -->
-                      <div th:if="${gallery.coverImageUrl == null or #strings.isEmpty(gallery.coverImageUrl)}"
-                           style="width:100%;height:100%;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);display:flex;align-items:center;justify-content:center;">
-                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="4" y="4" width="14" height="14" fill="rgba(255,255,255,0.15)"/>
-                          <rect x="22" y="4" width="14" height="14" fill="rgba(255,255,255,0.15)"/>
-                          <rect x="4" y="22" width="14" height="14" fill="rgba(255,255,255,0.1)"/>
-                          <rect x="22" y="22" width="14" height="14" fill="rgba(255,255,255,0.05)"/>
-                        </svg>
+                  <div class="thumb"
+                       th:style="${gallery.coverImageUrl != null and !#strings.isEmpty(gallery.coverImageUrl) ? 'background-image:url(' + gallery.coverImageUrl + ');background-size:cover;background-position:center;' : ''}">
+                    <div class="thumbLabel">
+                      <div class="thumbTitle" th:text="${gallery.name}">
+                        갤러리명
+
                       </div>
 
                       <div class="galleryThumbOverlay"></div>

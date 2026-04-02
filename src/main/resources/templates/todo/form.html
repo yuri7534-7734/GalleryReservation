@@ -38,10 +38,27 @@
             <span>Art Museum</span>
           </a>
           <div class="navLinks">
-            <a class="navLink" th:href="@{/gallery/list}">전시·관람</a>
-            <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/reservation/list}">내 예약</a>
-            <a class="navLink active" sec:authorize="isAuthenticated()" th:href="@{/todo/list}">할 일</a>
-            <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/gallery/list}">관리자</a>
+
+            <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
+            <a
+              class="navLink"
+              sec:authorize="isAuthenticated()"
+              th:href="@{/reservation/list}"
+              >내 예약</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/todo/list}"
+              >할 일</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/admin/gallery/list}"
+              >관리자</a
+            >
+
           </div>
           <div class="navActions">
             <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px">

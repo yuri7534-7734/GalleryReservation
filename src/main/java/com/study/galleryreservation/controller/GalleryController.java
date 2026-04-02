@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class GalleryController {
@@ -23,22 +27,25 @@ public class GalleryController {
     private final GalleryRepository galleryRepository;
     private final GalleryService galleryService;
 
-
-    //갤러리 상세화면
     @GetMapping("/gallery/detail")
     public String galleryDetail(@RequestParam("id") Long id, Model model) {
         Gallery gallery = galleryRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("gallery", gallery);
+        model.addAttribute("visitTimeSlots", halfHourSlots(gallery.getStartTime(), gallery.getEndTime()));
         return "gallery/detail";
+    }
 
-    //private final GalleryService galleryService;
-    //
-    //@GetMapping("/gallery/")
-    //public String galleryList(Model model) {
-    //    model.addAttribute("galleries", galleryService.findAll());
-    //    return "list";
-
+    /** start(포함) ~ end(미포함) 구간을 30분 간격으로 나눈 관람 선택 시간 목록 */
+    static List<LocalTime> halfHourSlots(LocalTime start, LocalTime end) {
+        List<LocalTime> slots = new ArrayList<>();
+        if (start == null || end == null || !end.isAfter(start)) {
+            return slots;
+        }
+        for (LocalTime t = start; t.isBefore(end); t = t.plusMinutes(30)) {
+            slots.add(t);
+        }
+        return slots;
     }
 
     //갤러리 전시 예약 등록

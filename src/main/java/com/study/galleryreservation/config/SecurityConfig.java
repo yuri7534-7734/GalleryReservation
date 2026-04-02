@@ -44,8 +44,12 @@ public class SecurityConfig {
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
 
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/todo/**").hasRole("ADMIN") // todo 전체 관리자만
+        );
+
         http.authorizeHttpRequests(authz -> authz
-                .requestMatchers("/css/**", "/js/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/*.css", "/*.js").permitAll()
                 .requestMatchers("/", "/member/join", "/member/login").permitAll()
                 .requestMatchers("/gallery/list", "/gallery/detail","/reservation/**", "/gallery/detail/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -106,4 +110,5 @@ public class SecurityConfig {
     public SimpleUrlAuthenticationFailureHandler oauthFailureHandler() {
         return new SimpleUrlAuthenticationFailureHandler("/member/login?error=true");
     }
+
 }

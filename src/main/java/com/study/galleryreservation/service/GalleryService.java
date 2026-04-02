@@ -44,6 +44,15 @@ public class GalleryService {
         }
 
         LocalDateTime now = LocalDateTime.now();
+        LocalTime start = dto.getStartTime() != null ? dto.getStartTime() : LocalTime.of(10, 0);
+        LocalTime end = dto.getEndTime() != null ? dto.getEndTime() : LocalTime.of(18, 0);
+        String cover = dto.getCoverImageUrl();
+        if (cover != null) {
+            cover = cover.trim();
+            if (cover.isEmpty()) {
+                cover = null;
+            }
+        }
         Gallery gallery = Gallery.builder()
                 .name(dto.getName())
                 .location(dto.getLocation())

@@ -150,10 +150,27 @@
             <span>Art Museum</span>
           </a>
           <div class="navLinks">
-            <a class="navLink" th:href="@{/gallery/list}">전시·관람</a>
-            <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/reservation/list}">내 예약</a>
-            <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/todo/list}">할 일</a>
-            <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/gallery/list}">관리자</a>
+
+            <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
+            <a
+              class="navLink"
+              sec:authorize="isAuthenticated()"
+              th:href="@{/reservation/list}"
+              >내 예약</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/todo/list}"
+              >할 일</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/admin/gallery/list}"
+              >관리자</a
+            >
+
           </div>
           <div class="navActions">
             <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px">
@@ -183,22 +200,62 @@
       <main>
         <div class="detailLayout">
 
-          <!-- ── 왼쪽: 이미지 + 전시 정보 ── -->
-          <div class="detailLeft">
-
-            <!-- 히어로 이미지 -->
-            <div class="detailHero">
-              <div class="detailHeroBg"
-                   th:style="${(gallery != null and gallery.coverImageUrl != null and !#strings.isEmpty(gallery.coverImageUrl)) ? 'background-image:url(' + gallery.coverImageUrl + ');background-size:cover;background-position:center;' : ''}">
+        <section class="grid grid-2" style="align-items: start">
+          <div class="stack">
+            <div class="card cardPad">
+              <div class="thumb"
+                   th:style="${'height:240px;' + (gallery != null and gallery.coverImageUrl != null and !#strings.isEmpty(gallery.coverImageUrl) ? 'background-image:url(' + gallery.coverImageUrl + ');background-size:cover;background-position:center;' : '')}">
+                <div class="thumbLabel">
+                  <div
+                    class="thumbTitle"
+                    th:text="${gallery != null ? gallery.description : '단색 전시 · 30분 코스'}"
+                  >
+                    단색 전시 · 30분 코스
+                  </div>
+                  <div
+                    class="thumbMeta"
+                    th:text="${gallery != null ? (gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : '층') + ' · ' + gallery.location + ' · ' + gallery.capacity + '석' : '2층 · West Wing · 35석'}"
+                  >
+                    2층 · West Wing · 35석
+                  </div>
+                </div>
               </div>
-              <div class="detailHeroOverlay"></div>
-              <div class="detailHeroContent">
-                <div class="detailBreadcrumb">
-                  <a th:href="@{/}">홈</a>
-                  <span style="opacity:.4">/</span>
-                  <a th:href="@{/gallery/list}">전시 목록</a>
-                  <span style="opacity:.4">/</span>
-                  <span th:text="${gallery != null ? gallery.name : '전시 상세'}">전시 상세</span>
+              <div style="height: 14px"></div>
+
+              <div class="grid grid-2">
+                <div
+                  class="card"
+                  style="
+                    box-shadow: none;
+                    background: var(--bg1);
+                    padding: 14px;
+                    border-color: var(--stroke);
+                  "
+                >
+                  <div
+                    class="helpText"
+                    style="
+                      margin: 0;
+                      text-transform: uppercase;
+                      letter-spacing: 0.3px;
+                      font-size: 12px;
+                      color: var(--accent);
+                      font-weight: 800;
+                    "
+                  >
+                    운영 시간
+                  </div>
+                  <div
+                    style="
+                      font-weight: 950;
+                      letter-spacing: -0.3px;
+                      margin-top: 8px;
+                    "
+                    th:text="${#strings.concat(#temporals.format(gallery.startTime, 'HH:mm'), ' - ', #temporals.format(gallery.endTime, 'HH:mm'))}"
+                  >
+                    10:00 - 18:00
+                  </div>
+
                 </div>
                 <h1 class="detailHeroTitle" th:text="${gallery != null ? gallery.name : '전시 공간'}">전시 공간</h1>
                 <div class="detailHeroMeta">
@@ -285,7 +342,42 @@
               <div class="formGrid">
                 <div>
                   <label for="rDate">관람 날짜</label>
-                  <input id="rDate" name="reservationDate" type="date" required/>
+
+                  <input id="rDate" name="date" type="date" required />
+                </div>
+                <div class="formGrid">
+                  <div>
+                    <label for="rTime">시간</label>
+                    <select id="rTime" name="time" required>
+                      <th:block th:if="${visitTimeSlots != null and !visitTimeSlots.isEmpty()}">
+                        <option
+                          th:each="t : ${visitTimeSlots}"
+                          th:value="${#temporals.format(t, 'HH:mm')}"
+                          th:text="${#temporals.format(t, 'HH:mm')}"
+                        >
+                          10:00
+                        </option>
+                      </th:block>
+                      <th:block th:if="${visitTimeSlots == null or visitTimeSlots.isEmpty()}">
+                        <option value="10:00">10:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="16:00">16:00</option>
+                      </th:block>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="rGuests">인원</label>
+                    <input
+                      id="rGuests"
+                      name="guests"
+                      type="number"
+                      min="1"
+                      step="1"
+                      value="2"
+                      required
+                    />
+                  </div>
+
                 </div>
                 <div>
                   <label for="rStartTime">시작 시간</label>
