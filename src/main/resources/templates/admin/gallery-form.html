@@ -603,7 +603,7 @@
             >
             <a
               class="navLink"
-              sec:authorize="isAuthenticated()"
+              sec:authorize="hasRole('ADMIN')"
               th:href="@{/todo/list}"
               >할 일</a
             >
@@ -658,6 +658,21 @@
             입력값은 미리보기에 즉시 반영됩니다.
           </p>
         </section>
+
+        <div
+          th:if="${errorMessage}"
+          style="
+            background: rgba(255, 77, 79, 0.08);
+            border: 1px solid rgba(255, 77, 79, 0.2);
+            color: #ff4d4f;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            font-size: 14px;
+          "
+          th:text="${errorMessage}"
+        ></div>
 
         <section class="grid grid-2">
           <div class="card cardPad">
@@ -741,21 +756,36 @@
                 </div>
               </div>
 
-              <div>
-                <label for="gHours">운영 시간</label>
-                <input
-                  id="gHours"
-                  name="hours"
-                  type="text"
-                  placeholder="예: 10:00 - 18:00"
-                />
+              <div class="formGrid">
+                <div>
+                  <label for="gStartTime">운영 시작</label>
+                  <input
+                    id="gStartTime"
+                    th:field="*{startTime}"
+                    type="time"
+                    step="1800"
+                  />
+                </div>
+                <div>
+                  <label for="gEndTime">운영 종료</label>
+                  <input
+                    id="gEndTime"
+                    th:field="*{endTime}"
+                    type="time"
+                    step="1800"
+                  />
+                </div>
               </div>
+              <p class="helpText" style="margin-top: -6px">
+                30분 단위로 선택할 수 있습니다. 비워 두면 등록 시 10:00 ~
+                18:00이 기본 적용됩니다.
+              </p>
 
               <div>
                 <label for="gCover">커버 이미지 URL (선택)</label>
                 <input
                   id="gCover"
-                  name="coverUrl"
+                  name="coverImageUrl"
                   type="url"
                   placeholder="https://example.com/cover.jpg"
                 />
@@ -919,8 +949,10 @@
         const ids = [
           "gName",
           "gLocation",
+          "gFloorZone",
           "gCapacity",
-          "gHours",
+          "gStartTime",
+          "gEndTime",
           "gDesc",
           "gCover",
         ];
@@ -938,7 +970,9 @@
           const fv = el.gFloorZone?.value || "1";
           const floorLabel = floorLabels[fv] || "층";
           const cap = el.gCapacity?.value?.trim() || "0";
-          const hours = el.gHours?.value?.trim() || "10:00 - 18:00";
+          const startT = el.gStartTime?.value?.trim() || "10:00";
+          const endT = el.gEndTime?.value?.trim() || "18:00";
+          const hours = `${startT} - ${endT}`;
           const desc = el.gDesc?.value?.trim() || "소개가 여기에 표시됩니다.";
           const cover = el.gCover?.value?.trim();
 

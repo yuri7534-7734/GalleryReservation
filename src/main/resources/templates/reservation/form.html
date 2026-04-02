@@ -432,7 +432,7 @@
       <div class="navLinks">
         <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
         <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/reservation/list}">내 예약</a>
-        <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/todo/list}">할 일</a>
+        <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/todo/list}">할 일</a>
         <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/gallery/list}">관리자</a>
       </div>
       <div class="navActions">
@@ -498,6 +498,7 @@
                         th:each="gallery : ${galleries}"
                         th:value="${gallery.id}"
                         th:text="${gallery.name}"
+                        th:data-cover="${gallery.coverImageUrl}"
                 >
                     <!--                        th:data-start="${gallery.startDate}"-->
                     <!--                        th:data-end="${gallery.endDate}"-->
@@ -613,6 +614,8 @@
           </div>
 
           <div style="height: 14px"></div>
+
+          <div id="summaryThumb" class="thumb" style="height:140px;margin-bottom:12px;display:none;"></div>
 
           <div class="stack" style="gap: 10px">
             <div class="row" style="align-items: flex-start">
@@ -857,10 +860,13 @@
     const sTime     = document.getElementById("summaryTime");
     const sGuests   = document.getElementById("summaryGuests");
     const sContact  = document.getElementById("summaryContact");
+    const sThumb    = document.getElementById("summaryThumb");
     if (!gallerySelect || !sGallery) return;
 
     function apply() {
-      const gText   = gallerySelect.options[gallerySelect.selectedIndex]?.text || "갤러리를 선택하세요";
+      const selectedOption = gallerySelect.options[gallerySelect.selectedIndex];
+      const gText   = selectedOption?.text || "갤러리를 선택하세요";
+      const cover   = selectedOption?.getAttribute("data-cover");
       const date    = dateInput.value || "날짜 선택";
       const start   = startTimeSelect.value || "";
       const end     = endTimeSelect.value || "";
@@ -873,6 +879,18 @@
       sTime.textContent    = timeText;
       sGuests.textContent  = guests;
       sContact.textContent = contact;
+
+      if (sThumb) {
+        if (cover && cover !== "null" && cover.startsWith("http")) {
+          sThumb.style.backgroundImage = `url("${cover}")`;
+          sThumb.style.backgroundSize = "cover";
+          sThumb.style.backgroundPosition = "center";
+          sThumb.style.display = "block";
+        } else {
+          sThumb.style.backgroundImage = "";
+          sThumb.style.display = "none";
+        }
+      }
     }
 
     ["input", "change"].forEach((evt) => {

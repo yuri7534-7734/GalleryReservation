@@ -617,7 +617,7 @@
             >
             <a
               class="navLink"
-              sec:authorize="hasRole('ADMIN')"
+              sec:authorize="isAuthenticated()"
               th:href="@{/todo/list}"
               >할 일</a
             >
@@ -681,8 +681,7 @@
         <section class="grid grid-2" style="align-items: start">
           <div class="stack">
             <div class="card cardPad">
-              <div class="thumb"
-                   th:style="${'height:240px;' + (gallery != null and gallery.coverImageUrl != null and !#strings.isEmpty(gallery.coverImageUrl) ? 'background-image:url(' + gallery.coverImageUrl + ');background-size:cover;background-position:center;' : '')}">
+              <div class="thumb" style="height: 240px">
                 <div class="thumbLabel">
                   <div
                     class="thumbTitle"
@@ -933,40 +932,82 @@
                 />
                 <div>
                   <label for="rDate">관람 날짜</label>
-                  <input id="rDate" name="date" type="date" required />
+                  <input
+                    id="rDate"
+                    name="reservationDate"
+                    type="date"
+                    required
+                  />
                 </div>
                 <div class="formGrid">
                   <div>
-                    <label for="rTime">시간</label>
-                    <select id="rTime" name="time" required>
-                      <th:block th:if="${visitTimeSlots != null and !visitTimeSlots.isEmpty()}">
+                    <label for="rStartTime">시작 시간</label>
+                    <select id="rStartTime" name="startTime" required>
+                      <th:block
+                        th:if="${gallery != null and gallery.startTime != null and gallery.endTime != null and gallery.endTime.hour > gallery.startTime.hour}"
+                      >
                         <option
-                          th:each="t : ${visitTimeSlots}"
-                          th:value="${#temporals.format(t, 'HH:mm')}"
-                          th:text="${#temporals.format(t, 'HH:mm')}"
+                          th:each="h : ${#numbers.sequence(gallery.startTime.hour, gallery.endTime.hour - 1)}"
+                          th:value="${#strings.concat(h &lt; 10 ? '0' : '', #strings.toString(h), ':00')}"
+                          th:text="${#strings.concat(h &lt; 10 ? '0' : '', #strings.toString(h), ':00')}"
                         >
                           10:00
                         </option>
                       </th:block>
-                      <th:block th:if="${visitTimeSlots == null or visitTimeSlots.isEmpty()}">
+                      <th:block
+                        th:if="${gallery == null or gallery.startTime == null or gallery.endTime == null or gallery.endTime.hour &lt;= gallery.startTime.hour}"
+                      >
                         <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
                         <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
                         <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
                       </th:block>
                     </select>
                   </div>
                   <div>
-                    <label for="rGuests">인원</label>
-                    <input
-                      id="rGuests"
-                      name="guests"
-                      type="number"
-                      min="1"
-                      step="1"
-                      value="2"
-                      required
-                    />
+                    <label for="rEndTime">종료 시간</label>
+                    <select id="rEndTime" name="endTime" required>
+                      <th:block
+                        th:if="${gallery != null and gallery.startTime != null and gallery.endTime != null and gallery.endTime.hour > gallery.startTime.hour}"
+                      >
+                        <option
+                          th:each="h : ${#numbers.sequence(gallery.startTime.hour + 1, gallery.endTime.hour)}"
+                          th:value="${#strings.concat(h &lt; 10 ? '0' : '', #strings.toString(h), ':00')}"
+                          th:text="${#strings.concat(h &lt; 10 ? '0' : '', #strings.toString(h), ':00')}"
+                        >
+                          11:00
+                        </option>
+                      </th:block>
+                      <th:block
+                        th:if="${gallery == null or gallery.startTime == null or gallery.endTime == null or gallery.endTime.hour &lt;= gallery.startTime.hour}"
+                      >
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                      </th:block>
+                    </select>
                   </div>
+                </div>
+                <div>
+                  <label for="rGuests">인원</label>
+                  <input
+                    id="rGuests"
+                    name="guests"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value="2"
+                    required
+                  />
                 </div>
                 <div>
                   <label for="rNote">요청 사항(선택)</label>
@@ -992,6 +1033,34 @@
                   </button>
                 </div>
               </form>
+              <script>
+                (function () {
+                  var startSel = document.getElementById("rStartTime");
+                  var endSel = document.getElementById("rEndTime");
+                  if (!startSel || !endSel) return;
+                  function hourFrom(v) {
+                    if (!v) return NaN;
+                    return parseInt(v.split(":")[0], 10);
+                  }
+                  function syncEnd() {
+                    var sh = hourFrom(startSel.value);
+                    if (Number.isNaN(sh)) return;
+                    var firstEnabled = -1;
+                    for (var i = 0; i < endSel.options.length; i++) {
+                      var opt = endSel.options[i];
+                      var eh = hourFrom(opt.value);
+                      var ok = !Number.isNaN(eh) && eh > sh;
+                      opt.disabled = !ok;
+                      if (ok && firstEnabled < 0) firstEnabled = i;
+                    }
+                    if (hourFrom(endSel.value) <= sh && firstEnabled >= 0) {
+                      endSel.selectedIndex = firstEnabled;
+                    }
+                  }
+                  startSel.addEventListener("change", syncEnd);
+                  syncEnd();
+                })();
+              </script>
             </div>
 
             <div

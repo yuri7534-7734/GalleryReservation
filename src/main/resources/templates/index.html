@@ -804,7 +804,7 @@
             >
             <a
               class="navLink"
-              sec:authorize="isAuthenticated()"
+              sec:authorize="hasRole('ADMIN')"
               th:href="@{/todo/list}"
               >할 일</a
             >
@@ -892,7 +892,7 @@
             <div class="sectionLabel">이런 것들을 할 수 있어요</div>
             <div class="featureGrid">
               <div class="card featureCard">
-                <div class="featureIcon">Explore Exhibitions</div>
+                <div class="featureIcon">🖼️</div>
                 <div class="featureTitle">전시 탐색</div>
                 <div class="helpText" style="margin: 0">
                   현재 운영 중인 전시를 확인하고, 원하는 전시 정보를 한눈에
@@ -901,7 +901,7 @@
               </div>
 
               <div class="card featureCard">
-                <div class="featureIcon">Quick Booking</div>
+                <div class="featureIcon">📅</div>
                 <div class="featureTitle">간편 예약</div>
                 <div class="helpText" style="margin: 0">
                   원하는 날짜와 시간에 맞춰 빠르게 예약하고 예약 상태를 확인할
@@ -910,7 +910,7 @@
               </div>
 
               <div class="card featureCard">
-                <div class="featureIcon">Operations</div>
+                <div class="featureIcon">🛠️</div>
                 <div class="featureTitle">운영 관리</div>
                 <div class="helpText" style="margin: 0">
                   관리자는 전시 및 예약 현황을 효율적으로 관리할 수 있습니다.
