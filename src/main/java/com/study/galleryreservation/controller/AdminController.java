@@ -51,7 +51,7 @@ public class AdminController {
     // 전체 예약 목록(관리자 전용)
     @GetMapping("/reservation/list")
     public String reservationList(Model model){
-        model.addAttribute("reservations",reservationService.findAll());
+        model.addAttribute("reservations",reservationService.findAllByOrderByIdAsc());
 
         return "admin/reservation-list";
     }
