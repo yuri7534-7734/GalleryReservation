@@ -28,4 +28,6 @@ src/main/resources/static/docu/20260401_GalleryReservation_002.md
 src/main/resources/static/docu/20260401_GalleryReservation_003.md
 src/main/resources/static/docu/20260401_GalleryReservation_004.md
 src/main/resources/static/docu/20260401_prompt.txt
+src\main\resources\application.yml
+src\main\resources\application-secret.yml
 
