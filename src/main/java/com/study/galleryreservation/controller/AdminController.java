@@ -56,12 +56,14 @@ public class AdminController {
         return "admin/reservation-list";
     }
 
+    // 예약 승인
     @PostMapping("/reservation/approve/{id}")
     public String reservationApprove(@PathVariable Long id){
         reservationService.approved(id);
         return "redirect:/admin/reservation/list";
     }
 
+    // 예약 거절
     @PostMapping("/reservation/reject/{id}")
     public String reservationReject(@PathVariable Long id){
         reservationService.rejected(id);

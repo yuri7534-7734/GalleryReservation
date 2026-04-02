@@ -3,6 +3,8 @@ package com.study.galleryreservation.domain.member;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.todo.Todo;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -23,9 +25,11 @@ public class Member {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true, length = 50)
+    @Size(min = 4, max = 20)
     public String username;
 
     @Column(name = "password", nullable = false, length = 255)
+    @Size(min = 8, max = 20)
     public String password;
 
     @Column(name = "email", nullable = false, unique = true, length = 100)
