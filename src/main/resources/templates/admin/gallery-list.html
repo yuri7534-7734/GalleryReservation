@@ -43,6 +43,7 @@
       }
       html {
         scroll-behavior: smooth;
+        scrollbar-gutter: stable;
       }
       body {
         margin: 0;
@@ -464,6 +465,7 @@
       }
       table {
         width: 100%;
+        table-layout: fixed;
         border-collapse: separate;
         border-spacing: 0;
         min-width: 720px;
@@ -636,8 +638,7 @@
                 <select id="statusFilter">
                   <option value="ALL" selected>전체</option>
                   <option value="ACTIVE">운영중</option>
-                  <option value="PAUSED">일시중지</option>
-                  <option value="SOLD_OUT">마감</option>
+                  <option value="INACTIVE">비활성</option>
                 </select>
               </div>
               <div style="align-self: flex-end">
@@ -704,7 +705,7 @@
                     </div>
                   </td>
                   <td th:text="${gallery.location}">위치</td>
-                  <td th:text="${gallery.capacity} + '명'">30명</td>
+                  <td th:text="|${gallery.capacity}명|">30명</td>
                   <td>
                     <span
                       th:class="${gallery.active} ? 'badge badge-ok' : 'badge badge-danger'"
@@ -724,7 +725,9 @@
                         method="post"
                         style="margin: 0; display: inline"
                       >
-                        <button class="btn btn-small btn-danger" type="submit">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button class="btn btn-small btn-danger" type="submit"
+                                onclick="return confirm('정말 삭제하시겠습니까?\n삭제된 갤러리는 복구할 수 없습니다.')">
                           삭제
                         </button>
                       </form>
@@ -737,9 +740,13 @@
           <div style="height: 12px"></div>
           <div class="row" style="flex-wrap: wrap">
             <div></div>
-            <a class="btn btn-primary" href="#" th:href="@{/admin/reservation/list}"
-            >예약 관리</a
+            <a
+              class="btn btn-primary"
+              href="#"
+              th:href="@{/admin/reservation/list}"
+              >예약 관리</a
             >
+          </div>
         </section>
       </main>
 
