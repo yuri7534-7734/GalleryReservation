@@ -617,7 +617,7 @@
             >
             <a
               class="navLink"
-              sec:authorize="isAuthenticated()"
+              sec:authorize="hasRole('ADMIN')"
               th:href="@{/todo/list}"
               >할 일</a
             >
