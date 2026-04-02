@@ -28,14 +28,6 @@ public class ReservationController {
         return "reservation/form";
     }
 
-    @PostMapping("/form")
-    public String postForm(@ModelAttribute ReservationCreateRequestDto requestDto,
-                           HttpSession session) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        reservationService.save(requestDto, sessionUser.getEmail());
-        return "redirect:/reservation/list";
-    }
-
     @GetMapping("/list")
     public String reservationList(Model model, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");

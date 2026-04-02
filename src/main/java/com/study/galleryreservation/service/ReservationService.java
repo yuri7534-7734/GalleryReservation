@@ -24,31 +24,6 @@ public class ReservationService {
     public final MemberRepository memberRepository;
     public final GalleryRepository galleryRepository;
 
-    //저장
-    @Transactional
-    public void save(ReservationCreateRequestDto requestDto, String email) {
-
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(()->new IllegalArgumentException("회원을 찾을 수 없습니다."));
-
-        Gallery gallery = galleryRepository.findById(requestDto.getGalleryId())
-                .orElseThrow(()->new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
-
-
-        Reservation reservation = Reservation.builder()
-                .member(member)
-                .gallery(gallery)
-                .reservationDate(requestDto.getReservationDate())
-                .startTime(requestDto.getStartTime())
-                .endTime(requestDto.getEndTime())
-                .guests(requestDto.getGuests())
-                .contact(requestDto.getContact())
-                .status(ReservationStatus.PENDING)
-                .build();
-
-        reservationRepository.save(reservation);
-    }
-
     //로그인한 유저의 예약 목록을 DTO로 변환해서 화면에 넘겨주는 메서드
     public List<ReservationResponseDto> findByEmail(String email) {
         Member member = memberRepository.findByEmail(email)

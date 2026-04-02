@@ -1,10 +1,16 @@
 package com.study.galleryreservation.service;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
+import com.study.galleryreservation.domain.member.Member;
+import com.study.galleryreservation.domain.reservation.Reservation;
+import com.study.galleryreservation.domain.reservation.ReservationStatus;
 import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
 import com.study.galleryreservation.dto.gallery.GalleryResponseDto;
 import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
+import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.repository.GalleryRepository;
+import com.study.galleryreservation.repository.MemberRepository;
+import com.study.galleryreservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +25,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class GalleryService {
     private final GalleryRepository galleryRepository;
+    private final MemberRepository memberRepository;
+    private final ReservationRepository reservationRepository;
 
     // 갤러리 조회(관리자 전용)
     public List<GalleryResponseDto> findAll(){
@@ -75,4 +83,30 @@ public class GalleryService {
 
         galleryRepository.delete(gallery);
     }
+
+    //갤러리 예약 등록
+    @Transactional
+    public void save(ReservationCreateRequestDto requestDto, String email) {
+
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(()->new IllegalArgumentException("회원을 찾을 수 없습니다."));
+
+        Gallery gallery = galleryRepository.findById(requestDto.getGalleryId())
+                .orElseThrow(()->new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
+
+
+        Reservation reservation = Reservation.builder()
+                .member(member)
+                .gallery(gallery)
+                .reservationDate(requestDto.getReservationDate())
+                .startTime(requestDto.getStartTime())
+                .endTime(requestDto.getEndTime())
+                .guests(requestDto.getGuests())
+                .contact(requestDto.getContact())
+                .status(ReservationStatus.PENDING)
+                .build();
+
+        reservationRepository.save(reservation);
+    }
+
 }
