@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,10 +35,17 @@ public class AdminController {
         return "admin/gallery-form";
     }
 
-     // 겔러리 등록
+     // 갤러리 등록
     @PostMapping("/gallery/form")
-    public String adminGalleryForm(@ModelAttribute GalleryCreateRequestDto dto){
-        galleryService.galleryAdd(dto);
+    public String adminGalleryForm(@ModelAttribute GalleryCreateRequestDto dto,
+                                   RedirectAttributes redirectAttributes){
+        // 갤러리 등록 중복 체크
+        try {
+            galleryService.galleryAdd(dto);
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/admin/gallery/form";
+        }
         return "redirect:/admin/gallery/list";
     }
 
