@@ -43,13 +43,15 @@ public class Gallery {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @Column(name = "start_time")
-    private LocalTime startTime;
+    @Column(name = "start_time", nullable = false)
+    @Builder.Default
+    private LocalTime startTime = LocalTime.of(10, 0);
 
-    @Column(name = "end_time")
-    private LocalTime endTime;
+    @Column(name = "end_time", nullable = false)
+    @Builder.Default
+    private LocalTime endTime = LocalTime.of(18, 0);
 
-    @Column(name = "cover_image_url")
+    @Column(name = "cover_image_url", length = 500)
     private String coverImageUrl;
 
     @Column(name = "created_at", nullable = false)
@@ -59,7 +61,7 @@ public class Gallery {
     private LocalDateTime updatedAt;
 
     public void update(String name, String location, String floorZone,
-                       String description, Integer capacity, Boolean active) {
+                       String description, Integer capacity, Boolean active, String coverImageUrl) {
         this.name = name;
         this.location = location;
         if (floorZone != null && !floorZone.isBlank()) {
@@ -68,6 +70,28 @@ public class Gallery {
         this.description = description;
         this.capacity = capacity;
         this.isActive = active != null && active;
+        if (coverImageUrl != null) {
+            String c = coverImageUrl.trim();
+            this.coverImageUrl = c.isEmpty() ? null : c;
+        }
         this.updatedAt = LocalDateTime.now();
+    }
+
+    /**
+     * HTML에서 img src에 넣을 주소입니다.
+     * 인터넷 주소(https://...)는 그대로 쓰고, 그 외에는 웹 루트 기준 경로(/로 시작)로 맞춥니다.
+     */
+    public String getCoverImageUrlForDisplay() {
+        if (coverImageUrl == null || coverImageUrl.isBlank()) {
+            return null;
+        }
+        String url = coverImageUrl.trim();
+        if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("//")) {
+            return url;
+        }
+        if (url.startsWith("/")) {
+            return url;
+        }
+        return "/" + url;
     }
 }

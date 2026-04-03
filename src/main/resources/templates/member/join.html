@@ -7,612 +7,53 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>회원가입 - 갤러리 예약</title>
+    <title>회원가입 — Art Museum</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
-      /* 기존 스타일 구조를 100% 유지하며 컬러값만 밝게 변경 */
-      :root {
-        --bg0: #ffffff; /* 순백색 배경 */
-        --bg1: #f8f9fb;
-        --surface: #ffffff;
-        --surface2: #f1f3f7;
-        --stroke: rgba(0, 0, 0, 0.08);
-        --text: #1a1d23; /* 가독성을 위한 짙은 회색 */
-        --muted: rgba(26, 29, 35, 0.6);
-        --accent: #b8934d; /* 골드 포인트 */
-        --accent2: #4a90e2;
-        --danger: #ff4d4f;
-        --ok: #52c41a;
-        --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
-        --radius: 18px;
-        --radius-sm: 12px;
-        --ring: 0 0 0 4px rgba(184, 147, 77, 0.15);
-        --container: 1120px;
-      }
-      html[data-theme="light"] {
-        --bg0: #ffffff;
-        --bg1: #f8f9fb;
-        --surface: #ffffff;
-        --surface2: #f1f3f7;
-        --stroke: rgba(0, 0, 0, 0.08);
-        --text: #1a1d23;
-        --muted: rgba(26, 29, 35, 0.6);
-        --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
-      }
-      * {
-        box-sizing: border-box;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        color: var(--text);
-        font-family:
-          ui-sans-serif,
-          system-ui,
-          -apple-system,
-          "Segoe UI",
-          Roboto,
-          "Noto Sans KR",
-          "Malgun Gothic",
-          "Apple SD Gothic Neo",
-          sans-serif;
-        background:
-          radial-gradient(
-            1200px 600px at 18% -10%,
-            rgba(184, 147, 77, 0.08),
-            transparent 60%
-          ),
-          radial-gradient(
-            900px 520px at 90% 10%,
-            rgba(74, 144, 226, 0.05),
-            transparent 55%
-          ),
-          radial-gradient(
-            700px 420px at 40% 95%,
-            rgba(82, 196, 26, 0.04),
-            transparent 55%
-          ),
-          linear-gradient(180deg, var(--bg0), var(--bg1));
-        min-height: 100vh;
-      }
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-      .appShell {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-      main {
-        flex: 1;
-      }
-      .container {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 0 20px;
-      }
-
-      /* Focus */
-      :focus-visible {
-        outline: none;
-        box-shadow: var(--ring);
-        border-color: var(--accent) !important;
-      }
-
-      /* Typography */
-      .kicker {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 12px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        border-radius: 999px;
-        color: var(--accent);
-        font-weight: 700;
-        letter-spacing: 0.2px;
-        font-size: 13px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
-      }
-      .title {
-        margin: 12px 0 8px;
-        font-size: clamp(26px, 3vw, 38px);
-        letter-spacing: -0.8px;
-        line-height: 1.1;
-        font-weight: 800;
-      }
-      .subtitle {
-        margin: 0;
-        color: var(--muted);
-        font-size: 15px;
-        line-height: 1.6;
-        max-width: 70ch;
-      }
-      .hero {
-        padding: 44px 0 26px;
-        position: relative;
-        overflow: hidden;
-      }
-      .hero::before {
-        content: "";
-        position: absolute;
-        left: -260px;
-        top: -260px;
-        width: 560px;
-        height: 560px;
-        background: radial-gradient(
-          circle at 30% 30%,
-          rgba(184, 147, 77, 0.12),
-          transparent 62%
-        );
-        filter: blur(20px);
-        pointer-events: none;
-        opacity: 0.95;
-      }
-      .hero::after {
-        content: "";
-        position: absolute;
-        right: -260px;
-        top: -180px;
-        width: 560px;
-        height: 560px;
-        background: radial-gradient(
-          circle at 50% 30%,
-          rgba(74, 144, 226, 0.08),
-          transparent 60%
-        );
-        filter: blur(20px);
-        pointer-events: none;
-        opacity: 0.8;
-      }
-
-      /* Components */
-      .card {
-        background: var(--surface);
-        border: 1px solid var(--stroke);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(10px);
-      }
-      .cardPad {
-        padding: 18px;
-      }
-      .row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-      }
-      .stack {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .grid {
-        display: grid;
-        gap: 16px;
-      }
-      .grid-2 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      .grid-3 {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-      @media (max-width: 920px) {
-        .grid-2,
-        .grid-3 {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        padding: 11px 14px;
-        border-radius: 12px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        color: var(--text);
-        font-weight: 700;
-        letter-spacing: 0.15px;
-        cursor: pointer;
-        user-select: none;
-        transition:
-          transform 0.12s ease,
-          background 0.12s ease,
-          border-color 0.12s ease;
-        text-decoration: none;
-        white-space: nowrap;
-      }
-      .btn:hover {
-        transform: translateY(-1px);
-        border-color: var(--accent);
-        background: var(--bg1);
-      }
-      .btn:active {
-        transform: translateY(0px);
-      }
-      .btn-primary {
-        background: var(--text);
-        color: #ffffff;
-        border: none;
-      }
-      .btn-primary:hover {
-        background: #333;
-        color: #fff;
-      }
-      .btn-ghost {
-        background: transparent;
-        border-color: var(--stroke);
-      }
-      .btn-danger {
-        border-color: rgba(255, 77, 79, 0.2);
-        background: rgba(255, 77, 79, 0.05);
-        color: var(--danger);
-      }
-      .btn-small {
-        padding: 8px 10px;
-        border-radius: 10px;
-        font-size: 13px;
-        font-weight: 750;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 6px 12px;
-        border-radius: 999px;
-        border: 1px solid var(--stroke);
-        background: var(--surface2);
-        color: var(--muted);
-        font-weight: 750;
-        font-size: 12.5px;
-        letter-spacing: 0.2px;
-        white-space: nowrap;
-      }
-      .badge-ok {
-        border-color: rgba(82, 196, 26, 0.2);
-        color: var(--ok);
-        background: rgba(82, 196, 26, 0.08);
-      }
-      .badge-warn {
-        border-color: rgba(184, 147, 77, 0.2);
-        color: var(--accent);
-        background: rgba(184, 147, 77, 0.08);
-      }
-      .badge-danger {
-        border-color: rgba(255, 77, 79, 0.2);
-        color: var(--danger);
-        background: rgba(255, 77, 79, 0.08);
-      }
-      .badge-info {
-        border-color: rgba(74, 144, 226, 0.2);
-        color: var(--accent2);
-        background: rgba(74, 144, 226, 0.08);
-      }
-
-      /* Navbar */
-      .navbar {
-        position: sticky;
-        top: 0;
-        z-index: 60;
-        backdrop-filter: blur(14px);
-        background: rgba(255, 255, 255, 0.8);
-        border-bottom: 1px solid var(--stroke);
-      }
-      html[data-theme="light"] .navbar {
-        background: rgba(255, 255, 255, 0.8);
-        border-bottom: 1px solid var(--stroke);
-      }
-      .navbarInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 12px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 900;
-        letter-spacing: -0.4px;
-      }
-      .brandMark {
-        width: 36px;
-        height: 36px;
-        border-radius: 12px;
-        background: var(--accent);
-        box-shadow: 0 4px 15px rgba(184, 147, 77, 0.2);
-      }
-      .navLinks {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .navLink {
-        padding: 9px 12px;
-        border-radius: 12px;
-        border: 1px solid transparent;
-        color: var(--muted);
-        font-weight: 800;
-        font-size: 13.5px;
-        transition:
-          border-color 0.12s ease,
-          color 0.12s ease,
-          background 0.12s ease;
-      }
-      .navLink:hover {
-        color: var(--text);
-        background: var(--surface2);
-        text-decoration: none;
-      }
-      .navActions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .hamburger {
-        display: none;
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        color: var(--text);
-        cursor: pointer;
-        font-weight: 900;
-      }
-      @media (max-width: 920px) {
-        .navLinks {
-          display: none;
-        }
-        .hamburger {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-      #mobileMenu {
-        display: none;
-        border-top: 1px solid var(--stroke);
-        background: #ffffff;
-      }
-      #mobileMenu[data-open="true"] {
-        display: block;
-      }
-      .mobileMenuInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 10px 20px 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .mobileMenuInner .navLink {
-        width: 100%;
-        border-color: var(--stroke);
-        background: var(--bg1);
-      }
-
-      /* Forms */
-      label {
-        display: block;
-        font-weight: 850;
-        font-size: 13px;
-        color: var(--text);
-        margin-bottom: 7px;
-      }
-      input,
-      select,
-      textarea {
-        width: 100%;
-        padding: 12px 12px;
-        border-radius: 12px;
-        background: #ffffff;
-        border: 1px solid var(--stroke);
-        color: var(--text);
-        outline: none;
-        transition:
-          border-color 0.12s ease,
-          background 0.12s ease;
-        font-size: 14.5px;
-      }
-      textarea {
-        min-height: 120px;
-        resize: vertical;
-      }
-      input::placeholder,
-      textarea::placeholder {
-        color: #adb5bd;
-      }
-      input:focus,
-      select:focus,
-      textarea:focus {
-        border-color: var(--accent);
-        background: #ffffff;
-        box-shadow: var(--ring);
-      }
-      .helpText {
-        color: var(--muted);
-        font-size: 12.5px;
-        line-height: 1.5;
-        margin-top: 8px;
-      }
-      .formGrid {
-        display: grid;
-        gap: 16px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-      @media (max-width: 920px) {
-        .formGrid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      /* Tables */
-      .tableWrap {
-        overflow: auto;
-        border-radius: var(--radius);
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-      }
-      table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        min-width: 720px;
-      }
-      thead th {
-        position: sticky;
-        top: 0;
-        background: var(--bg1);
-        z-index: 1;
-        text-align: left;
-        padding: 14px 14px;
-        font-size: 12.5px;
-        letter-spacing: 0.3px;
-        text-transform: uppercase;
-        color: var(--muted);
-        border-bottom: 1px solid var(--stroke);
-      }
-      tbody td {
-        padding: 14px 14px;
-        border-bottom: 1px solid var(--stroke);
-        color: var(--text);
-        vertical-align: middle;
-      }
-      tbody tr:hover td {
-        background: var(--bg1);
-      }
-
-      /* Thumb */
-      .thumb {
-        height: 160px;
-        border-radius: 16px;
-        border: 1px solid var(--stroke);
-        background: linear-gradient(135deg, #fdfdfd 0%, #f1f3f5 100%);
-        overflow: hidden;
-        position: relative;
-      }
-      .thumb::after {
-        content: "";
-        position: absolute;
-        inset: -30px -30px auto -30px;
-        height: 120px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(0, 0, 0, 0.02),
-          transparent
-        );
-        transform: rotate(-10deg);
-        opacity: 0.9;
-      }
-      .thumbLabel {
-        position: absolute;
-        left: 14px;
-        bottom: 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .thumbTitle {
-        font-weight: 950;
-        letter-spacing: -0.4px;
-        font-size: 18px;
-        color: #111;
-      }
-      .thumbMeta {
-        color: var(--muted);
-        font-weight: 800;
-        font-size: 12.5px;
-      }
-
-      /* Footer */
-      footer {
-        border-top: 1px solid var(--stroke);
-        padding: 22px 0;
-        color: var(--muted);
-        background: #ffffff;
-      }
-      .footerInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-      .footerLinks {
-        display: flex;
-        gap: 14px;
-        flex-wrap: wrap;
-      }
-
-      /* Toast */
-      #grToast {
-        position: fixed;
-        right: 16px;
-        bottom: 16px;
-        z-index: 9999;
-        min-width: 260px;
-        max-width: 380px;
-        padding: 16px;
-        border-radius: 14px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        color: var(--text);
-        display: none;
-      }
-      #grToast[data-show="true"] {
-        display: block;
-      }
-      #grToast strong {
-        display: block;
-        margin-bottom: 2px;
-      }
-      #grToast .toastText {
-        color: var(--muted);
-        line-height: 1.45;
-        font-weight: 700;
-        font-size: 13.5px;
-      }
-
-      /* Reduced motion */
-      @media (prefers-reduced-motion: reduce) {
-        * {
-          transition: none !important;
-          scroll-behavior: auto !important;
-        }
-        .btn:hover {
-          transform: none;
-        }
+      /* 회원가입 전용 */
+      input, select { padding: 12px 14px; font-size: 14.5px; }
+      .formGrid { gap: 14px; }
+      .joinLayout { display: grid; grid-template-columns: 1fr 340px; gap: 0; align-items: start; border: 1px solid var(--stroke); border-top: none; }
+      .joinMain { padding: 36px 32px; border-right: 1px solid var(--stroke); }
+      .joinSide { padding: 32px 28px; background: var(--bg1); }
+      .termsBox { background: var(--bg0); border: 1px solid var(--stroke); padding: 18px 20px; }
+      .termsTitle { font-size: 13px; font-weight: 900; letter-spacing: -0.1px; margin-bottom: 12px; }
+      .termsItem { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--stroke); cursor: pointer; }
+      .termsItem:last-child { border-bottom: none; padding-bottom: 0; }
+      .termsItem input[type="checkbox"] { width: auto; padding: 0; border: 1px solid var(--stroke-dark); cursor: pointer; }
+      .termsItemLabel { font-size: 14px; font-weight: 700; text-transform: none; letter-spacing: 0; color: var(--text); margin: 0; cursor: pointer; }
+      .benefitList { display: flex; flex-direction: column; gap: 1px; background: var(--stroke); border: 1px solid var(--stroke); }
+      .benefitItem { background: var(--surface); padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; }
+      .benefitNum { font-size: 11px; font-weight: 900; color: #ffffff; background: #111; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+      .benefitTitle { font-size: 14px; font-weight: 900; letter-spacing: -0.2px; }
+      .benefitDesc { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+      .sideTitle { font-size: 13px; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
+      @media (max-width: 900px) {
+        .joinLayout { grid-template-columns: 1fr; }
+        .joinMain { border-right: none; }
+        .joinSide { border-top: 1px solid var(--stroke); }
+        .formGrid { grid-template-columns: 1fr; }
       }
     </style>
   </head>
   <body>
     <div class="appShell">
+      <!-- NAVBAR -->
       <nav class="navbar">
         <div class="navbarInner">
           <a class="brand" th:href="@{/}">
-            <span class="brandMark"></span>
-            <span>Gallery</span>
+            <span class="brandMark">
+              <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="6" height="6"/>
+                <rect x="10" y="2" width="6" height="6"/>
+                <rect x="2" y="10" width="6" height="6"/>
+                <rect x="10" y="10" width="6" height="6" opacity="0.4"/>
+              </svg>
+            </span>
+            <span>Art Museum</span>
           </a>
           <div class="navLinks">
+
             <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
             <a
               class="navLink"
@@ -632,277 +73,145 @@
               th:href="@{/admin/gallery/list}"
               >관리자</a
             >
+
           </div>
           <div class="navActions">
-            <div
-              sec:authorize="!isAuthenticated()"
-              style="display: flex; gap: 8px"
-            >
-              <a class="btn btn-ghost btn-small" th:href="@{/member/login}"
-                >로그인</a
-              >
-              <a class="btn btn-primary btn-small" th:href="@{/member/join}"
-                >회원가입</a
-              >
+            <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px">
+              <a class="btn btn-ghost btn-small" th:href="@{/member/login}">로그인</a>
+              <a class="btn btn-primary btn-small" th:href="@{/member/join}">회원가입</a>
             </div>
-            <div
-              sec:authorize="isAuthenticated()"
-              style="display: flex; gap: 8px"
-            >
-              <form
-                th:action="@{/member/logout}"
-                method="post"
-                style="margin: 0"
-              >
-                <button type="submit" class="btn btn-ghost btn-small">
-                  로그아웃
-                </button>
-              </form>
-            </div>
+            <button class="hamburger" type="button"
+              onclick="document.getElementById('mobileMenu').dataset.open=document.getElementById('mobileMenu').dataset.open==='true'?'false':'true'">☰</button>
+          </div>
+        </div>
+        <div id="mobileMenu">
+          <div class="mobileMenuInner">
+            <a class="navLink" th:href="@{/gallery/list}">전시·관람</a>
           </div>
         </div>
       </nav>
 
-      <main class="container">
-        <section class="hero">
-          <div class="kicker">MEMBER</div>
-          <h1 class="title">회원가입</h1>
-          <p class="subtitle">
-            미술관 예약을 더 빠르게. 계정을 만들고 전시 공간을 미리 계획하세요.
-          </p>
-        </section>
+      <main>
+        <div class="container">
+          <header class="pageHeader">
+            <div class="pageEyebrow">Member · Sign Up</div>
+            <h1 class="pageTitle">회원가입</h1>
+            <p class="pageSubtitle">미술관 예약을 더 빠르게. 계정을 만들고 전시 공간을 미리 계획하세요.</p>
+          </header>
+        </div>
 
-        <section class="grid grid-2" style="align-items: start">
-          <div class="card cardPad">
-            <div class="row" style="align-items: flex-start; flex-wrap: wrap">
-              <div>
-                <h2
-                  style="
-                    margin: 0 0 8px;
-                    font-size: 16.5px;
-                    letter-spacing: -0.3px;
-                  "
-                >
-                  계정 정보
-                </h2>
-                <div class="helpText" style="margin: 0">
-                  필수 항목을 입력하면 바로 예약을 시작할 수 있습니다.
+        <div class="container" style="padding-left:0;padding-right:0">
+          <div class="joinLayout">
+            <!-- FORM -->
+            <div class="joinMain">
+              <form th:action="@{/member/join}" th:object="${memberJoinRequestDto}" method="post" class="stack">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                <div class="formGrid">
+                  <div>
+                    <label for="joinName">아이디</label>
+                    <input id="joinName" th:field="*{username}" type="text" placeholder="honggildong" required/>
+                  </div>
+                  <div>
+                    <label for="joinEmail">이메일</label>
+                    <input id="joinEmail" th:field="*{email}" type="email" placeholder="name@example.com" required/>
+                  </div>
+                  <div>
+                    <label for="joinPassword">비밀번호</label>
+                    <input id="joinPassword" th:field="*{password}" type="password" placeholder="최소 8자" required/>
+                  </div>
+                  <div>
+                    <label for="joinRole">역할</label>
+                    <select id="joinRole" th:field="*{role}">
+                      <option value="ROLE_USER" selected>사용자</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <span class="badge badge-warn">New</span>
+
+                <div class="termsBox">
+                  <div class="termsTitle">이용 약관 동의</div>
+                  <label class="termsItem">
+                    <input id="agree1" type="checkbox" name="agreeTerms" required/>
+                    <span class="termsItemLabel">이용약관 및 개인정보 처리방침 동의 (필수)</span>
+                  </label>
+                  <label class="termsItem">
+                    <input id="agree2" type="checkbox" name="agreeMarketing"/>
+                    <span class="termsItemLabel">마케팅 정보 수신 동의 (선택)</span>
+                  </label>
+                </div>
+
+                <div style="display:flex;gap:8px;justify-content:flex-end">
+                  <a class="btn btn-ghost" th:href="@{/member/login}">이미 계정이 있어요</a>
+                  <button class="btn btn-primary" type="submit">가입하기</button>
+                </div>
+              </form>
             </div>
 
-            <div style="height: 14px"></div>
-
-            <form
-              th:action="@{/member/join}"
-              th:object="${memberJoinRequestDto}"
-              method="post"
-              class="stack"
-            >
-              <input
-                type="hidden"
-                th:name="${_csrf.parameterName}"
-                th:value="${_csrf.token}"
-              />
-              <div class="formGrid">
-                <div>
-                  <label for="joinName">아이디</label>
-                  <input
-                    id="joinName"
-                    th:field="*{username}"
-                    type="text"
-                    placeholder="honggildong"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="joinEmail">이메일</label>
-                  <input
-                    id="joinEmail"
-                    th:field="*{email}"
-                    type="email"
-                    placeholder="name@example.com"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="joinPassword">비밀번호</label>
-                  <input
-                    id="joinPassword"
-                    th:field="*{password}"
-                    type="password"
-                    placeholder="최소 8자"
-                    minlength="8"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="joinRole">역할</label>
-                  <select id="joinRole" th:field="*{role}">
-                    <option value="ROLE_USER" selected>사용자</option>
-                  </select>
-                </div>
-              </div>
-
-              <div
-                class="card"
-                style="
-                  box-shadow: none;
-                  background: var(--bg1);
-                  padding: 14px;
-                  border-color: var(--stroke);
-                "
-              >
-                <div
-                  style="
-                    font-weight: 950;
-                    letter-spacing: -0.3px;
-                    margin-bottom: 8px;
-                  "
-                >
-                  이용 약관 동의
-                </div>
-                <div class="helpText" style="margin: 0 0 12px">
-                  서비스 이용을 위해 아래 항목에 동의해 주세요.
-                </div>
-                <label
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin: 0;
-                    cursor: pointer;
-                  "
-                >
-                  <input
-                    id="agree1"
-                    type="checkbox"
-                    name="agreeTerms"
-                    required
-                    style="width: auto; margin: 0"
-                  />
-                  <span style="font-weight: 850; font-size: 14px"
-                    >이용약관 및 개인정보 처리방침 동의 (필수)</span
-                  >
-                </label>
-                <label
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    margin: 10px 0 0;
-                    cursor: pointer;
-                  "
-                >
-                  <input
-                    id="agree2"
-                    type="checkbox"
-                    name="agreeMarketing"
-                    style="width: auto; margin: 0"
-                  />
-                  <span style="font-weight: 850; font-size: 14px"
-                    >마케팅 정보 수신 동의 (선택)</span
-                  >
-                </label>
-              </div>
-
-              <div
-                class="row"
-                style="justify-content: flex-end; flex-wrap: wrap"
-              >
-                <a class="btn btn-ghost" href="#" th:href="@{/member/login}"
-                  >이미 계정이 있어요</a
-                >
-                <button class="btn btn-primary" type="submit">가입하기</button>
-              </div>
-            </form>
-          </div>
-
-          <div class="stack">
-            <div class="card cardPad">
-              <div class="row" style="align-items: flex-start; flex-wrap: wrap">
-                <div>
-                  <div
-                    style="
-                      font-weight: 950;
-                      letter-spacing: -0.3px;
-                      font-size: 16.5px;
-                    "
-                  >
-                    가입하면 얻는 것
-                  </div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    간단한 예약 흐름을 설계했습니다.
+            <!-- SIDE -->
+            <div class="joinSide">
+              <div class="sideTitle">가입하면 얻는 것</div>
+              <div class="benefitList">
+                <div class="benefitItem">
+                  <div class="benefitNum">1</div>
+                  <div>
+                    <div class="benefitTitle">빠른 예약</div>
+                    <div class="benefitDesc">전시 공간 선택 후 날짜와 시간을 바로 입력합니다.</div>
                   </div>
                 </div>
-                <span class="badge badge-info">Benefit</span>
-              </div>
-              <div style="height: 14px"></div>
-              <div class="stack" style="gap: 10px">
-                <div
-                  class="card"
-                  style="
-                    box-shadow: none;
-                    background: var(--bg1);
-                    padding: 14px;
-                    border-color: var(--stroke);
-                  "
-                >
-                  <div style="font-weight: 950">1. 빠른 예약</div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    전시 공간 선택 후 날짜와 시간을 바로 입력합니다.
+                <div class="benefitItem">
+                  <div class="benefitNum">2</div>
+                  <div>
+                    <div class="benefitTitle">상태 확인</div>
+                    <div class="benefitDesc">대기·확정·취소 상태를 한 화면에서 확인합니다.</div>
                   </div>
                 </div>
-                <div
-                  class="card"
-                  style="
-                    box-shadow: none;
-                    background: var(--bg1);
-                    padding: 14px;
-                    border-color: var(--stroke);
-                  "
-                >
-                  <div style="font-weight: 950">2. 상태 확인</div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    대기 · 확정 · 취소 상태를 한 화면에서 확인합니다.
-                  </div>
-                </div>
-                <div
-                  class="card"
-                  style="
-                    box-shadow: none;
-                    background: var(--bg1);
-                    padding: 14px;
-                    border-color: var(--stroke);
-                  "
-                >
-                  <div style="font-weight: 950">3. 관람 메모</div>
-                  <div class="helpText" style="margin: 6px 0 0">
-                    요청 사항을 메모로 남길 수 있습니다.
+                <div class="benefitItem">
+                  <div class="benefitNum">3</div>
+                  <div>
+                    <div class="benefitTitle">관람 메모</div>
+                    <div class="benefitDesc">요청 사항을 메모로 남길 수 있습니다.</div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="card cardPad">
-              <div
-                style="
-                  font-weight: 950;
-                  letter-spacing: -0.3px;
-                  font-size: 16.5px;
-                "
-              >
-                보안 안내
-              </div>
-              <div class="helpText" style="margin-top: 8px">
-                비밀번호는 안전하게 암호화되어 저장됩니다. 타인과 공유하지
-                마세요.
+              <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--stroke)">
+                <div style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">보안 안내</div>
+                <div style="font-size:13px;color:var(--muted);line-height:1.7">
+                  비밀번호는 안전하게 암호화되어 저장됩니다. 타인과 공유하지 마세요.
+                </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
       </main>
+
+      <footer>
+        <div class="footerInner">
+          <div>
+            <div class="footerBrand">Art Museum</div>
+            <div class="footerDesc">국립현대미술관 예약 시스템<br/>미술 작품과 공간을 예약하세요.</div>
+          </div>
+          <div style="display:flex;gap:48px;flex-wrap:wrap">
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">관람 안내</div>
+              <div class="footerLinks" style="flex-direction:column;gap:10px">
+                <a th:href="@{/gallery/list}">전시 목록</a>
+                <a href="#">관람 시간</a>
+                <a href="#">오시는 길</a>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">계정</div>
+              <div class="footerLinks" style="flex-direction:column;gap:10px">
+                <a th:href="@{/member/login}">로그인</a>
+                <a th:href="@{/member/join}">회원가입</a>
+                <a th:href="@{/reservation/list}">내 예약</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footerBottom">© 2026 Art Museum Reservation. All rights reserved.</div>
+      </footer>
     </div>
   </body>
 </html>

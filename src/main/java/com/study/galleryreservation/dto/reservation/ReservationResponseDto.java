@@ -13,6 +13,7 @@ import java.time.LocalTime;
 public class ReservationResponseDto {
 
     private Long id;
+    private Long galleryId;
     private String galleryName;
     private String memberName;
     private String email;
@@ -26,6 +27,7 @@ public class ReservationResponseDto {
     public static ReservationResponseDto from(Reservation reservation) {
         return ReservationResponseDto.builder()
                 .id(reservation.getId())
+                .galleryId(reservation.getGallery().getId())
                 .galleryName(reservation.getGallery().getName())
                 .memberName(reservation.getMember().getUsername())
                 .email(reservation.getMember().getEmail())
