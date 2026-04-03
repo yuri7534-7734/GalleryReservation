@@ -7,342 +7,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>할 일 목록 - 갤러리 예약</title>
+    <title>할 일 목록 — Art Museum</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
-      :root {
-        --bg0: #ffffff;
-        --bg1: #f8f9fb;
-        --surface: #ffffff;
-        --surface2: #f1f3f7;
-        --stroke: rgba(0, 0, 0, 0.08);
-        --text: #1a1d23;
-        --muted: rgba(26, 29, 35, 0.6);
-        --accent: #b8934d;
-        --accent2: #4a90e2;
-        --danger: #ff4d4f;
-        --ok: #52c41a;
-        --shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
-        --radius: 18px;
-        --radius-sm: 12px;
-        --ring: 0 0 0 4px rgba(184, 147, 77, 0.15);
-        --container: 1120px;
+      /* 할 일 목록 전용 */
+      :focus-visible { outline: none; box-shadow: var(--ring); border-color: var(--text) !important; }
+      .toolbar { align-items: center; justify-content: space-between; border-bottom: none; margin-bottom: 24px; padding-bottom: 0; }
+      .toolbarFilters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+      .toolbarFilters select, .toolbarFilters input {
+        padding: 9px 13px; border: 1px solid var(--stroke-dark); border-radius: var(--radius);
+        background: #ffffff; color: var(--text); font-size: 13.5px; font-family: inherit;
+        outline: none; transition: border-color .12s;
       }
-      * {
-        box-sizing: border-box;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        color: var(--text);
-        font-family:
-          ui-sans-serif,
-          system-ui,
-          -apple-system,
-          "Segoe UI",
-          Roboto,
-          "Noto Sans KR",
-          "Malgun Gothic",
-          "Apple SD Gothic Neo",
-          sans-serif;
-        background:
-          radial-gradient(
-            1200px 600px at 18% -10%,
-            rgba(184, 147, 77, 0.08),
-            transparent 60%
-          ),
-          radial-gradient(
-            900px 520px at 90% 10%,
-            rgba(74, 144, 226, 0.05),
-            transparent 55%
-          ),
-          linear-gradient(180deg, var(--bg0), var(--bg1));
-        min-height: 100vh;
-      }
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-      .appShell {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-      main {
-        flex: 1;
-      }
-      .container {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 0 20px;
-      }
-      :focus-visible {
-        outline: none;
-        box-shadow: var(--ring);
-        border-color: var(--accent) !important;
-      }
-      .kicker {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 12px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        border-radius: 999px;
-        color: var(--accent);
-        font-weight: 700;
-        letter-spacing: 0.2px;
-        font-size: 13px;
-      }
-      .title {
-        margin: 12px 0 8px;
-        font-size: clamp(26px, 3vw, 38px);
-        letter-spacing: -0.8px;
-        line-height: 1.1;
-        font-weight: 800;
-      }
-      .subtitle {
-        margin: 0;
-        color: var(--muted);
-        font-size: 15px;
-        line-height: 1.6;
-        max-width: 70ch;
-      }
-      .hero {
-        padding: 44px 0 26px;
-        position: relative;
-        overflow: hidden;
-      }
-      .card {
-        background: var(--surface);
-        border: 1px solid var(--stroke);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-      }
-      .cardPad {
-        padding: 18px;
-      }
-      .row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-      }
-      .stack {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        padding: 11px 14px;
-        border-radius: 12px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        color: var(--text);
-        font-weight: 700;
-        cursor: pointer;
-        transition:
-          transform 0.12s ease,
-          background 0.12s ease,
-          border-color 0.12s ease;
-        text-decoration: none;
-        white-space: nowrap;
-      }
-      .btn:hover {
-        transform: translateY(-1px);
-        border-color: var(--accent);
-        background: var(--bg1);
-      }
-      .btn:active {
-        transform: translateY(0);
-      }
-      .btn-primary {
-        background: var(--text);
-        color: #fff;
-        border: none;
-      }
-      .btn-primary:hover {
-        background: #333;
-        color: #fff;
-      }
-      .btn-ghost {
-        background: transparent;
-        border-color: var(--stroke);
-      }
-      .btn-danger {
-        border-color: rgba(255, 77, 79, 0.2);
-        background: rgba(255, 77, 79, 0.05);
-        color: var(--danger);
-      }
-      .btn-small {
-        padding: 8px 10px;
-        border-radius: 10px;
-        font-size: 13px;
-        font-weight: 750;
-      }
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 6px 12px;
-        border-radius: 999px;
-        border: 1px solid var(--stroke);
-        background: var(--surface2);
-        color: var(--muted);
-        font-weight: 750;
-        font-size: 12.5px;
-      }
-      .badge-ok {
-        border-color: rgba(82, 196, 26, 0.2);
-        color: var(--ok);
-        background: rgba(82, 196, 26, 0.08);
-      }
-      .badge-warn {
-        border-color: rgba(184, 147, 77, 0.2);
-        color: var(--accent);
-        background: rgba(184, 147, 77, 0.08);
-      }
-      .navbar {
-        position: sticky;
-        top: 0;
-        z-index: 60;
-        backdrop-filter: blur(14px);
-        background: rgba(255, 255, 255, 0.8);
-        border-bottom: 1px solid var(--stroke);
-      }
-      .navbarInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 12px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 900;
-        letter-spacing: -0.4px;
-      }
-      .brandMark {
-        width: 36px;
-        height: 36px;
-        border-radius: 12px;
-        background: var(--accent);
-        box-shadow: 0 4px 15px rgba(184, 147, 77, 0.2);
-      }
-      .navLinks {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .navLink {
-        padding: 9px 12px;
-        border-radius: 12px;
-        border: 1px solid transparent;
-        color: var(--muted);
-        font-weight: 800;
-        font-size: 13.5px;
-      }
-      .navLink:hover {
-        color: var(--text);
-        background: var(--surface2);
-        text-decoration: none;
-      }
-      .navActions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      label {
-        display: block;
-        font-weight: 850;
-        font-size: 13px;
-        color: var(--text);
-        margin-bottom: 7px;
-      }
-      input,
-      select {
-        padding: 10px 12px;
-        border-radius: 12px;
-        background: #ffffff;
-        border: 1px solid var(--stroke);
-        color: var(--text);
-        outline: none;
-        font-size: 14px;
-      }
-      input:focus,
-      select:focus {
-        border-color: var(--accent);
-        box-shadow: var(--ring);
-      }
-      .helpText {
-        color: var(--muted);
-        font-size: 12.5px;
-        line-height: 1.5;
-      }
-      .tableWrap {
-        overflow: auto;
-        border-radius: var(--radius);
-        border: 1px solid var(--stroke);
-        background: #fff;
-      }
-      table {
-        width: 100%;
-        table-layout: fixed; /* 검색 필터로 행을 숨길 때 열 너비가 변하는 현상 완화 */
-        border-collapse: separate;
-        border-spacing: 0;
-        min-width: 560px;
-      }
-      thead th {
-        position: sticky;
-        top: 0;
-        background: var(--bg1);
-        z-index: 1;
-        text-align: left;
-        padding: 14px;
-        font-size: 12.5px;
-        letter-spacing: 0.3px;
-        text-transform: uppercase;
-        color: var(--muted);
-        border-bottom: 1px solid var(--stroke);
-      }
-      tbody td {
-        padding: 14px;
-        border-bottom: 1px solid var(--stroke);
-        color: var(--text);
-        vertical-align: middle;
-      }
-      tbody tr:hover td {
-        background: var(--bg1);
-      }
-      .flashErr {
-        margin: 0 0 16px;
-        padding: 12px 14px;
-        border-radius: var(--radius-sm);
-        border: 1px solid rgba(255, 77, 79, 0.35);
-        background: rgba(255, 77, 79, 0.08);
-        color: var(--danger);
-        font-weight: 750;
-        font-size: 14px;
-        line-height: 1.45;
-      }
-      footer {
-        border-top: 1px solid var(--stroke);
-        padding: 22px 0;
-        color: var(--muted);
-        background: #fff;
-      }
+      .toolbarFilters select:focus, .toolbarFilters input:focus { border-color: var(--text); box-shadow: var(--ring); }
+      .tableWrap { background: #fff; }
+      table { min-width: 560px; }
+      thead th { font-size: 11px; border-bottom: 1px solid var(--stroke-dark); }
+      tbody td { padding: 16px; }
+      .tdTitle { font-weight: 700; color: var(--text); margin-bottom: 3px; }
+      .tdDesc { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+      .pageHeader { padding: 40px 0 32px; margin-bottom: 40px; }
     </style>
   </head>
   <body>
@@ -350,10 +34,16 @@
       <nav class="navbar">
         <div class="navbarInner">
           <a class="brand" th:href="@{/}">
-            <span class="brandMark"></span>
-            <span>Gallery</span>
+            <span class="brandMark">
+              <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="6" height="6"/><rect x="10" y="2" width="6" height="6"/>
+                <rect x="2" y="10" width="6" height="6"/><rect x="10" y="10" width="6" height="6" opacity="0.4"/>
+              </svg>
+            </span>
+            <span>Art Museum</span>
           </a>
           <div class="navLinks">
+
             <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
             <a
               class="navLink"
@@ -373,200 +63,113 @@
               th:href="@{/admin/gallery/list}"
               >관리자</a
             >
+
           </div>
           <div class="navActions">
-            <div
-              sec:authorize="!isAuthenticated()"
-              style="display: flex; gap: 8px"
-            >
-              <a class="btn btn-ghost btn-small" th:href="@{/member/login}"
-                >로그인</a
-              >
-              <a class="btn btn-primary btn-small" th:href="@{/member/join}"
-                >회원가입</a
-              >
+            <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px">
+              <a class="btn btn-ghost btn-small" th:href="@{/member/login}">로그인</a>
+              <a class="btn btn-primary btn-small" th:href="@{/member/join}">회원가입</a>
             </div>
-            <div
-              sec:authorize="isAuthenticated()"
-              style="display: flex; gap: 8px"
-            >
-              <form
-                th:action="@{/member/logout}"
-                method="post"
-                style="margin: 0"
-              >
-                <input
-                  type="hidden"
-                  th:name="${_csrf.parameterName}"
-                  th:value="${_csrf.token}"
-                />
-                <button type="submit" class="btn btn-ghost btn-small">
-                  로그아웃
-                </button>
+            <div sec:authorize="isAuthenticated()" style="display:flex;gap:8px">
+              <form th:action="@{/member/logout}" method="post" style="margin:0">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="btn btn-ghost btn-small">로그아웃</button>
               </form>
             </div>
           </div>
         </div>
       </nav>
 
-      <main class="container">
-        <section class="hero">
-          <div class="kicker">TODO</div>
-          <h1 class="title">할 일 목록</h1>
-          <p class="subtitle">
-            전시 운영 준비, 점검, 공지 초안을 관리하는 화면입니다.
-          </p>
-        </section>
+      <main>
+      <div class="container">
+        <div class="pageHeader">
+          <div class="label">Task Management</div>
+          <h1>할 일 목록</h1>
+          <p>전시 운영 준비, 점검, 공지 초안을 관리하는 화면입니다.</p>
+        </div>
 
-        <section class="card cardPad">
-          <div
-            th:if="${errorMessage}"
-            class="flashErr"
-            role="alert"
-            th:text="${errorMessage}"
-          ></div>
-          <div class="row" style="flex-wrap: wrap">
-            <div class="stack" style="gap: 6px">
-              <div
-                style="
-                  font-weight: 950;
-                  letter-spacing: -0.3px;
-                  font-size: 16px;
-                "
-              >
-                검색 및 필터
-              </div>
-              <div class="helpText" style="margin: 0">
-                완료 · 미완료를 빠르게 구분하세요.
-              </div>
-            </div>
-            <div
-              style="
-                display: flex;
-                gap: 10px;
-                align-items: flex-end;
-                flex-wrap: wrap;
-              "
-            >
-              <div>
-                <label for="tStatus">상태</label>
-                <select id="tStatus">
-                  <option value="ALL" selected>전체</option>
-                  <option value="false">미완료</option>
-                  <option value="true">완료</option>
-                </select>
-              </div>
-              <div>
-                <label for="tSearch">검색</label>
-                <input id="tSearch" type="text" placeholder="제목 검색" />
-              </div>
-              <div style="align-self: flex-end">
-                <a class="btn btn-primary" th:href="@{/todo/form}">새 할 일</a>
-              </div>
-            </div>
+        <div th:if="${errorMessage}" class="flashErr" role="alert" th:text="${errorMessage}"></div>
+
+        <div class="toolbar">
+          <div class="toolbarFilters">
+            <select id="tStatus">
+              <option value="ALL" selected>전체 상태</option>
+              <option value="false">미완료</option>
+              <option value="true">완료</option>
+            </select>
+            <input id="tSearch" type="text" placeholder="제목 검색…" style="min-width:200px" />
           </div>
+          <a class="btn btn-primary invertHover" th:href="@{/todo/form}">+ 새 할 일</a>
+        </div>
 
-          <div style="height: 14px"></div>
-
-          <div class="tableWrap">
-            <table aria-label="할 일 목록">
-              <thead>
-                <tr>
-                  <th style="width: 120px">기한</th>
-                  <th>업무</th>
-                  <th style="width: 140px">상태</th>
-                  <th style="width: 260px">작업</th>
-                </tr>
-              </thead>
-              <tbody id="todoRows">
-                <tr th:if="${todos == null or #lists.isEmpty(todos)}">
-                  <td
-                    colspan="4"
-                    class="helpText"
-                    style="text-align: center; padding: 24px"
-                  >
-                    등록된 할 일이 없습니다. 새 할 일을 만들어보세요.
-                  </td>
-                </tr>
-                <tr th:each="todo : ${todos}" th:data-status="${todo.isDone}">
-                  <td th:text="${todo.dueDate}">2026-04-03</td>
-                  <td>
-                    <div
-                      style="
-                        font-weight: 950;
-                        letter-spacing: -0.2px;
-                        color: #111;
-                      "
-                      th:text="${todo.title}"
-                    >
-                      할 일
-                    </div>
-                    <div
-                      class="helpText"
-                      style="margin: 4px 0 0; font-size: 12.5px"
-                      th:text="${todo.content}"
-                    >
-                      내용
-                    </div>
-                  </td>
-                  <td>
-                    <span
-                      th:class="${todo.isDone} ? 'badge badge-ok' : 'badge badge-warn'"
-                      th:text="${todo.isDone} ? '완료' : '미완료'"
-                      >상태</span
-                    >
-                  </td>
-                  <td>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap">
-                      <!-- 수정 버튼 -->
-                      <a
-                        class="btn btn-small btn-ghost"
-                        th:href="@{/todo/update/{id}(id=${todo.id})}"
-                        >수정</a
-                      >
-
-                      <!-- 삭제 버튼 -->
-                      <form
-                        th:action="@{/todo/delete/{id}(id=${todo.id})}"
-                        method="post"
-                        style="margin: 0"
-                      >
-                        <input
-                          type="hidden"
-                          th:name="${_csrf.parameterName}"
-                          th:value="${_csrf.token}"
-                        />
-                        <button type="submit" class="btn btn-small btn-danger">
-                          삭제
-                        </button>
-                      </form>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+        <div class="tableWrap" style="margin-bottom:80px">
+          <table aria-label="할 일 목록">
+            <thead>
+              <tr>
+                <th style="width:130px">기한</th>
+                <th>업무</th>
+                <th style="width:110px">상태</th>
+                <th style="width:200px">작업</th>
+              </tr>
+            </thead>
+            <tbody id="todoRows">
+              <tr th:if="${todos == null or #lists.isEmpty(todos)}">
+                <td colspan="4" class="emptyCell">등록된 할 일이 없습니다. 새 할 일을 만들어보세요.</td>
+              </tr>
+              <tr th:each="todo : ${todos}" th:data-status="${todo.isDone}">
+                <td th:text="${todo.dueDate}" style="color:var(--muted);font-size:13px">2026-04-03</td>
+                <td>
+                  <div class="tdTitle" th:text="${todo.title}">할 일</div>
+                  <div class="tdDesc" th:text="${todo.content}">내용</div>
+                </td>
+                <td>
+                  <span
+                    th:class="${todo.isDone} ? 'badge badge-ok' : 'badge badge-warn'"
+                    th:text="${todo.isDone} ? '완료' : '미완료'"
+                  >상태</span>
+                </td>
+                <td>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <a class="btn btn-small btn-ghost" th:href="@{/todo/update/{id}(id=${todo.id})}">수정</a>
+                    <form th:action="@{/todo/delete/{id}(id=${todo.id})}" method="post" style="margin:0">
+                      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                      <button type="submit" class="btn btn-small btn-danger">삭제</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
       </main>
 
       <footer>
-        <div
-          class="container"
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 700;
-          "
-        >
-          <div>© 2026 Art Gallery Reservation System.</div>
-          <div style="display: flex; gap: 20px">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
+        <div class="footerInner">
+          <div>
+            <div class="footerBrand">Art Museum</div>
+            <div class="footerDesc">국립현대미술관 예약 시스템<br/>미술 작품과 공간을 예약하세요.</div>
+          </div>
+          <div style="display:flex;gap:48px;flex-wrap:wrap">
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">관람 안내</div>
+              <div class="footerLinks" style="flex-direction:column;gap:10px">
+                <a th:href="@{/gallery/list}">전시 목록</a>
+                <a href="#">관람 시간</a>
+                <a href="#">오시는 길</a>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">계정</div>
+              <div class="footerLinks" style="flex-direction:column;gap:10px">
+                <a th:href="@{/member/login}">로그인</a>
+                <a th:href="@{/member/join}">회원가입</a>
+                <a th:href="@{/reservation/list}">내 예약</a>
+              </div>
+            </div>
           </div>
         </div>
+        <div class="footerBottom">© 2026 Art Museum Reservation. All rights reserved.</div>
       </footer>
     </div>
 

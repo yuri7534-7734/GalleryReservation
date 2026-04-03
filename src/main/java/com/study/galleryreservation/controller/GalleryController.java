@@ -1,12 +1,18 @@
 package com.study.galleryreservation.controller;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
+import com.study.galleryreservation.domain.session.SessionUser;
+import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.repository.GalleryRepository;
+import com.study.galleryreservation.service.GalleryService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,6 +25,7 @@ import java.util.List;
 public class GalleryController {
 
     private final GalleryRepository galleryRepository;
+    private final GalleryService galleryService;
 
     @GetMapping("/gallery/detail")
     public String galleryDetail(@RequestParam("id") Long id, Model model) {
@@ -39,5 +46,21 @@ public class GalleryController {
             slots.add(t);
         }
         return slots;
+    }
+
+    //갤러리 전시 예약 등록
+    @PostMapping("/gallery/detail")
+    public String postForm(@ModelAttribute ReservationCreateRequestDto requestDto,
+                           HttpSession session) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
+        galleryService.save(requestDto, sessionUser.getEmail());
+        return "redirect:/reservation/list";
+    }
+    //갤러리 예약 폼
+    @GetMapping("/gallery/form")
+    public String getForm(Model model) {
+        model.addAttribute("reservationCreateRequestDto", new ReservationCreateRequestDto());
+        model.addAttribute("galleries", galleryRepository.findAll());
+        return "reservation/form";
     }
 }

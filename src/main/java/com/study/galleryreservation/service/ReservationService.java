@@ -14,8 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,32 +30,9 @@ public class ReservationService {
     public final MemberRepository memberRepository;
     public final GalleryRepository galleryRepository;
 
-    // 저장
-    @Transactional
-    public void save(ReservationCreateRequestDto requestDto, String email) {
 
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+    //로그인한 유저의 예약 목록을 DTO로 변환해서 화면에 넘겨주는 메서드
 
-        Gallery gallery = galleryRepository.findById(requestDto.getGalleryId())
-                .orElseThrow(() -> new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
-
-
-        Reservation reservation = Reservation.builder()
-                .member(member)
-                .gallery(gallery)
-                .reservationDate(requestDto.getReservationDate())
-                .startTime(requestDto.getStartTime())
-                .endTime(requestDto.getEndTime())
-                .guests(requestDto.getGuests())
-                .contact(requestDto.getContact())
-                .status(ReservationStatus.PENDING)
-                .build();
-
-        reservationRepository.save(reservation);
-    }
-
-    // 로그인한 유저의 예약 목록을 DTO로 변환해서 화면에 넘겨주는 메서드
     public List<ReservationResponseDto> findByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
@@ -124,5 +103,7 @@ public class ReservationService {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
         return reservationRepository.findAll(pageable);
     }
+
+
 }
 
