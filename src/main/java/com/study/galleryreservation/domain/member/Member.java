@@ -3,8 +3,6 @@ package com.study.galleryreservation.domain.member;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.todo.Todo;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -48,7 +46,6 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
-    @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         if (this.role == null) this.role = MemberRole.ROLE_USER;
