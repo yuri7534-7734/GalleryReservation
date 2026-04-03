@@ -22,7 +22,7 @@ public class ReservationController {
     private final GalleryRepository galleryRepository;
     private final GalleryService galleryService;
     private final ReservationService reservationService;
-    
+
     // 예약 리스트 패이지
     @GetMapping("/list")
     public String reservationList(@RequestParam(defaultValue = "0") int page, Model model, HttpSession session) {
