@@ -113,10 +113,10 @@
               </tr>
             </thead>
             <tbody id="todoRows">
-              <tr th:if="${todos == null or #lists.isEmpty(todos)}">
+              <tr th:if="${page == null or #lists.isEmpty(page.content)}">
                 <td colspan="4" class="emptyCell">등록된 할 일이 없습니다. 새 할 일을 만들어보세요.</td>
               </tr>
-              <tr th:each="todo : ${todos}" th:data-status="${todo.isDone}">
+              <tr th:each="todo : ${page.content}" th:data-status="${todo.isDone}">
                 <td th:text="${todo.dueDate}" style="color:var(--muted);font-size:13px">2026-04-03</td>
                 <td>
                   <div class="tdTitle" th:text="${todo.title}">할 일</div>
@@ -140,6 +140,22 @@
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <div th:if="${page != null and page.totalPages > 0}" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:80px;flex-wrap:wrap">
+          <a class="btn btn-small btn-ghost"
+             th:if="${page.hasPrevious()}"
+             th:href="@{/todo/list(page=${page.number - 1}, memberId=${memberId}, keyword=${keyword}, isDone=${isDone})}">이전</a>
+
+          <a class="btn btn-small"
+             th:each="p : ${#numbers.sequence(0, page.totalPages - 1)}"
+             th:classappend="${p == page.number} ? ' btn-primary' : ' btn-ghost'"
+             th:href="@{/todo/list(page=${p}, memberId=${memberId}, keyword=${keyword}, isDone=${isDone})}"
+             th:text="${p + 1}">1</a>
+
+          <a class="btn btn-small btn-ghost"
+             th:if="${page.hasNext()}"
+             th:href="@{/todo/list(page=${page.number + 1}, memberId=${memberId}, keyword=${keyword}, isDone=${isDone})}">다음</a>
         </div>
       </div>
       </main>
@@ -177,7 +193,7 @@
       (function () {
         const status = document.getElementById("tStatus");
         const search = document.getElementById("tSearch");
-        const rows = document.querySelectorAll("#todoRows tr");
+        const rows = document.querySelectorAll("#todoRows tr[data-status]");
         if (!status || !search || !rows.length) return;
 
         function apply() {

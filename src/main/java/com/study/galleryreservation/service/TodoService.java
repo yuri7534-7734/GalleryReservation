@@ -131,4 +131,22 @@ public class TodoService {
                 .memberId(todo.getMember().getId())
                 .build();
     }
+
+    // 할 일 목록 페이지 조회(필터 + 페이징)
+    public Page<TodoResponseDto> getPage(Long memberId, String keyword, Boolean isDone, int page) {
+        Pageable pageable = PageRequest.of(Math.max(page, 0), 10, Sort.by("id").descending());
+
+        if (memberId == null) {
+            return todoRepository.findAll(pageable).map(this::toResponseDto);
+        }
+        if (keyword != null && !keyword.isBlank()) {
+            return todoRepository.findByMember_IdAndTitleContaining(memberId, keyword, pageable)
+                    .map(this::toResponseDto);
+        }
+        if (isDone != null) {
+            return todoRepository.findByMember_IdAndIsDone(memberId, isDone, pageable)
+                    .map(this::toResponseDto);
+        }
+        return todoRepository.findByMember_Id(memberId, pageable).map(this::toResponseDto);
+    }
 }

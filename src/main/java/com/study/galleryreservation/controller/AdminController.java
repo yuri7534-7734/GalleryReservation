@@ -4,6 +4,7 @@ import com.study.galleryreservation.domain.gallery.Gallery;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
 import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
+import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.service.GalleryService;
 import com.study.galleryreservation.service.ReservationService;
 import jakarta.validation.Valid;
@@ -63,9 +64,9 @@ public class AdminController {
     // 전체 예약 목록(관리자 전용)
     @GetMapping("/reservation/list")
     public String reservationList(@RequestParam(defaultValue = "0") int page, Model model){
-        model.addAttribute("reservations",reservationService.findAllByOrderByIdAsc());
         int currentPage = Math.max(page, 0);
-        Page<Reservation> reservationPage = reservationService.getList(currentPage);
+        Page<ReservationResponseDto> reservationPage = reservationService.getList(currentPage)
+                .map(ReservationResponseDto::from);
         model.addAttribute("page", reservationPage);
         return "admin/reservation-list";
     }

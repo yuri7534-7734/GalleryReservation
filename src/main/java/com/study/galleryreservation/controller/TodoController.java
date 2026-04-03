@@ -7,6 +7,7 @@ import com.study.galleryreservation.dto.todo.TodoUpdateRequestDto;
 import com.study.galleryreservation.repository.MemberRepository;
 import com.study.galleryreservation.service.TodoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,16 +27,13 @@ public class TodoController {
             @RequestParam(required = false) Long memberId,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Boolean isDone,
+            @RequestParam(defaultValue = "0") int page,
             Model model) {
-        if (memberId == null) {
-            model.addAttribute("todos", todoService.getAll());
-        } else if (keyword != null && !keyword.isBlank()) {
-            model.addAttribute("todos", todoService.search(memberId, keyword));
-        } else if (isDone != null) {
-            model.addAttribute("todos", todoService.getAllByIsDone(memberId, isDone));
-        } else {
-            model.addAttribute("todos", todoService.getAll(memberId));
-        }
+        Page<TodoResponseDto> todoPage = todoService.getPage(memberId, keyword, isDone, page);
+        model.addAttribute("page", todoPage);
+        model.addAttribute("memberId", memberId);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("isDone", isDone);
         return "todo/list";
     }
 
