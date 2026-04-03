@@ -8,6 +8,10 @@ import com.study.galleryreservation.dto.todo.TodoUpdateRequestDto;
 import com.study.galleryreservation.repository.MemberRepository;
 import com.study.galleryreservation.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,5 +130,23 @@ public class TodoService {
                 .dueDate(todo.getDueDate())
                 .memberId(todo.getMember().getId())
                 .build();
+    }
+
+    // 할 일 목록 페이지 조회(필터 + 페이징)
+    public Page<TodoResponseDto> getPage(Long memberId, String keyword, Boolean isDone, int page) {
+        Pageable pageable = PageRequest.of(Math.max(page, 0), 10, Sort.by("id").descending());
+
+        if (memberId == null) {
+            return todoRepository.findAll(pageable).map(this::toResponseDto);
+        }
+        if (keyword != null && !keyword.isBlank()) {
+            return todoRepository.findByMember_IdAndTitleContaining(memberId, keyword, pageable)
+                    .map(this::toResponseDto);
+        }
+        if (isDone != null) {
+            return todoRepository.findByMember_IdAndIsDone(memberId, isDone, pageable)
+                    .map(this::toResponseDto);
+        }
+        return todoRepository.findByMember_Id(memberId, pageable).map(this::toResponseDto);
     }
 }

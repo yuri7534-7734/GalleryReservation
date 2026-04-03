@@ -576,6 +576,18 @@
                   />
                 </div>
                 <div>
+                  <label for="rGuests">인원</label>
+                  <input
+                    id="rGuests"
+                    name="guests"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value="2"
+                    required
+                  />
+                </div>
+                <div>
                   <label for="rStartTime">시작 시간</label>
                   <select id="rStartTime" name="startTime" required>
                     <th:block
@@ -620,18 +632,6 @@
                       <option value="14:00">14:00</option>
                     </th:block>
                   </select>
-                </div>
-                <div>
-                  <label for="rGuests">인원</label>
-                  <input
-                    id="rGuests"
-                    name="guests"
-                    type="number"
-                    min="1"
-                    step="1"
-                    value="2"
-                    required
-                  />
                 </div>
                 <div style="grid-column: 1 / -1">
                   <label for="rContact">연락처</label>

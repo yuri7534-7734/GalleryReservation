@@ -33,11 +33,9 @@ public class GalleryService {
     private final ReservationRepository reservationRepository;
 
     // 갤러리 조회(관리자 전용)
-    public List<GalleryResponseDto> findAll(){
-        List<Gallery> list = galleryRepository.findAll();
-
-        return list.stream().map(GalleryResponseDto::new)
-                .collect(Collectors.toList());
+    public Page<Gallery> getList(int page){
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        return galleryRepository.findAll(pageable);
     }
 
     // 갤러리 추가(관리자 전용)
@@ -121,5 +119,4 @@ public class GalleryService {
 
         reservationRepository.save(reservation);
     }
-
 }
