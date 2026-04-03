@@ -349,7 +349,7 @@
                         th:field="*{active}"
                         onchange="
                           document.getElementById('toggleLabel').textContent =
-                            this.checked ? '운영중' : '비활성'
+                            this.checked ? '운영중' : '마감'
                         "
                       />
                       <span class="toggleSlider"></span>
@@ -358,7 +358,7 @@
                       <div
                         class="toggleLabel"
                         id="toggleLabel"
-                        th:text="${galleryUpdateRequestDto.active} ? '운영중' : '비활성'"
+                        th:text="${galleryUpdateRequestDto.active} ? '운영중' : '마감'"
                       >
                         운영중
                       </div>
