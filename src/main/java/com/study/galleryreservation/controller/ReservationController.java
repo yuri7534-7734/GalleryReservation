@@ -42,7 +42,6 @@ public class ReservationController {
     }
 
     // 예약 리스트 패이지
-
     @GetMapping("/list")
     public String reservationList(@RequestParam(defaultValue = "0") int page, Model model, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
