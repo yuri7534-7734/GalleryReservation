@@ -8,14 +8,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>예약 상세 - 갤러리 예약</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" th:href="@{/css/common.css}" />
     <style>
-      /* 예약 상세 전용 — common.css 토큰·컴포넌트와 통일 */
+      /* 예약 상세 전용 — gallery/detail 과 유사한 풀폭·꽉 찬 레이아웃 */
+
+      /* common .container 제한 해제 → 전시 상세처럼 가로 풀폭 */
+      main.container {
+        max-width: none !important;
+        width: 100%;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
 
       .pageWrap {
-        max-width: 1120px;
-        margin: 0 auto;
-        padding: 40px 0 64px;
+        max-width: none;
+        margin: 0;
+        padding: 0 0 64px;
       }
 
       .backLink {
@@ -25,7 +34,8 @@
         font-size: 13px;
         font-weight: 700;
         color: var(--muted);
-        margin-bottom: 28px;
+        margin: 0 24px 24px;
+        padding-top: 40px;
         transition: color 0.12s;
       }
       .backLink:hover {
@@ -35,34 +45,52 @@
 
       .layout {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 400px;
-        gap: 28px;
-        align-items: start;
+        grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
+        gap: 0;
+        min-height: calc(100vh - var(--nav-h));
+        align-items: stretch;
       }
       @media (max-width: 960px) {
         .layout {
           grid-template-columns: 1fr;
+          min-height: auto;
         }
       }
 
       .leftCol {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 0;
+        min-width: 0;
+        border-right: 1px solid var(--stroke);
+      }
+      @media (max-width: 960px) {
+        .leftCol {
+          border-right: none;
+        }
       }
 
       .coverBox {
         width: 100%;
-        max-width: 400px;
-        aspect-ratio: 4 / 3;
-        border-radius: var(--radius);
-        border: 1px solid var(--stroke);
+        max-width: none;
+        min-height: min(52vh, 520px);
+        height: min(52vh, 520px);
+        aspect-ratio: auto;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid var(--stroke);
         background: var(--bg1);
         background-size: cover;
         background-position: center;
-        box-shadow: var(--shadow);
+        box-shadow: none;
         position: relative;
         overflow: hidden;
+      }
+      @media (max-width: 960px) {
+        .coverBox {
+          min-height: min(42vh, 380px);
+          height: min(42vh, 380px);
+        }
       }
       .coverBox .noImg {
         position: absolute;
@@ -79,15 +107,19 @@
         z-index: 1;
       }
 
-      .exhibitCard {
+      /* gallery/detail 과 동일 톤 — 전시 소개 + 정보 그리드 */
+      .exhibitIntro {
+        padding: 32px 40px;
+        border-bottom: 1px solid var(--stroke);
         background: var(--surface);
-        border: 1px solid var(--stroke);
-        border-radius: var(--radius);
-        padding: 28px 24px;
-        box-shadow: var(--shadow);
+      }
+      @media (max-width: 960px) {
+        .exhibitIntro {
+          padding: 24px 28px;
+        }
       }
       .exhibitName {
-        margin: 0 0 10px;
+        margin: 0 0 12px;
         font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
         font-size: clamp(24px, 3vw, 34px);
         font-weight: 900;
@@ -95,41 +127,150 @@
         line-height: 1.15;
         color: var(--text);
       }
-      .exhibitLocation {
-        display: inline-flex;
+      .exhibitHeroMeta {
+        display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 12px;
-        font-weight: 700;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 13px;
         color: var(--muted);
-        margin-bottom: 16px;
-        padding: 6px 10px;
-        background: var(--bg1);
-        border: 1px solid var(--stroke);
-        border-radius: var(--radius-sm);
+        font-weight: 600;
       }
-      .exhibitDesc {
+
+      .infoBlock {
+        padding: 32px 40px;
+        border-bottom: 1px solid var(--stroke);
+        background: var(--bg0);
+      }
+      @media (max-width: 960px) {
+        .infoBlock {
+          padding: 24px 28px;
+        }
+      }
+      .infoBlockTitle {
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0 0 18px;
+      }
+      .infoGrid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1px;
+        background: var(--stroke);
+        border: 1px solid var(--stroke);
+        margin-bottom: 24px;
+      }
+      .infoItem {
+        background: var(--bg0);
+        padding: 18px 20px;
+      }
+      .infoItemLabel {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .infoItemValue {
         font-size: 15px;
-        font-weight: 400;
-        color: var(--text);
-        line-height: 1.75;
-        border-top: 1px solid var(--stroke);
-        padding-top: 16px;
+        font-weight: 900;
+        letter-spacing: -0.3px;
+      }
+      .descText {
+        font-size: 14.5px;
+        line-height: 1.9;
+        color: var(--muted);
         margin: 0;
+      }
+
+      .stepList {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        background: var(--stroke);
+        border: 1px solid var(--stroke);
+      }
+      .stepItem {
+        background: var(--bg0);
+        padding: 18px 22px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      .stepNum {
+        width: 26px;
+        height: 26px;
+        background: #111;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 900;
+        flex-shrink: 0;
+      }
+      .stepTitle {
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: -0.2px;
+        margin-bottom: 4px;
+      }
+      .stepDesc {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      /* 오른쪽: 예약 카드 하단 안내 */
+      .reservePolicyBlock {
+        padding: 18px 24px 20px;
+        border-top: 1px solid var(--stroke);
+        background: var(--bg1);
+      }
+      .reservePolicyBlock + .reservePolicyBlock {
+        border-top-color: rgba(0, 0, 0, 0.06);
+      }
+      .reservePolicyTitle {
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+      .reservePolicyItem {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.65;
+        padding: 9px 0;
+        border-bottom: 1px solid var(--stroke);
+      }
+      .reservePolicyItem:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
       }
 
       .reserveCard {
         background: var(--surface);
-        border: 1px solid var(--stroke);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow-lg);
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
         overflow: hidden;
         position: sticky;
-        top: calc(var(--nav-h) + 16px);
+        top: var(--nav-h);
+        align-self: start;
+        min-height: calc(100vh - var(--nav-h));
+        display: flex;
+        flex-direction: column;
       }
       @media (max-width: 960px) {
         .reserveCard {
           position: static;
+          min-height: auto;
         }
       }
 
@@ -267,6 +408,7 @@
         padding: 18px 24px 24px;
         border-top: 1px solid var(--stroke);
         background: var(--bg1);
+        margin-top: auto;
       }
       .reserveFooter .btn {
         min-height: 44px;
@@ -300,8 +442,13 @@
       }
 
       @media (max-width: 860px) {
+        .backLink {
+          margin-left: 16px;
+          margin-right: 16px;
+          padding-top: 28px;
+        }
         .pageWrap {
-          padding: 28px 0 48px;
+          padding-bottom: 48px;
         }
         .reserveHeader {
           padding: 20px 20px 18px;
@@ -314,7 +461,7 @@
         }
       }
       @media (max-width: 560px) {
-        .exhibitCard {
+        .exhibitIntro {
           padding: 22px 18px;
         }
         .reserveHeader {
@@ -416,22 +563,89 @@
                 </div>
               </div>
 
-              <!-- 갤러리명 + 소개 -->
-              <div class="exhibitCard">
+              <!-- 전시 제목 · 메타 (gallery/detail 히어로 하단과 동일 톤) -->
+              <div class="exhibitIntro">
                 <div class="exhibitName" th:text="${reservation.galleryName}">
                   갤러리명
                 </div>
-                <div
-                  class="exhibitLocation"
-                  th:text="${gallery != null ? gallery.location : ''}"
-                >
-                  위치
+                <div class="exhibitHeroMeta" th:if="${gallery != null}">
+                  <span
+                    th:class="${gallery.isActive} ? 'badge badge-ok' : 'badge badge-danger'"
+                    th:text="${gallery.isActive} ? '운영중' : '마감'"
+                    >운영중</span>
+                  <span
+                    th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : gallery.floorZone) + ' · ' + (gallery.location != null ? gallery.location : '') + ' · ' + gallery.capacity + '석'}"
+                  ></span>
                 </div>
-                <div
-                  class="exhibitDesc"
-                  th:text="${gallery != null and gallery.description != null and !#strings.isEmpty(gallery.description) ? gallery.description : '소개글이 없습니다.'}"
+              </div>
+
+              <!-- 전시 정보 (gallery/detail과 동일 구조) -->
+              <div class="infoBlock" th:if="${gallery != null}">
+                <div class="infoBlockTitle">전시 정보</div>
+                <div class="infoGrid">
+                  <div class="infoItem">
+                    <div class="infoItemLabel">운영 시간</div>
+                    <div
+                      class="infoItemValue"
+                      th:text="${#strings.concat(#temporals.format(gallery.startTime, 'HH:mm'), ' — ', #temporals.format(gallery.endTime, 'HH:mm'))}"
+                    >
+                      10:00 — 18:00
+                    </div>
+                  </div>
+                  <div class="infoItem">
+                    <div class="infoItemLabel">수용 인원</div>
+                    <div class="infoItemValue" th:text="${gallery.capacity + '석'}">—</div>
+                  </div>
+                  <div class="infoItem">
+                    <div class="infoItemLabel">위치</div>
+                    <div class="infoItemValue" th:text="${gallery.location != null ? gallery.location : '—'}">—</div>
+                  </div>
+                  <div class="infoItem">
+                    <div class="infoItemLabel">층 / 구역</div>
+                    <div
+                      class="infoItemValue"
+                      th:text="${gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : gallery.floorZone}"
+                    >
+                      —
+                    </div>
+                  </div>
+                </div>
+                <p
+                  class="descText"
+                  th:text="${gallery.description != null and !#strings.isEmpty(gallery.description) ? gallery.description : '빛이 부드럽게 스며드는 전시 공간에서 천천히 감상하세요.'}"
                 >
-                  전시 공간 소개글이 들어갑니다.
+                  전시 공간 소개
+                </p>
+              </div>
+
+              <!-- 관람 안내 (gallery/detail stepList와 동일) -->
+              <div class="infoBlock" style="border-bottom: none">
+                <div class="infoBlockTitle">
+                  관람 안내
+                  <span class="badge badge-info" style="margin-left: 8px; vertical-align: middle">Guided</span>
+                </div>
+                <div class="stepList">
+                  <div class="stepItem">
+                    <div class="stepNum">1</div>
+                    <div>
+                      <div class="stepTitle">입장 후 5분 오리엔테이션</div>
+                      <div class="stepDesc">조명과 동선 안내를 먼저 제공합니다.</div>
+                    </div>
+                  </div>
+                  <div class="stepItem">
+                    <div class="stepNum">2</div>
+                    <div>
+                      <div class="stepTitle">30분 단독 감상</div>
+                      <div class="stepDesc">속도를 조절할 수 있는 좌석 배치로 구성됩니다.</div>
+                    </div>
+                  </div>
+                  <div class="stepItem">
+                    <div class="stepNum">3</div>
+                    <div>
+                      <div class="stepTitle">관람 기록 2분</div>
+                      <div class="stepDesc">간단한 메모를 남길 수 있습니다.</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -496,6 +710,34 @@
                   <div class="infoVal" th:text="${reservation.contact}">
                     010-0000-0000
                   </div>
+                </div>
+              </div>
+
+              <!-- 관람 주의사항 -->
+              <div class="reservePolicyBlock">
+                <div class="reservePolicyTitle">관람 주의사항</div>
+                <div class="reservePolicyItem">
+                  예약하신 시작 시간 <strong style="color: var(--text); font-weight: 800">5분 전</strong>까지 입장해 주세요. 지각 시 입장이 제한되거나 예약이 취소될 수 있습니다.
+                </div>
+                <div class="reservePolicyItem">
+                  전시 구역 내 촬영·소음은 현장 안내에 따라 제한될 수 있습니다. 플래시·삼각대 사용은 사전 허가가 필요할 수 있습니다.
+                </div>
+                <div class="reservePolicyItem">
+                  음식물 반입, 터치·가까이 접촉은 작품·전시 정책에 따라 금지될 수 있습니다.
+                </div>
+              </div>
+
+              <!-- 위약 및 취소 규정 -->
+              <div class="reservePolicyBlock">
+                <div class="reservePolicyTitle">위약 및 취소 규정</div>
+                <div class="reservePolicyItem">
+                  <strong style="color: var(--text); font-weight: 800">무단 불참</strong> 또는 노쇼(No-show)가 반복될 경우, 일정 기간 예약이 제한될 수 있습니다.
+                </div>
+                <div class="reservePolicyItem">
+                  예약자 본인 취소는 <strong style="color: var(--text); font-weight: 800">대기</strong> 상태에서만 가능하며, 확정 이후에는 현장 또는 관리자 안내에 따릅니다.
+                </div>
+                <div class="reservePolicyItem">
+                  관리자에 의한 거절 시 별도 위약금은 부과되지 않으며, 다른 일정으로 다시 예약할 수 있습니다.
                 </div>
               </div>
 
