@@ -287,8 +287,8 @@
           if (emptyState) emptyState.style.display = visibleCount === 0 ? "block" : "none";
         }
 
-        [q, minCap].forEach((el) => el.addEventListener("input", apply));
-        region.addEventListener("change", apply);
+        q.addEventListener("keydown", (e) => { if (e.key === "Click") apply(); });
+        region.addEventListener("keydown", (e) => { if (e.key === "Click") apply(); });
         if (applyBtn) applyBtn.addEventListener("click", apply);
         apply();
       })();
