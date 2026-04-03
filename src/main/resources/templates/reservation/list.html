@@ -82,7 +82,7 @@
       </div>
 
       <!-- TABLE -->
-      <div class="tableWrap" style="margin-top:0;margin-bottom:80px">
+      <div class="tableWrap" style="margin-top:0;margin-bottom:24px">
         <table aria-label="내 예약 목록">
           <thead>
             <tr>
@@ -96,13 +96,13 @@
             </tr>
           </thead>
           <tbody id="myRows">
-            <tr th:if="${reservations == null or #lists.isEmpty(reservations)}">
+            <tr th:if="${page == null or #lists.isEmpty(page.content)}">
               <td colspan="7" style="text-align:center;padding:40px 16px;color:var(--muted);font-size:14px">
                 아직 예약이 없습니다. 새 예약을 만들어보세요.
               </td>
             </tr>
-            <tr th:each="reservation : ${reservations}" th:data-status="${reservation.status.name()}">
-              <td class="tdMain" th:text="${reservation.id}">1</td>
+            <tr th:each="reservation, iter : ${page.content}" th:data-status="${reservation.status.name()}">
+              <td class="tdMain" th:text="${page.number * page.size + iter.count}">1</td>
               <td>
                 <div class="tdMain" th:text="${reservation.galleryName}">Gallery</div>
               </td>
@@ -132,6 +132,22 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div th:if="${page != null and page.totalPages > 0}" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:80px;flex-wrap:wrap">
+        <a class="btn btn-small btn-ghost"
+           th:if="${page.hasPrevious()}"
+           th:href="@{/reservation/list(page=${page.number - 1})}">이전</a>
+
+        <a class="btn btn-small"
+           th:each="p : ${#numbers.sequence(0, page.totalPages - 1)}"
+           th:classappend="${p == page.number} ? ' btn-primary' : ' btn-ghost'"
+           th:href="@{/reservation/list(page=${p})}"
+           th:text="${p + 1}">1</a>
+
+        <a class="btn btn-small btn-ghost"
+           th:if="${page.hasNext()}"
+           th:href="@{/reservation/list(page=${page.number + 1})}">다음</a>
       </div>
     </div>
   </main>
@@ -182,7 +198,7 @@
   (function () {
     const myStatus = document.getElementById("myStatus");
     const mySearch = document.getElementById("mySearch");
-    const rows = document.querySelectorAll("#myRows tr");
+    const rows = document.querySelectorAll("#myRows tr[data-status]");
 
     if (myStatus && mySearch && rows.length) {
       function apply() {
@@ -228,3 +244,4 @@
 </script>
 </body>
 </html>
+
