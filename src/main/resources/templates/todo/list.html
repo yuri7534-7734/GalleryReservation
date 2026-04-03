@@ -76,6 +76,22 @@
                 <button type="submit" class="btn btn-ghost btn-small">로그아웃</button>
               </form>
             </div>
+            <button
+              class="hamburger"
+              type="button"
+              onclick="document.getElementById('mobileMenu').dataset.open=document.getElementById('mobileMenu').dataset.open==='true'?'false':'true'"
+              aria-label="메뉴 열기"
+            >
+              ☰
+            </button>
+          </div>
+        </div>
+        <div id="mobileMenu">
+          <div class="mobileMenuInner">
+            <a class="navLink" th:href="@{/gallery/list}">전시·관람</a>
+            <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/reservation/list}">내 예약</a>
+            <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/todo/list}">할 일</a>
+            <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/gallery/list}">관리자</a>
           </div>
         </div>
       </nav>
