@@ -28,6 +28,9 @@
       .benefitTitle { font-size: 14px; font-weight: 900; letter-spacing: -0.2px; }
       .benefitDesc { font-size: 12.5px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
       .sideTitle { font-size: 13px; font-weight: 900; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
+      /* 변경: 로그인(login.html)의 .alertError/.alertBox 와 동일 계열 — 서버 오류·검증 안내를 alert 대신 페이지에 표시 */
+      .alertBox { padding: 12px 14px; border-radius: var(--radius); font-size: 13.5px; font-weight: 700; margin-bottom: 16px; }
+      .alertError { background: rgba(192,57,43,.07); border: 1px solid rgba(192,57,43,.25); color: var(--danger); }
       @media (max-width: 900px) {
         .joinLayout { grid-template-columns: 1fr; }
         .joinMain { border-right: none; }
@@ -107,10 +110,17 @@
               <form th:action="@{/member/join}" th:object="${memberJoinRequestDto}" method="post" class="stack">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
+                <!-- 변경: 서비스 예외(예: 중복 아이디) 시 컨트롤러가 넣은 signupError — 기존 alert 대체 -->
+                <div class="alertError alertBox" th:if="${signupError != null}" th:text="${signupError}">
+                  오류
+                </div>
+
                 <div class="formGrid">
                   <div>
                     <label for="joinName">아이디</label>
-                    <input id="joinName" th:field="*{username}" type="text" placeholder="honggildong" required/>
+                    <input id="joinName" th:field="*{username}" type="text" placeholder="5자 이상" required/>
+                    <!-- 변경: Bean Validation 실패 시 메시지 — BindingResult 연동(th:object와 세트) -->
+                    <p class="errorText" th:if="${#fields.hasErrors('username')}" th:text="${#fields.errors('username')[0]}"></p>
                   </div>
                   <div>
                     <label for="joinEmail">이메일</label>
@@ -118,7 +128,8 @@
                   </div>
                   <div>
                     <label for="joinPassword">비밀번호</label>
-                    <input id="joinPassword" th:field="*{password}" type="password" placeholder="최소 8자" required/>
+                    <input id="joinPassword" th:field="*{password}" type="password" placeholder="8자 이상" required/>
+                    <p class="errorText" th:if="${#fields.hasErrors('password')}" th:text="${#fields.errors('password')[0]}"></p>
                   </div>
                   <div>
                     <label for="joinRole">역할</label>
