@@ -67,4 +67,5 @@ public class ReservationController {
         reservationService.cancel(id, sessionUser.getEmail());
         return "redirect:/reservation/list";
     }
+
 }
