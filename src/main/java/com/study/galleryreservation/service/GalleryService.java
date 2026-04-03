@@ -33,8 +33,11 @@ public class GalleryService {
     private final ReservationRepository reservationRepository;
 
     // 갤러리 조회(관리자 전용)
-    public Page<Gallery> getList(int page){
+    public Page<Gallery> getList(int page, String keyword){
         Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        if (keyword != null && !keyword.isBlank()) {
+            return galleryRepository.findByNameContainingIgnoreCaseOrLocationContainingIgnoreCase(keyword, keyword, pageable);
+        }
         return galleryRepository.findAll(pageable);
     }
 
@@ -73,15 +76,16 @@ public class GalleryService {
 
     // 갤러리 단건 조회
     public Gallery findById(final Long id) {
-        return galleryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
+        return galleryRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
     }
 
      // 갤러리 수정(관리자 전용)
     @Transactional
     public void update(final Long id, final GalleryUpdateRequestDto dto) {
-        Gallery gallery = galleryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
+        Gallery gallery = galleryRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
+
         gallery.update(dto.getName(), dto.getLocation(), dto.getFloorZone(),
                 dto.getDescription(), dto.getCapacity(), dto.getActive(), dto.getCoverImageUrl());
     }
@@ -104,8 +108,7 @@ public class GalleryService {
 
         Gallery gallery = galleryRepository.findById(requestDto.getGalleryId())
                 .orElseThrow(()->new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
-
-
+        
         Reservation reservation = Reservation.builder()
                 .member(member)
                 .gallery(gallery)

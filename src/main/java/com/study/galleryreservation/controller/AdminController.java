@@ -26,10 +26,13 @@ public class AdminController {
 
     // 갤러리 관리 페이지 이동(관리자 전용)
     @GetMapping("/gallery/list")
-    public String adminGalleryList(@RequestParam(defaultValue = "0") int page, Model model){
+    public String adminGalleryList(@RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "") String keyword,
+                                   Model model){
         int currentPage = Math.max(page, 0);
-        Page<Gallery> galleryPage = galleryService.getList(currentPage);
+        Page<Gallery> galleryPage = galleryService.getList(currentPage, keyword);
         model.addAttribute("page", galleryPage);
+        model.addAttribute("keyword", keyword);
         return "admin/gallery-list";
     }
 
@@ -63,11 +66,14 @@ public class AdminController {
 
     // 전체 예약 목록(관리자 전용)
     @GetMapping("/reservation/list")
-    public String reservationList(@RequestParam(defaultValue = "0") int page, Model model){
+    public String reservationList(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "") String keyword,
+                                  Model model){
         int currentPage = Math.max(page, 0);
-        Page<ReservationResponseDto> reservationPage = reservationService.getList(currentPage)
+        Page<ReservationResponseDto> reservationPage = reservationService.getList(currentPage, keyword)
                 .map(ReservationResponseDto::from);
         model.addAttribute("page", reservationPage);
+        model.addAttribute("keyword", keyword);
         return "admin/reservation-list";
     }
 
