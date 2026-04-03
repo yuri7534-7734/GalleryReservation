@@ -45,6 +45,9 @@
 
 ---
 
+## 📁 프로젝트 구조
+
+```
 src/main/java/com/study/galleryreservation/
 ├── config/                         # 설정 클래스
 │   ├── SecurityConfig.java         # Spring Security 설정
@@ -96,7 +99,7 @@ src/main/resources/
 │   └── todo/                       # 할 일 폼/목록/수정
 ├── application.yml
 └── db.sql                          # 테이블 DDL
-
+```
 
 ---
 
