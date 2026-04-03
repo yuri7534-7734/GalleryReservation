@@ -72,10 +72,12 @@
             <option value="CANCELLED">취소</option>
           </select>
         </div>
-        <div class="toolbarItem" style="flex:1;max-width:320px">
-          <label for="resSearch">검색</label>
-          <input id="resSearch" type="text" placeholder="예약자 이메일 · 갤러리명"/>
-        </div>
+        <form method="get" th:action="@{/admin/reservation/list}" style="flex:1;max-width:320px;display:contents">
+          <div class="toolbarItem" style="flex:1;max-width:320px">
+            <label for="resSearch">검색</label>
+            <input id="resSearch" name="keyword" type="text" placeholder="갤러리명" th:value="${keyword}"/>
+          </div>
+        </form>
       </div>
 
       <div class="tableWrap" style="margin-bottom:24px">
@@ -141,17 +143,17 @@
       <div th:if="${page != null and page.totalPages > 0}" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:24px;flex-wrap:wrap">
         <a class="btn btn-small btn-ghost"
            th:if="${page.hasPrevious()}"
-           th:href="@{/admin/reservation/list(page=${page.number - 1})}">이전</a>
+           th:href="@{/admin/reservation/list(page=${page.number - 1}, keyword=${keyword})}">이전</a>
 
         <a class="btn btn-small"
            th:each="p : ${#numbers.sequence(0, page.totalPages - 1)}"
            th:classappend="${p == page.number} ? ' btn-primary' : ' btn-ghost'"
-           th:href="@{/admin/reservation/list(page=${p})}"
+           th:href="@{/admin/reservation/list(page=${p}, keyword=${keyword})}"
            th:text="${p + 1}">1</a>
 
         <a class="btn btn-small btn-ghost"
            th:if="${page.hasNext()}"
-           th:href="@{/admin/reservation/list(page=${page.number + 1})}">다음</a>
+           th:href="@{/admin/reservation/list(page=${page.number + 1}, keyword=${keyword})}">다음</a>
       </div>
 
       <div style="display:flex;justify-content:flex-end;margin-bottom:80px">
@@ -190,22 +192,16 @@
 
 <script>
   (function () {
-    const search = document.getElementById("resSearch");
     const status = document.getElementById("resStatus");
     const rows = document.querySelectorAll("#reservationRows tr[data-status]");
-    if (!search || !status) return;
+    if (!status) return;
     function apply() {
-      const q = (search.value || "").toLowerCase().trim();
       const s = status.value || "ALL";
       rows.forEach(function (tr) {
-        const text = (tr.innerText || "").toLowerCase();
         const st = tr.getAttribute("data-status") || "";
-        const hitTx = !q || text.includes(q);
-        const hitSt = s === "ALL" || st === s;
-        tr.style.display = hitTx && hitSt ? "" : "none";
+        tr.style.display = s === "ALL" || st === s ? "" : "none";
       });
     }
-    search.addEventListener("input", apply);
     status.addEventListener("change", apply);
   })();
 </script>

@@ -137,10 +137,12 @@
                 <option value="CANCELLED">취소</option>
               </select>
             </div>
-            <div class="toolbarItem" style="flex: 1; max-width: 300px">
-              <label for="mySearch">검색</label>
-              <input id="mySearch" type="text" placeholder="갤러리명" />
-            </div>
+            <form method="get" th:action="@{/reservation/list}" style="flex:1;max-width:300px;display:contents">
+              <div class="toolbarItem" style="flex: 1; max-width: 300px">
+                <label for="mySearch">검색</label>
+                <input id="mySearch" name="keyword" type="text" placeholder="갤러리명" th:value="${keyword}" />
+              </div>
+            </form>
             <div style="margin-left: auto; padding-bottom: 0">
               <a class="btn btn-primary invertHover" th:href="@{/gallery/list}"
                 >+ 새 예약</a
@@ -187,9 +189,19 @@
                     1
                   </td>
                   <td>
-                    <div class="tdMain" th:text="${reservation.galleryName}">
+                    <a
+                      class="tdMain"
+                      th:text="${reservation.galleryName}"
+                      th:href="@{/reservation/detail/{id}(id=${reservation.id})}"
+                      style="
+                        font-weight: 700;
+                        text-decoration: underline;
+                        color: var(--text);
+                        text-decoration: none;
+                      "
+                    >
                       Gallery
-                    </div>
+                    </a>
                   </td>
                   <td>
                     <div
@@ -271,7 +283,7 @@
             <a
               class="btn btn-small btn-ghost"
               th:if="${page.hasPrevious()}"
-              th:href="@{/reservation/list(page=${page.number - 1})}"
+              th:href="@{/reservation/list(page=${page.number - 1}, keyword=${keyword})}"
               >이전</a
             >
 
@@ -279,7 +291,7 @@
               class="btn btn-small"
               th:each="p : ${#numbers.sequence(0, page.totalPages - 1)}"
               th:classappend="${p == page.number} ? ' btn-primary' : ' btn-ghost'"
-              th:href="@{/reservation/list(page=${p})}"
+              th:href="@{/reservation/list(page=${p}, keyword=${keyword})}"
               th:text="${p + 1}"
               >1</a
             >
@@ -287,7 +299,7 @@
             <a
               class="btn btn-small btn-ghost"
               th:if="${page.hasNext()}"
-              th:href="@{/reservation/list(page=${page.number + 1})}"
+              th:href="@{/reservation/list(page=${page.number + 1}, keyword=${keyword})}"
               >다음</a
             >
           </div>
@@ -377,23 +389,17 @@
     <script>
       (function () {
         const myStatus = document.getElementById("myStatus");
-        const mySearch = document.getElementById("mySearch");
         const rows = document.querySelectorAll("#myRows tr[data-status]");
 
-        if (myStatus && mySearch && rows.length) {
+        if (myStatus && rows.length) {
           function apply() {
             const s = myStatus.value || "ALL";
-            const q = (mySearch.value || "").toLowerCase().trim();
             rows.forEach((tr) => {
               const st = tr.getAttribute("data-status") || "SCHEDULED";
-              const text = (tr.innerText || "").toLowerCase();
-              const hitStatus = s === "ALL" || st === s;
-              const hitText = !q || text.includes(q);
-              tr.style.display = hitStatus && hitText ? "" : "none";
+              tr.style.display = s === "ALL" || st === s ? "" : "none";
             });
           }
           myStatus.addEventListener("change", apply);
-          mySearch.addEventListener("input", apply);
           apply();
         }
 
