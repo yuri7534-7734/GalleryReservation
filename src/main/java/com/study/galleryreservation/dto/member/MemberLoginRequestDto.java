@@ -10,9 +10,11 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 public class MemberLoginRequestDto {
+    @NotBlank
+    @Size(min=5,max=20,message = "아이디는 5자 이상")
     private String username;
     @NotBlank
-    @Size(min = 8, message = "비밀번호는 8자 이상")
+    @Size(min = 8,max = 20, message = "비밀번호는 8자 이상")
     private String password;
     private String email;
     private MemberRole role;
