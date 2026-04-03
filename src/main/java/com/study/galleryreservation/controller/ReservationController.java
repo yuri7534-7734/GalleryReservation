@@ -1,7 +1,9 @@
 package com.study.galleryreservation.controller;
 
+import com.study.galleryreservation.domain.gallery.Gallery;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.session.SessionUser;
+import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
@@ -10,9 +12,11 @@ import com.study.galleryreservation.service.GalleryService;
 import com.study.galleryreservation.service.ReservationService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -75,5 +79,4 @@ public class ReservationController {
         reservationService.cancel(id, sessionUser.getEmail());
         return "redirect:/reservation/list";
     }
-
 }
