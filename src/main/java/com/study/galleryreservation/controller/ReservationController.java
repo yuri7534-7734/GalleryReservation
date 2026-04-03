@@ -22,25 +22,7 @@ public class ReservationController {
     private final GalleryRepository galleryRepository;
     private final GalleryService galleryService;
     private final ReservationService reservationService;
-
-
-    // 예약 페이지로 이동
-    @GetMapping("/form")
-    public String getForm(Model model) {
-        model.addAttribute("reservationCreateRequestDto", new ReservationCreateRequestDto());
-        model.addAttribute("galleries", galleryRepository.findAll());
-        return "reservation/form";
-    }
-
-    // 예약하기
-    @PostMapping("/form")
-    public String postForm(@ModelAttribute ReservationCreateRequestDto requestDto,
-                           HttpSession session) {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        galleryService.save(requestDto, sessionUser.getEmail());
-        return "redirect:/reservation/list";
-    }
-
+    
     // 예약 리스트 패이지
     @GetMapping("/list")
     public String reservationList(@RequestParam(defaultValue = "0") int page, Model model, HttpSession session) {
