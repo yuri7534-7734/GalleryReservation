@@ -234,24 +234,94 @@
       .reservePolicyBlock + .reservePolicyBlock {
         border-top-color: rgba(0, 0, 0, 0.06);
       }
-      .reservePolicyTitle {
-        font-size: 11px;
-        font-weight: 900;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--muted);
+      /* 제목 + 오른쪽으로 이어지는 선 (Needs 스타일, 테마 컬러 유지) */
+      .reservePolicyTitleBar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .reservePolicyTitleText {
+        flex-shrink: 0;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: -0.35px;
+        color: var(--text);
+        line-height: 1.2;
+      }
+      .reservePolicyTitleLine {
+        flex: 1;
+        min-width: 32px;
+        height: 2px;
+        border-radius: 1px;
+        background: var(--stroke);
+      }
+      .reservePolicyTitleBar--sub {
         margin-bottom: 12px;
       }
-      .reservePolicyItem {
+      .reservePolicyTitleBar--sub .reservePolicyTitleText {
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: -0.2px;
+      }
+      .reservePolicyGroup {
+        margin-bottom: 22px;
+      }
+      .reservePolicyGroup:last-child {
+        margin-bottom: 0;
+      }
+      .reservePolicyCopy {
         font-size: 13px;
         color: var(--muted);
-        line-height: 1.65;
-        padding: 9px 0;
-        border-bottom: 1px solid var(--stroke);
+        line-height: 1.75;
       }
-      .reservePolicyItem:last-child {
+      .reservePolicyCopy p {
+        margin: 0 0 10px;
+      }
+      .reservePolicyCopy p:last-child {
+        margin-bottom: 0;
+      }
+      .reservePolicyLead {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.75;
+        margin: -6px 0 20px;
+      }
+      .reservePolicyTableWrap {
+        margin-top: 8px;
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+      }
+      .reservePolicyTable {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .reservePolicyTable th,
+      .reservePolicyTable td {
+        padding: 10px 12px;
+        text-align: left;
+        border-bottom: 1px solid var(--stroke);
+        vertical-align: top;
+        line-height: 1.5;
+      }
+      .reservePolicyTable tr:last-child td {
         border-bottom: none;
-        padding-bottom: 0;
+      }
+      .reservePolicyTable thead th {
+        background: var(--bg0);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .reservePolicyTable td:first-child {
+        color: var(--text);
+        font-weight: 700;
+        width: 44%;
       }
 
       .reserveCard {
@@ -715,29 +785,136 @@
 
               <!-- 관람 주의사항 -->
               <div class="reservePolicyBlock">
-                <div class="reservePolicyTitle">관람 주의사항</div>
-                <div class="reservePolicyItem">
-                  예약하신 시작 시간 <strong style="color: var(--text); font-weight: 800">5분 전</strong>까지 입장해 주세요. 지각 시 입장이 제한되거나 예약이 취소될 수 있습니다.
+                <div class="reservePolicyTitleBar">
+                  <span class="reservePolicyTitleText">관람 주의사항</span>
+                  <span class="reservePolicyTitleLine" aria-hidden="true"></span>
                 </div>
-                <div class="reservePolicyItem">
-                  전시 구역 내 촬영·소음은 현장 안내에 따라 제한될 수 있습니다. 플래시·삼각대 사용은 사전 허가가 필요할 수 있습니다.
+
+                <div class="reservePolicyGroup">
+                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
+                    <span class="reservePolicyTitleText">작품과의 거리 유지</span>
+                    <span class="reservePolicyTitleLine" aria-hidden="true"></span>
+                  </div>
+                  <div class="reservePolicyCopy">
+                    <p>
+                      눈으로만 감상하세요: 손의 유분이나 염분이 작품을 훼손할 수 있습니다.
+                    </p>
+                    <p>
+                      안전선 준수: 바닥에 표시된 가이드라인 뒤에서 관람해 주세요.
+                    </p>
+                  </div>
                 </div>
-                <div class="reservePolicyItem">
-                  음식물 반입, 터치·가까이 접촉은 작품·전시 정책에 따라 금지될 수 있습니다.
+
+                <div class="reservePolicyGroup">
+                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
+                    <span class="reservePolicyTitleText">촬영 규정 확인</span>
+                    <span class="reservePolicyTitleLine" aria-hidden="true"></span>
+                  </div>
+                  <div class="reservePolicyCopy">
+                    <p>
+                      플래시 및 삼각대 금지: 강한 빛은 작품의 색상을 변질시킵니다. 촬영이 허용된 곳이라도 플래시는 반드시 꺼야 합니다.
+                    </p>
+                    <p>
+                      무음 촬영: 다른 관람객의 몰입을 방해하지 않도록 무음 카메라 앱을 권장합니다.
+                    </p>
+                    <p>
+                      촬영 불가 구역: ‘No Photo’ 표시가 있는 작품이나 구역은 절대 촬영해서는 안 됩니다.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="reservePolicyGroup">
+                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
+                    <span class="reservePolicyTitleText">정숙 및 이동 에티켓</span>
+                    <span class="reservePolicyTitleLine" aria-hidden="true"></span>
+                  </div>
+                  <div class="reservePolicyCopy">
+                    <p>
+                      대화는 소곤소곤: 작품에 대한 감상은 낮은 목소리로 나누어 주세요.
+                    </p>
+                    <p>
+                      휴대전화 매너: 진동 모드로 전환하고, 통화는 전시장 밖에서 부탁드립니다.
+                    </p>
+                    <p>
+                      뛰지 않기: 전시장 내에서 뛰는 행위는 본인과 타인의 안전, 그리고 작품 보호를 위해 엄격히 금지됩니다.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="reservePolicyGroup">
+                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
+                    <span class="reservePolicyTitleText">반입 금지 품목</span>
+                    <span class="reservePolicyTitleLine" aria-hidden="true"></span>
+                  </div>
+                  <div class="reservePolicyCopy">
+                    <p>
+                      음식물 및 음료: 생수를 포함한 모든 음식물은 반입이 어렵습니다.
+                    </p>
+                    <p>
+                      큰 가방 및 우산: 백팩은 가방 보관소에 맡기거나 앞으로 매는 것이 관례입니다. (뒤로 매면 뒤에 있는 작품을 칠 수 있기 때문입니다.)
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <!-- 위약 및 취소 규정 -->
+              <!-- 예매 취소 및 위약 규정 -->
               <div class="reservePolicyBlock">
-                <div class="reservePolicyTitle">위약 및 취소 규정</div>
-                <div class="reservePolicyItem">
-                  <strong style="color: var(--text); font-weight: 800">무단 불참</strong> 또는 노쇼(No-show)가 반복될 경우, 일정 기간 예약이 제한될 수 있습니다.
+                <div class="reservePolicyTitleBar">
+                  <span class="reservePolicyTitleText">예매 취소 및 위약 규정</span>
+                  <span class="reservePolicyTitleLine" aria-hidden="true"></span>
                 </div>
-                <div class="reservePolicyItem">
-                  예약자 본인 취소는 <strong style="color: var(--text); font-weight: 800">대기</strong> 상태에서만 가능하며, 확정 이후에는 현장 또는 관리자 안내에 따릅니다.
+                <p class="reservePolicyLead">
+                  대부분의 전시회는 공정거래위원회 소비자분쟁해결기준 및 예매처(인터파크, 네이버 등)의 규정을 따릅니다.
+                </p>
+
+                <div class="reservePolicyGroup">
+                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
+                    <span class="reservePolicyTitleText">취소 가능 기한</span>
+                    <span class="reservePolicyTitleLine" aria-hidden="true"></span>
+                  </div>
+                  <div class="reservePolicyCopy">
+                    <p>보통 관람 전일 17:00~23:59까지 취소가 가능합니다.</p>
+                    <p>당일 취소 및 환불은 원칙적으로 불가능한 경우가 대부분입니다.</p>
+                  </div>
                 </div>
-                <div class="reservePolicyItem">
-                  관리자에 의한 거절 시 별도 위약금은 부과되지 않으며, 다른 일정으로 다시 예약할 수 있습니다.
+
+                <div class="reservePolicyGroup">
+                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
+                    <span class="reservePolicyTitleText">취소 수수료</span>
+                    <span class="reservePolicyTitleLine" aria-hidden="true"></span>
+                  </div>
+                  <div class="reservePolicyTableWrap">
+                    <table class="reservePolicyTable">
+                      <thead>
+                        <tr>
+                          <th scope="col">취소 시점</th>
+                          <th scope="col">취소 수수료</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>예매 후 7일 이내</td>
+                          <td>없음 (단, 관람일 전일까지만)</td>
+                        </tr>
+                        <tr>
+                          <td>예매 8일 후 ~ 관람일 10일 전</td>
+                          <td>장당 1,000원 ~ 2,000원 또는 티켓 금액의 10%</td>
+                        </tr>
+                        <tr>
+                          <td>관람일 9일 전 ~ 7일 전</td>
+                          <td>티켓 금액의 10%</td>
+                        </tr>
+                        <tr>
+                          <td>관람일 6일 전 ~ 3일 전</td>
+                          <td>티켓 금액의 20%</td>
+                        </tr>
+                        <tr>
+                          <td>관람일 2일 전 ~ 1일 전</td>
+                          <td>티켓 금액의 30%</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
 
