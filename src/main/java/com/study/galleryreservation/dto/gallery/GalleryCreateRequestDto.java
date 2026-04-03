@@ -3,6 +3,7 @@ package com.study.galleryreservation.dto.gallery;
 import com.study.galleryreservation.domain.gallery.Gallery;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter

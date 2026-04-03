@@ -7,142 +7,452 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>미술관 예약</title>
+    <title>미술관 예약 — Art Museum</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
-      :root {
-        --bg0: #fcfbf8;
-        --bg1: #f6f3ee;
-        --surface: rgba(255, 255, 255, 0.72);
-        --surface-strong: rgba(255, 255, 255, 0.84);
-        --surface2: rgba(246, 243, 238, 0.85);
-        --stroke: rgba(40, 35, 28, 0.08);
-        --text: #171717;
-        --muted: rgba(23, 23, 23, 0.64);
-        --accent: #b08a46;
-        --accent-deep: #8b6c37;
-        --danger: #e74c3c;
-        --ok: #27ae60;
-        --shadow: 0 18px 50px rgba(35, 28, 20, 0.08);
-        --shadow-soft: 0 10px 30px rgba(35, 28, 20, 0.05);
-        --radius: 24px;
-        --radius-sm: 14px;
-        --ring: 0 0 0 4px rgba(176, 138, 70, 0.14);
-        --container: 1120px;
+      /* ── HERO ── */
+        .hero {
+          background: #2a2a2a;
+          color: #ffffff;
+          padding: 100px 0 80px;
+          position: relative;
+          overflow: hidden;
+          /*https://images.unsplash.com/photo-1500856311637-fc0249e33e4c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D*/
+          background-image: url('https://images.unsplash.com/photo-1737490419239-8b9a7895a17b?q=80&w=1246&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+          background-size: cover;
+          background-position: center;
+          background-blend-mode: overlay;
+        }
+      /* 어둡게 만들어줌 */
+      /*.hero::before {*/
+      /*  content: "";*/
+      /*  position: absolute;*/
+      /*  inset: 0;*/
+      /*  background: rgba(0, 0, 0, 0.55);*/
+      /*  z-index: 0;*/
+      /*}*/
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.02) 0px,
+          rgba(255, 255, 255, 0.02) 1px,
+          transparent 1px,
+          transparent 60px
+        );
+        pointer-events: none;
       }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        margin: 0;
-        color: var(--text);
-        font-family:
-          "Noto Sans KR",
-          "Pretendard",
-          ui-sans-serif,
-          system-ui,
-          -apple-system,
-          "Segoe UI",
-          Roboto,
-          "Malgun Gothic",
-          "Apple SD Gothic Neo",
-          sans-serif;
-        background:
-          linear-gradient(
-            180deg,
-            rgba(252, 251, 248, 0.96) 0%,
-            rgba(246, 243, 238, 0.92) 100%
-          ),
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1400' viewBox='0 0 1600 1400'%3E%3Cdefs%3E%3Cfilter id='b'%3E%3CfeGaussianBlur stdDeviation='60'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1600' height='1400' fill='%23f8f5ef'/%3E%3Ccircle cx='310' cy='210' r='210' fill='%23ead7b6' filter='url(%23b)' opacity='0.85'/%3E%3Ccircle cx='1320' cy='250' r='250' fill='%23d9e4ee' filter='url(%23b)' opacity='0.65'/%3E%3Ccircle cx='1250' cy='1050' r='280' fill='%23e6d4c0' filter='url(%23b)' opacity='0.72'/%3E%3Ccircle cx='420' cy='1080' r='260' fill='%23efe7d7' filter='url(%23b)' opacity='0.85'/%3E%3Cpath d='M160 860C280 740 490 720 620 780C720 826 825 920 930 932C1096 950 1196 820 1356 840C1452 852 1520 920 1600 1010L1600 1400L0 1400L0 980C54 940 98 912 160 860Z' fill='%23f2ece2' opacity='0.95'/%3E%3C/svg%3E");
-        background-size: cover;
-        background-attachment: fixed;
-        min-height: 100vh;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      a:hover {
-        text-decoration: none;
-      }
-
-      .appShell {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        isolation: isolate;
-      }
-
-      main {
-        flex: 1;
+      .heroInner {
         position: relative;
         z-index: 1;
       }
 
-      .container {
+      .heroEyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .heroEyebrow::before {
+        content: "";
+        display: inline-block;
+        width: 28px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.4);
+      }
+
+      .heroTitle {
+        font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+        font-size: clamp(30px, 6vw, 70px);
+        font-weight: 700;
+        line-height: 1.06;
+        letter-spacing: -2px;
+        margin: 0 0 24px;
+        color: #ffffff;
+      }
+
+      .heroSubtitle {
+        font-size: 16px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.65);
+        max-width: 52ch;
+        margin: 0 0 40px;
+      }
+
+      .heroActions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .heroActions .btn-primary {
+        background: #ffffff;
+        color: #111111;
+        border-color: #ffffff;
+        padding: 13px 32px;
+        font-size: 15px;
+      }
+
+      .heroActions .btn-primary:hover {
+        background: #f0f0f0;
+        border-color: #f0f0f0;
+        color: #111111;
+      }
+
+      .heroActions .btn-ghost {
+        border-color: rgba(255, 255, 255, 0.35);
+        color: rgba(255, 255, 255, 0.85);
+        padding: 13px 32px;
+        font-size: 15px;
+        background: transparent;
+      }
+
+      .heroActions .btn-ghost:hover {
+        border-color: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .heroStat {
+        display: flex;
+        gap: 48px;
+        margin-top: 60px;
+        padding-top: 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        flex-wrap: wrap;
+      }
+
+      .statItem {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .statNum {
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: #ffffff;
+      }
+
+      .statLabel {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.45);
+        font-weight: 600;
+        letter-spacing: 0.05em;
+      }
+
+      /* ── CONTENT SECTIONS ── */
+      .section {
+        padding: 72px 0;
+      }
+
+      .section + .section {
+        border-top: 1px solid var(--stroke);
+      }
+
+      .sectionHeader {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 36px;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .sectionEyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+
+      .sectionTitle {
+        font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+        font-size: clamp(24px, 3vw, 36px);
+        font-weight: 900;
+        letter-spacing: -1px;
+        line-height: 1.1;
+        margin: 0;
+      }
+
+      .sectionHeaderCta {
+        border-color: #111111;
+        color: #111111;
+        background: #ffffff;
+        padding: 13px 32px;
+        font-size: 15px;
+      }
+
+      .sectionHeaderCta:hover {
+        background: #111111;
+        border-color: #111111;
+        color: #ffffff;
+      }
+
+      /* ── FEATURE GRID ── */
+      .featureGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--stroke-dark);
+        border: 1px solid var(--stroke-dark);
+      }
+
+      .featureCard {
+        background: var(--bg0);
+        padding: 36px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        transition: background 0.14s ease;
+      }
+
+      .featureCard:hover {
+        background: var(--bg1);
+      }
+
+      .featureNum {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .featureIcon {
+        font-size: 20px;
+        line-height: 1;
+      }
+
+      .featureTitle {
+        font-size: 18px;
+        font-weight: 900;
+        letter-spacing: -0.4px;
+        line-height: 1.2;
+      }
+
+      .featureDesc {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.75;
+        margin: 0;
+      }
+
+      @media (max-width: 900px) {
+        .featureGrid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── INTRO PANEL ── */
+      .introPanel {
+        background: var(--bg1);
+        border: 1px solid var(--stroke-dark);
+
+        padding: 48px 44px;
+        display: flex;
+        gap: 48px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .introPanelLeft {
+        flex: 1;
+        min-width: 260px;
+      }
+
+      .introPanelRight {
+        flex: 1;
+        min-width: 260px;
+      }
+
+      .introPanelTitle {
+        font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+        font-size: clamp(22px, 2.8vw, 32px);
+        font-weight: 900;
+        letter-spacing: -0.8px;
+        margin: 0 0 16px;
+        line-height: 1.2;
+      }
+
+      .introPanelText {
+        font-size: 15px;
+        line-height: 1.85;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      .introList {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      .introList li {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+        background: var(--bg0);
+        border: 1px solid var(--stroke);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .introList li::before {
+        content: "—";
+        color: var(--muted);
+        font-weight: 400;
+        flex-shrink: 0;
+      }
+
+      /* ── QUOTE ── */
+        .quoteBlock {
+          background: #111111;
+          color: #ffffff;
+          padding: 56px 48px;
+          text-align: center;
+        }
+
+
+
+      .quoteText {
+        font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+        font-size: clamp(18px, 2.2vw, 26px);
+        font-weight: 700;
+        line-height: 1.65;
+        color: rgba(255, 255, 255, 0.9);
+        max-width: 60ch;
+        margin: 0 auto 16px;
+      }
+
+      .quoteCaption {
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.38);
+        font-weight: 600;
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        background: #111111;
+        color: rgba(255, 255, 255, 0.55);
+        padding: 48px 0 32px;
+        margin-top: 0;
+      }
+
+      .footerInner {
         max-width: var(--container);
         margin: 0 auto;
-        padding: 0 20px;
+        padding: 0 16px;
+        display: block;
       }
 
-      :focus-visible {
-        outline: none;
-        box-shadow: var(--ring);
-        border-color: var(--accent) !important;
+      .footerTop {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        flex-wrap: wrap;
+        padding-bottom: 36px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 28px;
       }
 
-      .kicker {
-        display: inline-flex;
+      .footerBrand {
+        display: flex;
         align-items: center;
         gap: 10px;
-        padding: 9px 16px;
-        border: 1px solid rgba(176, 138, 70, 0.18);
-        background: rgba(255, 255, 255, 0.72);
-        backdrop-filter: blur(10px);
-        border-radius: 999px;
-        color: var(--accent-deep);
-        font-weight: 700;
-        letter-spacing: 0.24em;
+        font-size: 16px;
+        font-weight: 900;
+        color: #ffffff;
+        letter-spacing: -0.3px;
+      }
+
+      .footerBrandMark {
+        width: 28px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .footerNav {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+
+      .footerNavGroup {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-width: 100px;
+      }
+
+      .footerNavLabel {
         font-size: 11px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.35);
+        margin-bottom: 4px;
       }
 
-      .title {
-        margin: 14px 0 10px;
-        font-size: clamp(34px, 6vw, 68px);
-        letter-spacing: -2px;
-        line-height: 1.04;
-        font-weight: 800;
+      .footerNavLink {
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.6);
+        transition: color 0.1s ease;
       }
 
-      .subtitle {
-        margin: 0;
-        color: var(--muted);
-        font-size: 15.5px;
-        line-height: 1.9;
-        max-width: 62ch;
+      .footerNavLink:hover {
+        color: #ffffff;
       }
 
-      .card {
-        background: var(--surface);
-        border: 1px solid rgba(255, 255, 255, 0.55);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(16px);
+      .footerBottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.3);
       }
 
-      .cardPad {
-        padding: 18px;
+      .footerLinks {
+        display: flex;
+        gap: 20px;
       }
 
+      .footerLinks a {
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 12px;
+        transition: color 0.1s;
+      }
+
+      .footerLinks a:hover {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* ── UTILS ── */
       .row {
         display: flex;
         align-items: center;
@@ -156,646 +466,55 @@
         gap: 12px;
       }
 
-      .grid {
-        display: grid;
-        gap: 16px;
-      }
-
-      .grid-2 {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .grid-3 {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      @media (max-width: 920px) {
-        .grid-2,
-        .grid-3 {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        padding: 11px 14px;
-        border-radius: 12px;
-        border: 1px solid rgba(31, 24, 16, 0.08);
-        background: rgba(255, 255, 255, 0.78);
-        color: var(--text);
-        font-weight: 700;
-        letter-spacing: 0.1px;
-        cursor: pointer;
-        user-select: none;
-        transition:
-          transform 0.14s ease,
-          background 0.14s ease,
-          border-color 0.14s ease,
-          box-shadow 0.14s ease,
-          color 0.14s ease;
-        text-decoration: none;
-        white-space: nowrap;
-        backdrop-filter: blur(12px);
-      }
-
-      .btn:hover {
-        transform: translateY(-1px);
-        border-color: rgba(176, 138, 70, 0.34);
-        background: rgba(255, 255, 255, 0.92);
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
-      }
-
-      .btn:active {
-        transform: translateY(0px);
-      }
-
-      .btn-primary {
-        background: linear-gradient(135deg, #1d1b18, #0f0e0d);
-        color: #ffffff;
-        border: none;
-        box-shadow: 0 14px 30px rgba(20, 16, 12, 0.16);
-      }
-
-      .btn-primary:hover {
-        background: linear-gradient(135deg, #26231f, #141210);
-        color: #ffffff;
-      }
-
-      .btn-ghost {
-        background: rgba(255, 255, 255, 0.64);
-        border-color: rgba(31, 24, 16, 0.07);
-      }
-
-      .btn-danger {
-        border-color: rgba(231, 76, 60, 0.2);
-        background: rgba(231, 76, 60, 0.05);
-        color: var(--danger);
-      }
-
-      .btn-small {
-        padding: 8px 11px;
-        border-radius: 10px;
-        font-size: 13px;
-        font-weight: 750;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 6px 12px;
-        border-radius: 999px;
-        border: 1px solid var(--stroke);
-        background: var(--surface2);
-        color: var(--muted);
-        font-weight: 750;
-        font-size: 12.5px;
-        letter-spacing: 0.2px;
-        white-space: nowrap;
-      }
-
-      .badge-ok {
-        border-color: rgba(39, 174, 96, 0.2);
-        color: var(--ok);
-        background: rgba(39, 174, 96, 0.08);
-      }
-
-      .badge-warn {
-        border-color: rgba(176, 138, 70, 0.18);
-        color: var(--accent-deep);
-        background: rgba(176, 138, 70, 0.08);
-      }
-
-      .badge-danger {
-        border-color: rgba(231, 76, 60, 0.2);
-        color: var(--danger);
-        background: rgba(231, 76, 60, 0.08);
-      }
-
-      .badge-info {
-        border-color: rgba(52, 152, 219, 0.2);
-        color: #2f7bb0;
-        background: rgba(52, 152, 219, 0.08);
-      }
-
-      .navbar {
-        position: sticky;
-        top: 0;
-        z-index: 60;
-        backdrop-filter: blur(18px);
-        background: rgba(252, 250, 247, 0.68);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.55);
-        box-shadow: 0 6px 24px rgba(23, 18, 12, 0.03);
-      }
-
-      .navbarInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 14px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: 900;
-        letter-spacing: -0.4px;
-      }
-
-      .brandMark {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: radial-gradient(
-          circle at 35% 35%,
-          #e5cf9f 0%,
-          #c29e5e 45%,
-          #8c6c38 100%
-        );
-        box-shadow: 0 8px 18px rgba(176, 138, 70, 0.2);
-        position: relative;
-      }
-
-      .brandMark::after {
-        content: "";
-        position: absolute;
-        inset: 9px;
-        border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.55);
-      }
-
-      .navLinks {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .navLink {
-        padding: 9px 12px;
-        border-radius: 12px;
-        border: 1px solid transparent;
-        color: var(--muted);
-        font-weight: 700;
-        font-size: 13.5px;
-        transition:
-          border-color 0.12s ease,
-          color 0.12s ease,
-          background 0.12s ease;
-      }
-
-      .navLink:hover {
-        color: var(--text);
-        background: rgba(255, 255, 255, 0.56);
-      }
-
-      .navActions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .hamburger {
-        display: none;
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        color: var(--text);
-        cursor: pointer;
-        font-weight: 900;
-      }
-
-      @media (max-width: 920px) {
-        .navLinks {
-          display: none;
+      @media (max-width: 620px) {
+        .hero {
+          padding: 72px 0 56px;
         }
 
-        .hamburger {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-
-      #mobileMenu {
-        display: none;
-        border-top: 1px solid var(--stroke);
-        background: #ffffff;
-      }
-
-      #mobileMenu[data-open="true"] {
-        display: block;
-      }
-
-      .mobileMenuInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 10px 20px 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .mobileMenuInner .navLink {
-        width: 100%;
-        border-color: var(--stroke);
-        background: var(--bg1);
-      }
-
-      label {
-        display: block;
-        font-weight: 850;
-        font-size: 13px;
-        color: var(--muted);
-        margin-bottom: 7px;
-      }
-
-      input,
-      select,
-      textarea {
-        width: 100%;
-        padding: 12px 12px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.82);
-        border: 1px solid rgba(31, 24, 16, 0.08);
-        color: var(--text);
-        outline: none;
-        transition:
-          border-color 0.12s ease,
-          background 0.12s ease;
-        font-size: 14.5px;
-      }
-
-      textarea {
-        min-height: 120px;
-        resize: vertical;
-      }
-
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(0, 0, 0, 0.3);
-      }
-
-      input:focus,
-      select:focus,
-      textarea:focus {
-        border-color: var(--accent);
-        background: #ffffff;
-      }
-
-      .helpText {
-        color: var(--muted);
-        font-size: 12.5px;
-        line-height: 1.7;
-        margin-top: 8px;
-      }
-
-      .formGrid {
-        display: grid;
-        gap: 16px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      @media (max-width: 920px) {
-        .formGrid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      .tableWrap {
-        overflow: auto;
-        border-radius: var(--radius);
-        border: 1px solid rgba(255, 255, 255, 0.58);
-        background: rgba(255, 255, 255, 0.72);
-        backdrop-filter: blur(12px);
-      }
-
-      table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        min-width: 720px;
-      }
-
-      thead th {
-        position: sticky;
-        top: 0;
-        background: rgba(246, 243, 238, 0.92);
-        z-index: 1;
-        text-align: left;
-        padding: 14px 14px;
-        font-size: 12.5px;
-        letter-spacing: 0.3px;
-        text-transform: uppercase;
-        color: var(--muted);
-        border-bottom: 1px solid var(--stroke);
-      }
-
-      tbody td {
-        padding: 14px 14px;
-        border-bottom: 1px solid var(--stroke);
-        color: var(--text);
-        vertical-align: middle;
-      }
-
-      tbody tr:hover td {
-        background: rgba(255, 255, 255, 0.46);
-      }
-
-      footer {
-        border-top: 1px solid rgba(255, 255, 255, 0.52);
-        padding: 22px 0;
-        color: var(--muted);
-        background: rgba(255, 255, 255, 0.44);
-        backdrop-filter: blur(8px);
-      }
-
-      .footerInner {
-        max-width: var(--container);
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-
-      .footerLinks {
-        display: flex;
-        gap: 14px;
-        flex-wrap: wrap;
-      }
-
-      #grToast {
-        position: fixed;
-        right: 16px;
-        bottom: 16px;
-        z-index: 9999;
-        min-width: 260px;
-        max-width: 380px;
-        padding: 16px;
-        border-radius: 14px;
-        border: 1px solid var(--stroke);
-        background: #ffffff;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        color: var(--text);
-        display: none;
-      }
-
-      #grToast[data-show="true"] {
-        display: block;
-      }
-
-      .heroMain {
-        padding: 134px 0 102px;
-        position: relative;
-        overflow: hidden;
-        text-align: center;
-        border-radius: 0 0 34px 34px;
-        margin-bottom: 26px;
-      }
-
-      .heroMain::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-          linear-gradient(
-            180deg,
-            rgba(255, 251, 245, 0.76),
-            rgba(255, 255, 255, 0.88)
-          ),
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='900' viewBox='0 0 1600 900'%3E%3Cdefs%3E%3Cfilter id='blur'%3E%3CfeGaussianBlur stdDeviation='32'/%3E%3C/filter%3E%3ClinearGradient id='g1' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23eee0c4'/%3E%3Cstop offset='100%25' stop-color='%23d8e4eb'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1600' height='900' fill='url(%23g1)'/%3E%3Cpath d='M0 710C92 650 186 603 280 591C377 579 438 601 548 579C669 554 712 491 816 474C923 456 1004 513 1092 560C1183 609 1263 642 1367 630C1446 621 1513 583 1600 541L1600 900L0 900Z' fill='%23e7d2b3' opacity='0.82'/%3E%3Cpath d='M0 540C121 441 259 389 374 416C515 449 578 614 712 650C860 690 979 565 1107 487C1241 406 1381 373 1600 429L1600 0L0 0Z' fill='%23d9e8ef' opacity='0.66'/%3E%3Ccircle cx='310' cy='248' r='148' fill='%23f6efe1' filter='url(%23blur)' opacity='0.86'/%3E%3Ccircle cx='1284' cy='232' r='166' fill='%23e9d7bc' filter='url(%23blur)' opacity='0.72'/%3E%3Cpath d='M564 170C637 122 728 98 806 119C875 137 931 189 1000 212C1063 233 1150 231 1194 274C1231 312 1237 375 1197 405C1158 434 1095 420 1036 426C920 438 849 526 739 549C656 566 548 547 494 485C447 431 454 360 481 303C500 264 526 196 564 170Z' fill='%23b68c54' filter='url(%23blur)' opacity='0.26'/%3E%3C/svg%3E");
-        background-size: cover;
-        background-position: center;
-        z-index: 0;
-      }
-
-      .heroMain::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        bottom: 28px;
-        transform: translateX(-50%);
-        width: min(520px, 72%);
-        height: 1px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(176, 138, 70, 0.44),
-          transparent
-        );
-        z-index: 1;
-      }
-
-      .heroMain > * {
-        position: relative;
-        z-index: 2;
-      }
-
-      .heroMain .kicker {
-        margin: 0 auto;
-      }
-
-      .heroMain .title {
-        color: #111111;
-      }
-
-      .heroMain .subtitle {
-        margin: 0 auto;
-        max-width: 58ch;
-      }
-
-      .heroActions {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-        margin-top: 34px;
-        flex-wrap: wrap;
-      }
-
-      .infoSection {
-        padding: 18px 0 76px;
-      }
-
-      .sectionLabel {
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 0.22em;
-        text-transform: uppercase;
-        color: var(--accent-deep);
-        margin-bottom: 18px;
-      }
-
-      .introPanel {
-        margin-bottom: 28px;
-        padding: 34px 32px;
-        border-radius: 26px;
-        border: 1px solid rgba(255, 255, 255, 0.58);
-        background:
-          linear-gradient(
-            180deg,
-            rgba(255, 255, 255, 0.78),
-            rgba(250, 247, 242, 0.7)
-          ),
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='700' viewBox='0 0 1400 700'%3E%3Cdefs%3E%3Cfilter id='f'%3E%3CfeGaussianBlur stdDeviation='28'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1400' height='700' fill='%23f5efe4'/%3E%3Ccircle cx='280' cy='180' r='140' fill='%23e8d8be' filter='url(%23f)' opacity='0.8'/%3E%3Ccircle cx='1150' cy='190' r='170' fill='%23d8e6ec' filter='url(%23f)' opacity='0.65'/%3E%3Cpath d='M117 528C243 430 384 384 516 406C623 424 693 505 797 531C955 571 1100 479 1225 430C1288 405 1343 391 1400 382L1400 700L0 700L0 580C34 571 73 562 117 528Z' fill='%23eadcc9' opacity='0.85'/%3E%3C/svg%3E");
-        background-size: cover;
-        background-position: center;
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(14px);
-      }
-
-      .introPanelTitle {
-        font-size: clamp(24px, 3.2vw, 34px);
-        font-weight: 900;
-        letter-spacing: -0.95px;
-        margin: 0 0 12px;
-      }
-
-      .introPanelText {
-        margin: 0;
-        color: var(--muted);
-        line-height: 1.88;
-        font-size: 15px;
-        max-width: 72ch;
-      }
-
-      .featureGrid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
-      }
-
-      .featureCard {
-        padding: 30px 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
-        align-items: center;
-        border-radius: 22px;
-        transition:
-          transform 0.18s ease,
-          box-shadow 0.18s ease,
-          border-color 0.18s ease,
-          background 0.18s ease;
-      }
-
-      .featureCard:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 44px rgba(0, 0, 0, 0.08);
-        border-color: rgba(176, 138, 70, 0.16);
-        background: rgba(255, 255, 255, 0.8);
-      }
-
-      .featureIcon {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        border: 1px solid rgba(176, 138, 70, 0.14);
-        background: radial-gradient(
-          circle at 30% 30%,
-          #fffaf1 0%,
-          #f1e5ce 100%
-        );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 22px;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      }
-
-      .featureTitle {
-        font-size: 17px;
-        font-weight: 800;
-        letter-spacing: -0.3px;
-      }
-
-      .museumQuote {
-        margin-top: 28px;
-        padding: 28px 26px;
-        border: 1px solid rgba(255, 255, 255, 0.55);
-        border-radius: 24px;
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.72),
-          rgba(255, 255, 255, 0.64)
-        );
-        text-align: center;
-        color: var(--muted);
-        line-height: 1.95;
-        font-size: 14px;
-        backdrop-filter: blur(10px);
-        box-shadow: var(--shadow-soft);
-      }
-
-      .museumQuote strong {
-        color: var(--text);
-      }
-
-      @media (max-width: 920px) {
-        .featureGrid {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @media (max-width: 720px) {
-        .heroMain {
-          padding: 98px 0 74px;
-          border-radius: 0 0 24px 24px;
+        .heroStat {
+          gap: 32px;
         }
 
         .introPanel {
-          padding: 24px 20px;
+          padding: 32px 24px;
+        }
+        @media (max-width: 720px) {
+          .quoteBlock {
+            padding: 40px 24px;
+          }
         }
 
-        .museumQuote {
-          padding: 22px 18px;
-        }
-
-        .heroMain .title {
-          font-size: clamp(34px, 10vw, 52px);
-        }
-
-        .kicker {
-          letter-spacing: 0.14em;
-          font-size: 10px;
+        .section {
+          padding: 52px 0;
         }
       }
 
       @media (prefers-reduced-motion: reduce) {
         * {
           transition: none !important;
-          scroll-behavior: auto !important;
-        }
-
-        .btn:hover,
-        .featureCard:hover {
-          transform: none;
         }
       }
     </style>
   </head>
   <body>
     <div class="appShell">
+      <!-- NAVBAR -->
       <nav class="navbar">
         <div class="navbarInner">
           <a class="brand" th:href="@{/}">
-            <span class="brandMark"></span>
+            <span class="brandMark">
+              <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="6" height="6" />
+                <rect x="10" y="2" width="6" height="6" />
+                <rect x="2" y="10" width="6" height="6" />
+                <rect x="10" y="10" width="6" height="6" opacity="0.4" />
+              </svg>
+            </span>
             <span>Art Museum</span>
           </a>
 
           <div class="navLinks">
-            <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
+            <a class="navLink" th:href="@{/gallery/list}">전시·관람</a>
             <a
               class="navLink"
               sec:authorize="isAuthenticated()"
@@ -804,7 +523,7 @@
             >
             <a
               class="navLink"
-              sec:authorize="isAuthenticated()"
+              sec:authorize="hasRole('ADMIN')"
               th:href="@{/todo/list}"
               >할 일</a
             >
@@ -828,7 +547,6 @@
                 >회원가입</a
               >
             </div>
-
             <div
               sec:authorize="isAuthenticated()"
               style="display: flex; gap: 8px"
@@ -848,90 +566,236 @@
                 </button>
               </form>
             </div>
+            <button
+              class="hamburger"
+              type="button"
+              onclick="document.getElementById('mobileMenu').dataset.open = document.getElementById('mobileMenu').dataset.open === 'true' ? 'false' : 'true'"
+            >
+              ☰
+            </button>
+          </div>
+        </div>
+
+        <div id="mobileMenu">
+          <div class="mobileMenuInner">
+            <a class="navLink" th:href="@{/gallery/list}">전시·관람</a>
+            <a
+              class="navLink"
+              sec:authorize="isAuthenticated()"
+              th:href="@{/reservation/list}"
+              >내 예약</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="isAuthenticated()"
+              th:href="@{/todo/list}"
+              >할 일</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/admin/gallery/list}"
+              >관리자</a
+            >
           </div>
         </div>
       </nav>
 
       <main>
-        <div class="container">
-          <section class="heroMain">
-            <div class="kicker">ART MUSEUM RESERVATION</div>
-            <h1 class="title">예술과 마주하는<br />조용하고 특별한 시간</h1>
-            <p class="subtitle">
-              원하는 전시를 선택하고 관람 일정을 예약해보세요. 회화, 조각,
-              설치미술 등 다양한 작품을 차분한 공간에서 더욱 깊이 있게 감상할 수
-              있습니다.
+        <!-- HERO -->
+        <section class="hero">
+          <div class="container heroInner">
+            <div class="heroEyebrow">Art Museum Reservation</div>
+            <h1 class="heroTitle">
+              예술과 마주하는<br />조용하고 특별한 시간
+            </h1>
+            <p class="heroSubtitle">
+              원하는 전시를 선택하고 관람 일정을 예약하세요. 회화, 조각,
+              설치미술 등 다양한 작품을 차분한 공간에서 더욱 깊이 있게
+              감상할 수 있습니다.
             </p>
             <div class="heroActions">
-              <a
-                class="btn btn-primary"
-                href="#"
-                th:href="@{/gallery/list}"
-                style="padding: 14px 28px; font-size: 15px"
+              <a class="btn btn-primary" th:href="@{/gallery/list}"
                 >전시 둘러보기</a
               >
+              <a
+                class="btn btn-ghost"
+                sec:authorize="!isAuthenticated()"
+                th:href="@{/member/join}"
+                >회원가입</a
+              >
             </div>
-          </section>
-        </div>
+            <div class="heroStat">
+              <div class="statItem">
+                <span class="statNum">10:00</span>
+                <span class="statLabel">개관 시간</span>
+              </div>
+              <div class="statItem">
+                <span class="statNum">18:00</span>
+                <span class="statLabel">폐관 시간</span>
+              </div>
+              <div class="statItem">
+                <span class="statNum">월요일</span>
+                <span class="statLabel">정기 휴관</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <div class="container">
-          <section class="infoSection">
-            <div class="introPanel">
-              <div class="sectionLabel">Art Museum Experience</div>
-              <h2 class="introPanelTitle">
-                미술관 관람을 더 간편하고 우아하게
-              </h2>
-              <p class="introPanelText">
-                복잡한 절차 없이 전시를 확인하고, 원하는 날짜에 맞춰 예약하고,
-                방문 일정을 관리할 수 있도록 구성했습니다. 전체 화면은 밝고
-                정제된 톤으로 다듬어 미술관의 고요한 분위기와 작품 감상의
-                집중감을 자연스럽게 전달합니다.
-              </p>
+        <!-- FEATURE SECTION -->
+        <section class="section">
+          <div class="container">
+            <div class="sectionHeader">
+              <div>
+                <div class="sectionEyebrow">이용 안내</div>
+                <h2 class="sectionTitle">이런 것들을 할 수 있어요</h2>
+              </div>
+              <a class="btn btn-ghost sectionHeaderCta" th:href="@{/gallery/list}"
+                >전시 목록 보기</a
+              >
             </div>
 
-            <div class="sectionLabel">이런 것들을 할 수 있어요</div>
             <div class="featureGrid">
-              <div class="card featureCard">
-                <div class="featureIcon">🖼️</div>
+              <div class="featureCard">
+                <div class="featureNum">01</div>
+                <div class="featureIcon">Explore Exhibitions</div>
                 <div class="featureTitle">전시 탐색</div>
-                <div class="helpText" style="margin: 0">
-                  현재 운영 중인 전시를 확인하고, 원하는 전시 정보를 한눈에
-                  살펴볼 수 있습니다.
-                </div>
+                <p class="featureDesc">
+                  현재 운영 중인 전시를 확인하고, 층별·구역별로 필터링하여
+                  원하는 전시 공간을 찾아보세요.
+                </p>
               </div>
-
-              <div class="card featureCard">
-                <div class="featureIcon">📅</div>
+              <div class="featureCard">
+                <div class="featureNum">02</div>
+                <div class="featureIcon">Quick Booking</div>
                 <div class="featureTitle">간편 예약</div>
-                <div class="helpText" style="margin: 0">
-                  원하는 날짜와 시간에 맞춰 빠르게 예약하고 예약 상태를 확인할
-                  수 있습니다.
-                </div>
+                <p class="featureDesc">
+                  원하는 날짜와 시간에 맞춰 빠르게 예약하고, 예약 상태를
+                  실시간으로 확인할 수 있습니다.
+                </p>
               </div>
-
-              <div class="card featureCard">
-                <div class="featureIcon">🛠️</div>
+              <div class="featureCard">
+                <div class="featureNum">03</div>
+                <div class="featureIcon">Operations</div>
                 <div class="featureTitle">운영 관리</div>
-                <div class="helpText" style="margin: 0">
-                  관리자는 전시 및 예약 현황을 효율적으로 관리할 수 있습니다.
-                </div>
+                <p class="featureDesc">
+                  관리자는 전시 공간 등록·수정, 예약 현황 확인·상태 변경을
+                  효율적으로 처리할 수 있습니다.
+                </p>
               </div>
             </div>
+          </div>
+        </section>
 
-            <div class="museumQuote">
-              <strong
-                >예술을 감상하는 경험은 화면에서도 이어질 수 있어야
-                합니다.</strong
-              ><br />
-              필요한 정보는 명확하게, 시선은 편안하게, 분위기는 미술관답게
-              정돈된 화면으로 구성했습니다.
+        <!-- INTRO PANEL -->
+        <section class="section" style="padding-top: 0">
+          <div class="container">
+            <div style="height: 70px"></div>
+            <div class="introPanel">
+              <div class="introPanelLeft">
+                <div class="sectionEyebrow">Art Museum Experience</div>
+                <h2 class="introPanelTitle">
+                  미술관 관람을<br />더 간편하고 우아하게
+                </h2>
+                <p class="introPanelText">
+                  복잡한 절차 없이 전시를 확인하고, 원하는 날짜에 맞춰
+                  예약하고, 방문 일정을 관리할 수 있도록 구성했습니다.
+                  미술관의 고요한 분위기와 작품 감상의 집중감을 자연스럽게
+                  전달하는 화면으로 설계했습니다.
+                </p>
+              </div>
+              <div class="introPanelRight">
+                <ul class="introList">
+                  <li>갤러리별 상세 정보 및 수용 인원 확인</li>
+                  <li>날짜·시간·인원 지정 후 예약 요청</li>
+                  <li>예약 상태 (대기·확정·취소·완료) 추적</li>
+                  <li>관리자 전용 전시 및 예약 관리 화면</li>
+                </ul>
+              </div>
             </div>
-          </section>
+          </div>
+        </section>
+
+        <!-- QUOTE -->
+        <div class="quoteBlock">
+          <p class="quoteText">
+            "예술을 감상하는 경험은 화면에서도 이어질 수 있어야 합니다."
+          </p>
+          <div class="quoteCaption">Art Museum · Reservation System</div>
         </div>
       </main>
+
+      <!-- FOOTER -->
+      <footer>
+        <div class="footerInner">
+          <div class="footerTop">
+            <div class="footerBrand">
+              <span class="footerBrandMark">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 18 18"
+                  fill="white"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect x="2" y="2" width="6" height="6" />
+                  <rect x="10" y="2" width="6" height="6" />
+                  <rect x="2" y="10" width="6" height="6" />
+                  <rect x="10" y="10" width="6" height="6" opacity="0.4" />
+                </svg>
+              </span>
+              <span>Art Museum</span>
+            </div>
+            <nav class="footerNav">
+              <div class="footerNavGroup">
+                <div class="footerNavLabel">관람</div>
+                <a class="footerNavLink" th:href="@{/gallery/list}">전시 목록</a>
+                <a class="footerNavLink" th:href="@{/gallery/list}">관람 안내</a>
+              </div>
+              <div class="footerNavGroup">
+                <div class="footerNavLabel">예약</div>
+                <a
+                  class="footerNavLink"
+                  sec:authorize="isAuthenticated()"
+                  th:href="@{/reservation/list}"
+                  >내 예약</a
+                >
+                <a
+                  class="footerNavLink"
+                  sec:authorize="!isAuthenticated()"
+                  th:href="@{/member/login}"
+                  >로그인 후 예약</a
+                >
+              </div>
+              <div class="footerNavGroup">
+                <div class="footerNavLabel">계정</div>
+                <a
+                  class="footerNavLink"
+                  sec:authorize="!isAuthenticated()"
+                  th:href="@{/member/login}"
+                  >로그인</a
+                >
+                <a
+                  class="footerNavLink"
+                  sec:authorize="!isAuthenticated()"
+                  th:href="@{/member/join}"
+                  >회원가입</a
+                >
+              </div>
+            </nav>
+          </div>
+          <div class="footerBottom">
+            <span>© 2026 Art Museum Reservation System.</span>
+            <div class="footerLinks">
+              <a href="#">개인정보처리방침</a>
+              <a href="#">이용약관</a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
+
     <script>
-      /* 웹브라우저 back키 누를때, 페이지 재로딩 => 조회수 증가  */
       window.onpageshow = function (event) {
         if (
           event.persisted ||

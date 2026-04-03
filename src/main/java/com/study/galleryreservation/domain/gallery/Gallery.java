@@ -60,4 +60,38 @@ public class Gallery {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    public void update(String name, String location, String floorZone,
+                       String description, Integer capacity, Boolean active, String coverImageUrl) {
+        this.name = name;
+        this.location = location;
+        if (floorZone != null && !floorZone.isBlank()) {
+            this.floorZone = floorZone;
+        }
+        this.description = description;
+        this.capacity = capacity;
+        this.isActive = active != null && active;
+        if (coverImageUrl != null) {
+            String c = coverImageUrl.trim();
+            this.coverImageUrl = c.isEmpty() ? null : c;
+        }
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    /**
+     * HTML에서 img src에 넣을 주소입니다.
+     * 인터넷 주소(https://...)는 그대로 쓰고, 그 외에는 웹 루트 기준 경로(/로 시작)로 맞춥니다.
+     */
+    public String getCoverImageUrlForDisplay() {
+        if (coverImageUrl == null || coverImageUrl.isBlank()) {
+            return null;
+        }
+        String url = coverImageUrl.trim();
+        if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("//")) {
+            return url;
+        }
+        if (url.startsWith("/")) {
+            return url;
+        }
+        return "/" + url;
+    }
 }
