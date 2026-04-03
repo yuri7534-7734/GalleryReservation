@@ -5,7 +5,6 @@ import com.study.galleryreservation.domain.member.MemberRole;
 import com.study.galleryreservation.dto.member.MemberJoinRequestDto;
 import com.study.galleryreservation.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +22,11 @@ public class MemberService {
     public void signup(MemberJoinRequestDto dto){
         if (repository.findByUsername(dto.getUsername()).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
+        }
+
+        // email 중복 체크 (필요하다면)
+        if (repository.existsByEmail(dto.getEmail())) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
 
         Member member = Member.builder()

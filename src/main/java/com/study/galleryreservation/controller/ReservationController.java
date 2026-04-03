@@ -1,7 +1,9 @@
 package com.study.galleryreservation.controller;
 
+import com.study.galleryreservation.domain.gallery.Gallery;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.session.SessionUser;
+import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequiredArgsConstructor
@@ -52,5 +55,4 @@ public class ReservationController {
         reservationService.cancel(id, sessionUser.getEmail());
         return "redirect:/reservation/list";
     }
-
 }
