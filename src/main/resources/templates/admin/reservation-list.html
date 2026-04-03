@@ -91,11 +91,11 @@
             </tr>
           </thead>
           <tbody id="reservationRows">
-            <tr th:if="${reservations == null or #lists.isEmpty(reservations)}">
+            <tr th:if="${page == null or #lists.isEmpty(page.content)}">
               <td colspan="6" class="emptyCell">예약 데이터가 없습니다.</td>
             </tr>
             <tr
-              th:each="reservation : ${reservations}"
+              th:each="reservation : ${page.content}"
               th:data-status="${reservation.status.name()}"
             >
               <td class="tdMain" th:text="${reservation.id}">1</td>
@@ -136,6 +136,22 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div th:if="${page != null and page.totalPages > 0}" style="display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+        <a class="btn btn-small btn-ghost"
+           th:if="${page.hasPrevious()}"
+           th:href="@{/admin/reservation/list(page=${page.number - 1})}">이전</a>
+
+        <a class="btn btn-small"
+           th:each="p : ${#numbers.sequence(0, page.totalPages - 1)}"
+           th:classappend="${p == page.number} ? ' btn-primary' : ' btn-ghost'"
+           th:href="@{/admin/reservation/list(page=${p})}"
+           th:text="${p + 1}">1</a>
+
+        <a class="btn btn-small btn-ghost"
+           th:if="${page.hasNext()}"
+           th:href="@{/admin/reservation/list(page=${page.number + 1})}">다음</a>
       </div>
 
       <div style="display:flex;justify-content:flex-end;margin-bottom:80px">

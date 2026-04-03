@@ -1,12 +1,9 @@
 package com.study.galleryreservation.service;
 
-import com.study.galleryreservation.domain.gallery.Gallery;
 import com.study.galleryreservation.domain.member.Member;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.reservation.ReservationStatus;
-import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
-import com.study.galleryreservation.repository.GalleryRepository;
 import com.study.galleryreservation.repository.MemberRepository;
 import com.study.galleryreservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,14 +20,26 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ReservationService {
-
     public final ReservationRepository reservationRepository;
     public final MemberRepository memberRepository;
-    public final GalleryRepository galleryRepository;
 
+    // 전시 예약 리스트 10개씩 조회(관리자 전용)
+    public Page<Reservation> getList(int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        return reservationRepository.findAll(pageable);
+    }
+
+    // 로그인한 유저의 예약 목록을 DTO 페이징으로 조회
+    public Page<ReservationResponseDto> findByEmailPage(String email, int page) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
+
+        Pageable pageable = PageRequest.of(Math.max(page, 0), 10, Sort.by("createdAt").descending());
+        return reservationRepository.findByMember(member, pageable)
+                .map(ReservationResponseDto::from);
+    }
 
     //로그인한 유저의 예약 목록을 DTO로 변환해서 화면에 넘겨주는 메서드
-
     public List<ReservationResponseDto> findByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
@@ -97,13 +104,4 @@ public class ReservationService {
         }
         return reservation;
     }
-
-    // 10개씩 조회
-    public Page<Reservation> getList(int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
-        return reservationRepository.findAll(pageable);
-    }
-
-
 }
-
