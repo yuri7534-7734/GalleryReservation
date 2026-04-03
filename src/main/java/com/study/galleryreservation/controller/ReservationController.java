@@ -28,10 +28,13 @@ public class ReservationController {
 
     // 예약 리스트 패이지
     @GetMapping("/list")
-    public String reservationList(@RequestParam(defaultValue = "0") int page, Model model, HttpSession session) {
+    public String reservationList(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "") String keyword,
+                                  Model model, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        Page<ReservationResponseDto> reservationPage = reservationService.findByEmailPage(sessionUser.getEmail(), page);
+        Page<ReservationResponseDto> reservationPage = reservationService.findByEmailPage(sessionUser.getEmail(), page, keyword);
         model.addAttribute("page", reservationPage);
+        model.addAttribute("keyword", keyword);
         return "reservation/list";
     }
 

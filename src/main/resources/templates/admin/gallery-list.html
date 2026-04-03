@@ -143,14 +143,18 @@
                 <option value="INACTIVE">마감</option>
               </select>
             </div>
-            <div class="toolbarItem" style="flex: 1; max-width: 300px">
-              <label for="searchText">검색</label>
-              <input
-                id="searchText"
-                type="text"
-                placeholder="갤러리명 / 위치"
-              />
-            </div>
+            <form method="get" th:action="@{/admin/gallery/list}" style="flex:1;max-width:300px;display:contents">
+              <div class="toolbarItem" style="flex: 1; max-width: 300px">
+                <label for="searchText">검색</label>
+                <input
+                  id="searchText"
+                  name="keyword"
+                  type="text"
+                  placeholder="갤러리명 / 위치"
+                  th:value="${keyword}"
+                />
+              </div>
+            </form>
             <div style="margin-left: auto; padding-bottom: 0">
               <a
                 class="btn btn-primary invertHover"
@@ -247,7 +251,7 @@
             <a
               class="btn btn-small btn-ghost"
               th:if="${page.hasPrevious()}"
-              th:href="@{/admin/gallery/list(page=${page.number - 1})}"
+              th:href="@{/admin/gallery/list(page=${page.number - 1}, keyword=${keyword})}"
               >이전</a
             >
 
@@ -255,7 +259,7 @@
               class="btn btn-small"
               th:each="p : ${#numbers.sequence(0, page.totalPages - 1)}"
               th:classappend="${p == page.number} ? ' btn-primary' : ' btn-ghost'"
-              th:href="@{/admin/gallery/list(page=${p})}"
+              th:href="@{/admin/gallery/list(page=${p}, keyword=${keyword})}"
               th:text="${p + 1}"
               >1</a
             >
@@ -263,7 +267,7 @@
             <a
               class="btn btn-small btn-ghost"
               th:if="${page.hasNext()}"
-              th:href="@{/admin/gallery/list(page=${page.number + 1})}"
+              th:href="@{/admin/gallery/list(page=${page.number + 1}, keyword=${keyword})}"
               >다음</a
             >
           </div>
@@ -344,22 +348,16 @@
 
     <script>
       (function () {
-        const search = document.getElementById("searchText");
         const status = document.getElementById("statusFilter");
         const rows = document.querySelectorAll("#galleryRows tr[data-status]");
-        if (!search || !status) return;
+        if (!status) return;
         function apply() {
-          const q = (search.value || "").toLowerCase().trim();
           const s = status.value || "ALL";
           rows.forEach(function (tr) {
-            const text = (tr.innerText || "").toLowerCase();
             const st = tr.getAttribute("data-status") || "";
-            const hitTx = !q || text.includes(q);
-            const hitSt = s === "ALL" || st === s;
-            tr.style.display = hitTx && hitSt ? "" : "none";
+            tr.style.display = s === "ALL" || st === s ? "" : "none";
           });
         }
-        search.addEventListener("input", apply);
         status.addEventListener("change", apply);
       })();
     </script>
