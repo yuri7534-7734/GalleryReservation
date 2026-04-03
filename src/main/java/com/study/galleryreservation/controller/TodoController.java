@@ -6,6 +6,7 @@ import com.study.galleryreservation.dto.todo.TodoResponseDto;
 import com.study.galleryreservation.dto.todo.TodoUpdateRequestDto;
 import com.study.galleryreservation.repository.MemberRepository;
 import com.study.galleryreservation.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,7 @@ public class TodoController {
 
     // 새 할일 작성
     @PostMapping("/create")
-    public String create(@ModelAttribute TodoCreateRequestDto dto, Principal principal) {
+    public String create(@Valid@ModelAttribute TodoCreateRequestDto dto, Principal principal) {
         Member member = memberRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new IllegalArgumentException("로그인 사용자를 찾을 수 없습니다."));
         todoService.create(member.getId(), dto);
@@ -81,7 +82,7 @@ public class TodoController {
 
     // 할일 수정하기
     @PostMapping("/update/{id}")
-    public String update(@PathVariable Long id,
+    public String update(@Valid @PathVariable Long id,
                          @ModelAttribute TodoUpdateRequestDto dto,
                          Principal principal,
                          RedirectAttributes redirectAttributes) {

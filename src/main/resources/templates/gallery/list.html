@@ -1,8 +1,8 @@
 <!doctype html>
 <html
-  lang="ko"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
 >
   <head>
     <meta charset="UTF-8" />
@@ -170,8 +170,6 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        min-height: 0;
-        box-sizing: border-box;
       }
       .galleryCardDesc {
         font-size: 13.5px;
@@ -333,7 +331,19 @@
             >
           </div>
         </div>
-      </nav>
+        <button class="hamburger" type="button"
+                onclick="document.getElementById('mobileMenu').dataset.open=document.getElementById('mobileMenu').dataset.open==='true'?'false':'true'">☰</button>
+      </div>
+    </div>
+    <div id="mobileMenu">
+      <div class="mobileMenuInner">
+        <a class="navLink" th:href="@{/gallery/list}">전시·관람</a>
+        <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/reservation/list}">내 예약</a>
+        <a class="navLink" sec:authorize="isAuthenticated()" th:href="@{/todo/list}">할 일</a>
+        <a class="navLink" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/gallery/list}">관리자</a>
+      </div>
+    </div>
+  </nav>
 
       <main>
         <!-- PAGE HEADER -->
@@ -522,20 +532,52 @@
       </footer>
     </div>
 
-    <script>
-      (function () {
-        const q = document.getElementById("q");
-        const region = document.getElementById("region");
-        const minCap = document.getElementById("minCap");
-        const applyBtn = document.getElementById("applyFilter");
-        const emptyState = document.getElementById("emptyState");
-        if (!q || !region || !minCap) return;
+    <!-- CONTENT: 본문만 일반 .container(기존 중앙 영역), 필터는 fixed 날개 -->
+    <div class="galleryListWithWing">
+      <div class="container">
+        <section class="galleryPanel">
+          <div class="galleryMeta" id="galleryFilterAlign">
+            <div>
+              <div class="galleryMetaTitle">전시 공간</div>
+              <div class="galleryMetaSub">카드를 클릭하면 상세 및 예약 화면으로 이동합니다.</div>
+            </div>
+            <span class="badge badge-warn">실시간</span>
+          </div>
 
-        function apply() {
-          const query = (q.value || "").toLowerCase().trim();
-          const r = region.value || "ALL";
-          const cap = Number(minCap.value || 1);
-          let visibleCount = 0;
+          <div class="galleryGrid" id="galleryCardGrid">
+            <article
+                    th:each="gallery : ${galleries}"
+                    class="galleryCard"
+                    th:data-floor-zone="${gallery.floorZone}"
+                    th:data-cap="${gallery.capacity}"
+                    th:data-status="${gallery.isActive}"
+            >
+              <a th:href="@{/gallery/detail(id=${gallery.id})}">
+                <div class="galleryThumb">
+                  <img
+                          th:if="${gallery.coverImageUrlForDisplay != null}"
+                          th:src="${gallery.coverImageUrlForDisplay}"
+                          class="galleryThumbBg"
+                          alt=""
+                  />
+                  <div class="galleryThumbOverlay"></div>
+                  <div class="galleryThumbLabel">
+                    <div class="galleryThumbName" th:text="${gallery.name}">갤러리명</div>
+                    <div
+                            class="galleryThumbMeta"
+                            th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : '층') + ' · ' + (gallery.location != null ? gallery.location : '') + ' · ' + gallery.capacity + '석'}"
+                    >
+                      위치 · 석수
+                    </div>
+                  </div>
+                </div>
+                <div class="galleryCardBody">
+                  <div class="galleryCardDesc" th:text="${gallery.description}">소개</div>
+                  <span class="galleryCardBadge" th:classappend="${gallery.isActive} ? ' badge badge-ok' : ' badge badge-danger'" th:text="${gallery.isActive} ? '운영중' : '마감'">상태</span>
+                </div>
+              </a>
+            </article>
+          </div>
 
           document
             .querySelectorAll("#galleryCardGrid article")
@@ -555,11 +597,107 @@
             emptyState.style.display = visibleCount === 0 ? "block" : "none";
         }
 
-        [q, minCap].forEach((el) => el.addEventListener("input", apply));
-        region.addEventListener("change", apply);
-        if (applyBtn) applyBtn.addEventListener("click", apply);
-        apply();
-      })();
-    </script>
-  </body>
+  <footer>
+    <div class="footerInner">
+      <div>
+        <div class="footerBrand">Art Museum</div>
+        <div class="footerDesc">국립현대미술관 예약 시스템<br/>미술 작품과 공간을 예약하세요.</div>
+      </div>
+      <div style="display:flex;gap:48px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">관람 안내</div>
+          <div class="footerLinks" style="flex-direction:column;gap:10px">
+            <a th:href="@{/gallery/list}">전시 목록</a>
+            <a href="#">관람 시간</a>
+            <a href="#">오시는 길</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">계정</div>
+          <div class="footerLinks" style="flex-direction:column;gap:10px">
+            <a th:href="@{/member/login}">로그인</a>
+            <a th:href="@{/member/join}">회원가입</a>
+            <a th:href="@{/reservation/list}">내 예약</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footerBottom">© 2026 Art Museum Reservation. All rights reserved.</div>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    const q = document.getElementById("q");
+    const region = document.getElementById("region");
+    const minCap = document.getElementById("minCap");
+    const applyBtn = document.getElementById("applyFilter");
+    const emptyState = document.getElementById("emptyState");
+    if (!q || !region || !minCap) return;
+
+    function apply() {
+      const query = (q.value || "").toLowerCase().trim();
+      const r = region.value || "ALL";
+      const cap = Number(minCap.value || 1);
+      let visibleCount = 0;
+
+      document.querySelectorAll("#galleryCardGrid article").forEach((card) => {
+        const text = (card.innerText || "").toLowerCase();
+        const fz = card.getAttribute("data-floor-zone") || "";
+        const cCap = Number(card.getAttribute("data-cap") || 0);
+        const hitText = !query || text.includes(query);
+        const hitRegion = r === "ALL" || fz === r;
+        const hitCap = cCap >= cap;
+        const show = hitText && hitRegion && hitCap;
+        card.style.display = show ? "" : "none";
+        if (show) visibleCount++;
+      });
+
+      if (emptyState) emptyState.style.display = visibleCount === 0 ? "block" : "none";
+    }
+
+    [q, minCap].forEach((el) => el.addEventListener("input", apply));
+    region.addEventListener("change", apply);
+    if (applyBtn) applyBtn.addEventListener("click", apply);
+    apply();
+  })();
+
+  (function () {
+    var wing = document.querySelector(".filterWing.filterPanel");
+    var anchor = document.getElementById("galleryFilterAlign");
+    if (!wing || !anchor) return;
+
+    function navHeightPx() {
+      var v = getComputedStyle(document.documentElement).getPropertyValue("--nav-h").trim();
+      if (v.endsWith("px")) return parseFloat(v) || 64;
+      return 64;
+    }
+
+    function syncFilterWingToRealtimeRow() {
+      if (window.matchMedia("(max-width: 900px)").matches) {
+        wing.style.top = "";
+        wing.style.maxHeight = "";
+        return;
+      }
+      var navH = navHeightPx();
+      var topPx = Math.max(navH + 6, anchor.getBoundingClientRect().top);
+      wing.style.top = topPx + "px";
+      wing.style.maxHeight = Math.max(200, window.innerHeight - topPx - 24) + "px";
+    }
+
+    window.addEventListener("load", function () {
+      syncFilterWingToRealtimeRow();
+      requestAnimationFrame(syncFilterWingToRealtimeRow);
+    });
+    window.addEventListener("resize", syncFilterWingToRealtimeRow);
+    window.addEventListener("scroll", syncFilterWingToRealtimeRow, { passive: true });
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", syncFilterWingToRealtimeRow);
+    } else {
+      syncFilterWingToRealtimeRow();
+      requestAnimationFrame(syncFilterWingToRealtimeRow);
+    }
+  })();
+</script>
+</body>
 </html>
