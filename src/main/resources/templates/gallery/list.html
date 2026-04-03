@@ -56,6 +56,10 @@
       }
       .galleryCardBadge { flex-shrink: 0; margin-top: auto; align-self: flex-start; }
 
+      .galleryCard--inactive {
+        opacity: 0.45;
+        pointer-events: none;
+      }
       .emptyState { padding: 48px 24px; text-align: center; color: var(--muted); margin-top: 1px; border: 1px solid var(--stroke); background: var(--bg1); }
       .emptyStateTitle { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
 
@@ -287,8 +291,18 @@
           if (emptyState) emptyState.style.display = visibleCount === 0 ? "block" : "none";
         }
 
-        q.addEventListener("keydown", (e) => { if (e.key === "Click") apply(); });
-        region.addEventListener("keydown", (e) => { if (e.key === "Click") apply(); });
+        const grid = document.getElementById("galleryCardGrid");
+        if(grid){
+          Array.from(grid.querySelectorAll("article")).forEach(card => {
+            if (card.getAttribute("data-status") === "false") {
+              card.classList.add("galleryCard--inactive");
+              grid.appendChild(card);
+            }
+          })
+        }
+
+        // q.addEventListener("keydown", (e) => { if (e.key === "Enter") apply(); });
+        // region.addEventListener("keydown", (e) => { if (e.key === "Click") apply(); });
         if (applyBtn) applyBtn.addEventListener("click", apply);
         apply();
       })();
