@@ -22,7 +22,7 @@ public class TodoUpdateRequestDto {
 
     private String content;
 
-    private Boolean isDone;
+    private boolean isDone;
 
     private LocalDate dueDate;
 

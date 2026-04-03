@@ -479,7 +479,7 @@
                 </tr>
               </thead>
               <tbody id="todoRows">
-                <tr th:if="${todos == null or #lists.isEmpty(todos)}">
+                <tr th:if="${todos == null or #lists.isEmpty(todos.content)}">
                   <td
                     colspan="4"
                     class="helpText"
@@ -488,7 +488,7 @@
                     등록된 할 일이 없습니다. 새 할 일을 만들어보세요.
                   </td>
                 </tr>
-                <tr th:each="todo : ${todos}" th:data-status="${todo.isDone}">
+                <tr th:each="todo : ${todos.content}" th:data-status="${todo.isDone}">
                   <td th:text="${todo.dueDate}">2026-04-03</td>
                   <td>
                     <div
@@ -545,6 +545,26 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- 페이징 버튼 -->
+          <div style="display:flex;justify-content:center;gap:6px;margin-top:20px;flex-wrap:wrap;"
+               th:if="${todos != null and todos.totalPages > 1}">
+
+            <a class="btn btn-small btn-ghost"
+               th:href="@{/todo/list(page=${currentPage - 1})}"
+               th:if="${currentPage > 0}">이전</a>
+
+            <th:block th:each="i : ${#numbers.sequence(0, todos.totalPages - 1)}">
+              <a th:href="@{/todo/list(page=${i})}"
+                 th:text="${i + 1}"
+                 th:class="${i == currentPage} ? 'btn btn-small btn-primary' : 'btn btn-small btn-ghost'">
+              </a>
+            </th:block>
+
+            <a class="btn btn-small btn-ghost"
+               th:href="@{/todo/list(page=${currentPage + 1})}"
+               th:if="${currentPage < todos.totalPages - 1}">다음</a>
           </div>
         </section>
       </main>
