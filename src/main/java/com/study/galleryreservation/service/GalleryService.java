@@ -5,7 +5,6 @@ import com.study.galleryreservation.domain.member.Member;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.reservation.ReservationStatus;
 import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
-import com.study.galleryreservation.dto.gallery.GalleryResponseDto;
 import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.repository.GalleryRepository;
@@ -21,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
