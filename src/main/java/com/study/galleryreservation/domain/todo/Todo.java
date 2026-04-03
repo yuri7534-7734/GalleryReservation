@@ -26,7 +26,7 @@ public class Todo {
     @Column(name="is_done",nullable = false)
     private boolean isDone;
 
-    @Column(name = "due_date", updatable = false)
+    @Column(name = "due_date")
     private LocalDate dueDate;
 
     @Column(name = "created_at", updatable = false,nullable = false)
