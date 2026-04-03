@@ -27,6 +27,7 @@ public class GalleryController {
     private final GalleryRepository galleryRepository;
     private final GalleryService galleryService;
 
+    // 갤러리 전시 작품 상세 보기
     @GetMapping("/gallery/detail")
     public String galleryDetail(@RequestParam("id") Long id, Model model) {
         Gallery gallery = galleryRepository.findById(id)

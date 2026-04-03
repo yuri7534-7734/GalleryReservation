@@ -1,12 +1,15 @@
 package com.study.galleryreservation.controller;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
+import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
 import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
+import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.service.GalleryService;
 import com.study.galleryreservation.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,8 +26,10 @@ public class AdminController {
 
     // 갤러리 관리 페이지 이동(관리자 전용)
     @GetMapping("/gallery/list")
-    public String adminGalleryList(Model model){
-        model.addAttribute("galleries", galleryService.findAll());
+    public String adminGalleryList(@RequestParam(defaultValue = "0") int page, Model model){
+        int currentPage = Math.max(page, 0);
+        Page<Gallery> galleryPage = galleryService.getList(currentPage);
+        model.addAttribute("page", galleryPage);
         return "admin/gallery-list";
     }
 
@@ -58,9 +63,11 @@ public class AdminController {
 
     // 전체 예약 목록(관리자 전용)
     @GetMapping("/reservation/list")
-    public String reservationList(Model model){
-        model.addAttribute("reservations",reservationService.findAllByOrderByIdAsc());
-
+    public String reservationList(@RequestParam(defaultValue = "0") int page, Model model){
+        int currentPage = Math.max(page, 0);
+        Page<ReservationResponseDto> reservationPage = reservationService.getList(currentPage)
+                .map(ReservationResponseDto::from);
+        model.addAttribute("page", reservationPage);
         return "admin/reservation-list";
     }
 
