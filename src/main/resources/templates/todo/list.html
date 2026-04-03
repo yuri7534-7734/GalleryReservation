@@ -26,7 +26,11 @@
       thead th { font-size: 11px; border-bottom: 1px solid var(--stroke-dark); }
       tbody td { padding: 16px; }
       .tdTitle { font-weight: 700; color: var(--text); margin-bottom: 3px; }
-      .tdDesc { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+      .tdDesc { color: var(--muted); font-size: 12.5px; margin-top: 3px;
+        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 3;          /* 최대 3줄까지만 표시 */
+        -webkit-box-orient: vertical;   /* 세로 방향으로 박스 정렬 */
+        overflow: hidden;               /* 넘치는 텍스트 숨김 */ }
       .pageHeader { padding: 40px 0 32px; margin-bottom: 40px; }
     </style>
   </head>

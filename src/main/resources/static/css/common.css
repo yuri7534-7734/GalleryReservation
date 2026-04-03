@@ -142,7 +142,11 @@ tbody td { padding: 14px 16px; border-bottom: 1px solid var(--stroke); color: va
 tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover td { background: var(--bg1); }
 .tdMain { font-weight: 700; letter-spacing: -0.1px; }
-.tdSub  { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.tdSub  { font-size: 12.5px; color: var(--muted); margin-top: 3px;
+  display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+  -webkit-line-clamp: 3;          /* 최대 3줄까지만 표시 */
+  -webkit-box-orient: vertical;   /* 세로 방향으로 박스 정렬 */
+  overflow: hidden;               /* 넘치는 텍스트 숨김 */}
 
 /* ── Modal ──────────────────────────────────── */
 .modalOverlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; }
