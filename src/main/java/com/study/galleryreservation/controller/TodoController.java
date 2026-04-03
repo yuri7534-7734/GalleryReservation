@@ -22,6 +22,7 @@ public class TodoController {
     private final TodoService todoService;
     private final MemberRepository memberRepository;
 
+    // 할일 리스트 전체 조회
     @GetMapping("/list")
     public String list(
             @RequestParam(required = false) Long memberId,
@@ -37,12 +38,14 @@ public class TodoController {
         return "todo/list";
     }
 
+    // 새 할일 작성 페이지로 이동
     @GetMapping("/form")
     public String form(Model model) {
         model.addAttribute("todoCreateRequestDto", new TodoCreateRequestDto());
         return "todo/form";
     }
 
+    // 새 할일 작성
     @PostMapping("/create")
     public String create(@ModelAttribute TodoCreateRequestDto dto, Principal principal) {
         Member member = memberRepository.findByUsername(principal.getName())
@@ -51,6 +54,7 @@ public class TodoController {
         return "redirect:/todo/list";
     }
 
+    // 할일 수정 페이지로 이동
     @GetMapping("/update/{id}")
     public String updateForm(@PathVariable Long id,
                              Principal principal,
@@ -75,6 +79,7 @@ public class TodoController {
         return "todo/update";
     }
 
+    // 할일 수정하기
     @PostMapping("/update/{id}")
     public String update(@PathVariable Long id,
                          @ModelAttribute TodoUpdateRequestDto dto,
@@ -91,6 +96,7 @@ public class TodoController {
         return "redirect:/todo/list";
     }
 
+    // 할일 삭제하기
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Long id,
                          Principal principal,
