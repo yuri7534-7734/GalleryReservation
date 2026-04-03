@@ -6,6 +6,10 @@ import com.study.galleryreservation.dto.gallery.GalleryResponseDto;
 import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
 import com.study.galleryreservation.repository.GalleryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,5 +87,12 @@ public class GalleryService {
                 new IllegalArgumentException("작품을 찾을 수 없어 삭제가 불가능합니다."));
 
         galleryRepository.delete(gallery);
+    }
+
+    // 갤러리 등록 리스트 페이징(10개)-관리자 전용
+    @Transactional
+    public Page<Gallery> getList(int page){
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("id"));
+        return galleryRepository.findAll(pageable);
     }
 }
