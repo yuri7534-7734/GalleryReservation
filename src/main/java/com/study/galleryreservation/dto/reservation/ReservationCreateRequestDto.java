@@ -1,5 +1,6 @@
 package com.study.galleryreservation.dto.reservation;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -29,7 +30,7 @@ public class ReservationCreateRequestDto {
     @NotNull(message = "인원을 확인해주세요")
     private Integer guests;
 
-    @NotNull(message = "연락처를 입력해주세요")
+    @NotBlank(message = "연락처를 입력해주세요")
     @Pattern(regexp = "^01[0-9]-?\\d{3,4}-?\\d{4}$", message = "올바른 전화번호 형식을 입력해주세요 (예: 010-1234-5678)")
     private String contact;
 }
