@@ -347,8 +347,7 @@ erDiagram
 
 | 김태혁(팀장👑) | 김민준 | 이유리 | 박준현 |
 |---|---|---|---|
-| Back-End | Back-End | Back-End | Back-End |
-|  |  | Front-End |  |
+| Back-End | Back-End | Back-End / Front-End | Back-End |
 | 회원가입 / 로그인 | 예약 기능 구현 | 갤러리 기능 구현 | 할 일(Todo) 기능 구현 |
 | 소셜 로그인 (카카오, 네이버) | 예약 목록 / 상세 / 취소 | 갤러리 목록 / 상세 | 할 일 등록 / 수정 / 삭제 |
 | Spring Security 설정 | | | |
