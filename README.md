@@ -111,58 +111,59 @@
 
 ## 🗂 프로젝트 구조
 
+```
 src/main/java/com/study/galleryreservation/
-├── config/ # 설정 클래스
-│ ├── SecurityConfig.java # Spring Security 설정
-│ ├── CustomAuthenticationSuccessHandler.java
-│ ├── OAuthAttributes.java # OAuth2 속성 매핑
-│ └── CustomUserDetailsService.java
+├── config/                         # 설정 클래스
+│   ├── SecurityConfig.java         # Spring Security 설정
+│   ├── CustomAuthenticationSuccessHandler.java
+│   ├── OAuthAttributes.java        # OAuth2 속성 매핑
+│   └── CustomUserDetailsService.java
 │
-├── controller/ # 컨트롤러
-│ ├── AdminController.java # 관리자 전용 (갤러리 관리, 예약 승인)
-│ ├── MemberController.java # 회원가입 / 로그인
-│ ├── ReservationController.java # 예약 신청 / 조회 / 취소
-│ ├── TodoController.java # 할 일 CRUD
-│ └── ViewController.java # 공통 뷰 라우팅
+├── controller/                     # 컨트롤러
+│   ├── AdminController.java        # 관리자 전용 (갤러리 관리, 예약 승인)
+│   ├── MemberController.java       # 회원가입 / 로그인
+│   ├── ReservationController.java  # 예약 신청 / 조회 / 취소
+│   ├── TodoController.java         # 할 일 CRUD
+│   └── ViewController.java         # 공통 뷰 라우팅
 │
-├── domain/ # 엔티티
-│ ├── gallery/Gallery.java
-│ ├── member/Member.java
-│ ├── member/MemberRole.java
-│ ├── reservation/Reservation.java
-│ ├── reservation/ReservationStatus.java
-│ └── todo/Todo.java
+├── domain/                         # 엔티티
+│   ├── gallery/Gallery.java
+│   ├── member/Member.java
+│   ├── member/MemberRole.java
+│   ├── reservation/Reservation.java
+│   ├── reservation/ReservationStatus.java
+│   └── todo/Todo.java
 │
-├── dto/ # DTO
-│ ├── gallery/
-│ ├── member/
-│ ├── reservation/
-│ └── todo/
+├── dto/                            # DTO
+│   ├── gallery/
+│   ├── member/
+│   ├── reservation/
+│   └── todo/
 │
-├── repository/ # JPA 레포지토리
-│ ├── GalleryRepository.java
-│ ├── MemberRepository.java
-│ ├── ReservationRepository.java
-│ └── TodoRepository.java
+├── repository/                     # JPA 레포지토리
+│   ├── GalleryRepository.java
+│   ├── MemberRepository.java
+│   ├── ReservationRepository.java
+│   └── TodoRepository.java
 │
-└── service/ # 서비스
-├── GalleryService.java
-├── MemberService.java
-├── ReservationService.java
-├── TodoService.java
-└── CustomOAuth2UserService.java
+└── service/                        # 서비스
+    ├── GalleryService.java
+    ├── MemberService.java
+    ├── ReservationService.java
+    ├── TodoService.java
+    └── CustomOAuth2UserService.java
 
 src/main/resources/
 ├── templates/
-│ ├── index.html # 메인 페이지
-│ ├── admin/ # 관리자 페이지
-│ ├── gallery/ # 갤러리 목록/상세
-│ ├── member/ # 로그인/회원가입
-│ ├── reservation/ # 예약 폼/목록
-│ └── todo/ # 할 일 폼/목록/수정
+│   ├── index.html                  # 메인 페이지
+│   ├── admin/                      # 관리자 페이지
+│   ├── gallery/                    # 갤러리 목록/상세
+│   ├── member/                     # 로그인/회원가입
+│   ├── reservation/                # 예약 폼/목록
+│   └── todo/                       # 할 일 폼/목록/수정
 ├── application.yml
 └── db.sql
-
+```
 
 ---
 
@@ -235,6 +236,16 @@ erDiagram
     MEMBER ||--o{ RESERVATION : "예약"
     MEMBER ||--o{ TODO : "작성"
     GALLERY ||--o{ RESERVATION : "포함"
-💙 팀원 소개
-김태혁(팀장👑)	김민준	이유리	박준현
-Back-End <br> 회원가입 / 로그인 <br> 소셜 로그인 (카카오, 네이버) <br> Spring Security 설정 <br> 관리자 페이지	Back-End <br> 예약 기능 구현 <br> 예약 목록 / 상세 / 취소	Back-End <br> 갤러리 기능 구현 <br> 갤러리 목록 / 상세	Back-End <br> 할 일(Todo) 기능 구현 <br> 할 일 등록 / 수정 / 삭제
+```
+
+---
+
+## 💙 팀원 소개
+
+| 김태혁(팀장👑) | 김민준 | 이유리 | 박준현 |
+|---|---|---|---|
+| Back-End | Back-End | Back-End | Back-End |
+| 회원가입 / 로그인 | 예약 기능 구현 | 갤러리 기능 구현 | 할 일(Todo) 기능 구현 |
+| 소셜 로그인 (카카오, 네이버) | 예약 목록 / 상세 / 취소 | 갤러리 목록 / 상세 | 할 일 등록 / 수정 / 삭제 |
+| Spring Security 설정 | | | |
+| 관리자 페이지 | | | |
