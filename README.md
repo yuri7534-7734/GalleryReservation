@@ -121,6 +121,68 @@
 
 ---
 
+## 📡 API 명세
+
+### 👤 회원 (Member)
+
+| Method | URL | 설명 | 권한 |
+|:------:|-----|------|:----:|
+| `GET` | `/member/login` | 로그인 페이지 | - |
+| `GET` | `/member/join` | 회원가입 페이지 | - |
+| `POST` | `/member/join` | 회원가입 처리 | - |
+
+---
+
+### 🏛️ 갤러리 (Gallery)
+
+| Method | URL | 설명 | 권한 |
+|:------:|-----|------|:----:|
+| `GET` | `/` | 메인 페이지 | - |
+| `GET` | `/gallery/list` | 갤러리 목록 조회 | - |
+| `GET` | `/gallery/detail?galleryId={id}` | 갤러리 상세 조회 + 예약 폼 | - |
+| `POST` | `/gallery/detail` | 예약 신청 | `USER` |
+
+---
+
+### 🗓️ 예약 (Reservation)
+
+| Method | URL | 설명 | 권한 |
+|:------:|-----|------|:----:|
+| `GET` | `/reservation/list` | 내 예약 목록 조회 | `USER` |
+| `GET` | `/reservation/detail/{id}` | 예약 상세 조회 | `USER` |
+| `POST` | `/reservation/cancel/{id}` | 예약 취소 | `USER` |
+
+---
+
+### ✅ 할 일 (Todo)
+
+| Method | URL | 설명 | 권한 |
+|:------:|-----|------|:----:|
+| `GET` | `/todo/list` | 할 일 목록 조회 | `USER` |
+| `GET` | `/todo/form` | 할 일 등록 페이지 | `USER` |
+| `POST` | `/todo/create` | 할 일 등록 | `USER` |
+| `GET` | `/todo/update/{id}` | 할 일 수정 페이지 | `USER` |
+| `POST` | `/todo/update/{id}` | 할 일 수정 | `USER` |
+| `POST` | `/todo/delete/{id}` | 할 일 삭제 | `USER` |
+
+---
+
+### 🔧 관리자 (Admin)
+
+| Method | URL | 설명 | 권한 |
+|:------:|-----|------|:----:|
+| `GET` | `/admin/gallery/list` | 갤러리 목록 관리 | `ADMIN` |
+| `GET` | `/admin/gallery/form` | 갤러리 등록 페이지 | `ADMIN` |
+| `POST` | `/admin/gallery/form` | 갤러리 등록 | `ADMIN` |
+| `GET` | `/admin/gallery/edit/{id}` | 갤러리 수정 페이지 | `ADMIN` |
+| `POST` | `/admin/gallery/edit/{id}` | 갤러리 수정 | `ADMIN` |
+| `POST` | `/admin/gallery/delete/{id}` | 갤러리 삭제 | `ADMIN` |
+| `GET` | `/admin/reservation/list` | 전체 예약 목록 관리 | `ADMIN` |
+| `POST` | `/admin/reservation/approve/{id}` | 예약 승인 | `ADMIN` |
+| `POST` | `/admin/reservation/reject/{id}` | 예약 거절 | `ADMIN` |
+
+---
+
 ## 🗂 프로젝트 구조
 
 ```
