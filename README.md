@@ -131,6 +131,13 @@
 
 ![관리자 예약 관리](readme_assets/admin-reservation.png)
 
+- **핳일 등록/수정**
+> 전체 예약 목록을 조회하고 예약을 승인하거나 거절할 수 있다.
+
+![할일 리스트](readme_assets/todo-list.png)
+![할일 등록](readme_assets/todo-add.png)
+![할일 수정](readme_assets/todo-edit.png)
+
 ---
 
 ## 📡 API 명세
