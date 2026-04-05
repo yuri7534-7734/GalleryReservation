@@ -13,7 +13,13 @@
   <style>
     /* 전시 상세 전용 */
     .formGrid { gap: 14px; }
-    input, select { padding: 12px 14px; font-size: 14.5px; }
+    input { padding: 12px 14px; font-size: 14.5px; }
+    select {
+      padding: 12px 14px;
+      padding-right: 42px;
+      font-size: 14.5px;
+      background-position: right 13px center;
+    }
 
     /* ── 좌우 분할 레이아웃 ── */
     .detailLayout {
@@ -382,7 +388,10 @@
             </div>
             <div style="grid-column: 1 / -1">
               <label for="rContact">연락처</label>
-              <input id="rContact" name="contact" type="tel" placeholder="010-0000-0000" />
+              <input id="rContact" name="contact" type="tel" placeholder="하이픈 없이 입력해주세요" />
+              <!-- 에러가 있으면 보여주는 message가 담긴 span -->
+              <span th:if="${contactError}" th:text="${contactError}"
+                    style="color: red; font-size: 12px;"></span>
             </div>
           </div>
 
