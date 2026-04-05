@@ -110,6 +110,7 @@ input, select, textarea {
   width: 100%; padding: 11px 13px; border-radius: var(--radius);
   border: 1px solid var(--stroke-dark); background: var(--bg0); color: var(--text);
   outline: none; font-size: 14px; transition: border-color 0.12s; font-family: inherit;
+
 }
 textarea { min-height: 120px; resize: vertical; }
 input:focus, select:focus, textarea:focus { border-color: var(--text); }
