@@ -72,7 +72,7 @@
             <option value="CANCELLED">취소</option>
           </select>
         </div>
-        <form method="get" th:action="@{/admin/reservation/list}" style="flex:1;max-width:320px;display:contents">
+        <form method="get" th:action="@{/admin/reservation/list}" style="flex:1;max-width:320px;">
           <div class="toolbarItem" style="flex:1;max-width:320px">
             <label for="resSearch">검색</label>
             <input id="resSearch" name="keyword" type="text" placeholder="갤러리명" th:value="${keyword}"/>

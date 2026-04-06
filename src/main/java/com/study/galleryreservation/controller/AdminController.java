@@ -71,6 +71,7 @@ public class AdminController {
                                   @RequestParam(defaultValue = "") String keyword,
                                   Model model){
         int currentPage = Math.max(page, 0);
+        //findByGalleryNameIgnoreSpace
         Page<ReservationResponseDto> reservationPage = reservationService.getList(currentPage, keyword)
                 .map(ReservationResponseDto::from);
         model.addAttribute("page", reservationPage);

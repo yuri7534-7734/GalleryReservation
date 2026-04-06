@@ -1,10 +1,7 @@
 package com.study.galleryreservation.controller;
 
-import com.study.galleryreservation.domain.gallery.Gallery;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.session.SessionUser;
-import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
-import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
 import com.study.galleryreservation.service.GalleryService;
@@ -15,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,9 +29,11 @@ public class ReservationController {
                                   Model model, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
         Page<ReservationResponseDto> reservationPage = reservationService.findByEmailPage(sessionUser.getEmail(), page, keyword);
+
         model.addAttribute("page", reservationPage);
         model.addAttribute("keyword", keyword);
         return "reservation/list";
+
     }
 
     // 예약 상세 페이지
@@ -56,3 +54,4 @@ public class ReservationController {
         return "redirect:/reservation/list";
     }
 }
+

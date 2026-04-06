@@ -4,47 +4,43 @@
         xmlns:th="http://www.thymeleaf.org"
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
 >
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>갤러리 등록 — Art Museum Admin</title>
-  <link rel="stylesheet" th:href="@{/css/common.css}"/>
-  <style>
-    /* 갤러리 등록 전용 */
-    :focus-visible { outline: none; box-shadow: var(--ring); border-color: var(--text) !important; }
-    input:focus, select:focus, textarea:focus { box-shadow: var(--ring); }
-    .pageHeader { padding: 40px 0 32px; margin-bottom: 40px; }
-    .thumb { height: 200px; border: 1px solid var(--stroke); background: #111111; overflow: hidden; position: relative; }
-    .thumbLabel { position: absolute; left: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
-    .thumbTitle { font-weight: 900; font-size: 18px; color: #ffffff; letter-spacing: -.3px; }
-    .thumbMeta { color: rgba(255,255,255,.65); font-weight: 600; font-size: 12.5px; }
-    .guideBox { background: var(--bg1); border: 1px solid var(--stroke); padding: 20px; }
-    .guideBox h3 { margin: 0 0 10px; font-size: 15px; font-weight: 700; }
-    .guideBox p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.75; }
-    .formLayoutFixed {
-      align-items: start;
-    }
-    .previewDesc {
-      margin-top: 2px;
-      color: var(--text);
-      line-height: 1.65;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
-      white-space: normal;
-      overflow-wrap: anywhere;
-      word-break: break-word;
-    }
-  </style>
-</head>
-<body>
-<div class="appShell">
-  <nav class="navbar">
-    <div class="navbarInner">
-      <a class="brand" th:href="@{/}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>갤러리 등록 — Art Museum Admin</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <style>
+      /* 갤러리 등록 전용 */
+      :focus-visible { outline: none; box-shadow: var(--ring); border-color: var(--text) !important; }
+      input:focus, select:focus, textarea:focus { box-shadow: var(--ring); }
+      .pageHeader { padding: 40px 0 32px; margin-bottom: 40px; }
+      .thumb { height: 200px; border: 1px solid var(--stroke); background: #111111; overflow: hidden; position: relative; }
+      .thumbLabel { position: absolute; left: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+      .thumbTitle { font-weight: 900; font-size: 18px; color: #ffffff; letter-spacing: -.3px; }
+      .thumbMeta { color: rgba(255,255,255,.65); font-weight: 600; font-size: 12.5px; }
+      .guideBox { background: var(--bg1); border: 1px solid var(--stroke); padding: 20px; }
+      .guideBox h3 { margin: 0 0 10px; font-size: 15px; font-weight: 700; }
+      .guideBox p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.75; }
+      .helpText {
+        width: 600px;
+        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 5;          /* 최대 3줄까지만 표시 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        resize: none;
+      }
+      #gDesc {
+        resize: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="appShell">
+      <nav class="navbar">
+        <div class="navbarInner">
+          <a class="brand" th:href="@{/}">
             <span class="brandMark">
               <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
                 <rect x="2" y="2" width="6" height="6"/><rect x="10" y="2" width="6" height="6"/>
@@ -113,29 +109,139 @@
             th:text="${errorMessage}"
     ></div>
 
-    <section class="grid grid-2 formLayoutFixed">
-      <div class="card cardPad">
-        <form
-                id="galleryForm"
-                th:action="${gallery != null} ? @{/admin/gallery/edit/{id}(id=${gallery.id})} : @{/admin/gallery/form}"
-                th:object="${galleryCreateRequestDto}"
-                method="post"
-                class="stack"
-        >
-          <input
-                  type="hidden"
-                  th:name="${_csrf.parameterName}"
-                  th:value="${_csrf.token}"
-          />
-          <div>
-            <div class="row">
-              <h2
-                      style="
+        <section class="grid grid-2" style="align-items: start; padding-bottom: 60px">
+          <div class="card cardPad">
+            <form
+              id="galleryForm"
+              th:action="${gallery != null} ? @{/admin/gallery/edit/{id}(id=${gallery.id})} : @{/admin/gallery/form}"
+              th:object="${galleryCreateRequestDto}"
+              method="post"
+              class="stack"
+            >
+              <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+              />
+              <div>
+                <div class="row">
+                  <h2
+                    style="
                       margin: 0;
                       font-size: 18px;
                       letter-spacing: -0.3px;
                       font-weight: 800;
                     "
+                  >
+                    기본 정보
+                  </h2>
+                  <a
+                    class="btn btn-ghost btn-small"
+                    href="#"
+                    th:href="@{/admin/gallery/list}"
+                    >목록으로</a
+                  >
+                </div>
+                <p class="helpText">
+                  갤러리명 · 위치 · 수용 인원은 예약 카드에 표시됩니다.
+                </p>
+              </div>
+
+              <div class="formGrid">
+                <div>
+                  <label for="gName">갤러리명</label>
+                  <input
+                    id="gName"
+                    th:field="*{name}"
+                    type="text"
+                    placeholder="예: Monochrome Hall"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="gLocation">위치</label>
+                  <input
+                    id="gLocation"
+                    th:field="*{location}"
+                    type="text"
+                    placeholder="예: 서울시 종로구 사직로 161"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="gFloorZone">층 / 구역</label>
+                  <select id="gFloorZone" th:field="*{floorZone}" required>
+                    <option value="1">1층</option>
+                    <option value="2">2층</option>
+                    <option value="3">3층</option>
+                    <option value="B">지하</option>
+                  </select>
+                  <div></div>
+                </div>
+                <div>
+                  <label for="gCapacity">수용 인원</label>
+                  <input
+                    id="gCapacity"
+                    th:field="*{capacity}"
+                    type="number"
+                    min="1"
+                    step="1"
+                    placeholder="예: 35"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="formGrid">
+                <div>
+                  <label for="gStartTime">운영 시작</label>
+                  <input
+                    id="gStartTime"
+                    th:field="*{startTime}"
+                    type="time"
+                    step="1800"
+                  />
+                </div>
+                <div>
+                  <label for="gEndTime">운영 종료</label>
+                  <input
+                    id="gEndTime"
+                    th:field="*{endTime}"
+                    type="time"
+                    step="1800"
+                  />
+                </div>
+              </div>
+              <p class="helpText" style="margin-top: -6px">
+                30분 단위로 선택할 수 있습니다. 비워 두면 등록 시 10:00 ~
+                18:00이 기본 적용됩니다.
+              </p>
+
+              <div>
+                <label for="gCover">커버 이미지 URL (선택)</label>
+                <input
+                  id="gCover"
+                  name="coverImageUrl"
+                  type="url"
+                  placeholder="https://example.com/cover.jpg"
+                />
+                <div class="helpText">
+                  이미지가 없으면 기본 배경이 적용됩니다.
+                </div>
+              </div>
+
+              <div>
+                <label for="gDesc">전시 소개</label>
+                <textarea
+                  id="gDesc"
+                  th:field="*{description}"
+                  placeholder="전시 공간의 분위기와 관람 포인트를 간단히 적어주세요."
+                ></textarea>
+              </div>
+
+              <div
+                class="row"
+                style="justify-content: flex-end; flex-wrap: wrap"
               >
                 기본 정보
               </h2>
@@ -151,111 +257,11 @@
             </p>
           </div>
 
-          <div class="formGrid">
-            <div>
-              <label for="gName">갤러리명</label>
-              <input
-                      id="gName"
-                      th:field="*{name}"
-                      type="text"
-                      placeholder="예: Monochrome Hall"
-                      required
-              />
-            </div>
-            <div>
-              <label for="gLocation">위치</label>
-              <input
-                      id="gLocation"
-                      th:field="*{location}"
-                      type="text"
-                      placeholder="예: 서울시 종로구 사직로 161"
-                      required
-              />
-            </div>
-            <div>
-              <label for="gFloorZone">층 / 구역</label>
-              <select id="gFloorZone" th:field="*{floorZone}" required>
-                <option value="1">1층</option>
-                <option value="2">2층</option>
-                <option value="3">3층</option>
-                <option value="B">지하</option>
-              </select>
-            </div>
-            <div>
-              <label for="gCapacity">수용 인원</label>
-              <input
-                      id="gCapacity"
-                      th:field="*{capacity}"
-                      type="number"
-                      min="1"
-                      step="1"
-                      placeholder="예: 35"
-                      required
-              />
-            </div>
-          </div>
-
-          <div class="formGrid">
-            <div>
-              <label for="gStartTime">운영 시작</label>
-              <input
-                      id="gStartTime"
-                      th:field="*{startTime}"
-                      type="time"
-                      step="1800"
-              />
-            </div>
-            <div>
-              <label for="gEndTime">운영 종료</label>
-              <input
-                      id="gEndTime"
-                      th:field="*{endTime}"
-                      type="time"
-                      step="1800"
-              />
-            </div>
-          </div>
-          <p class="helpText" style="margin-top: -6px">
-            30분 단위로 선택할 수 있습니다. 비워 두면 등록 시 10:00 ~
-            18:00이 기본 적용됩니다.
-          </p>
-
-          <div>
-            <label for="gCover">커버 이미지 URL (선택)</label>
-            <input
-                    id="gCover"
-                    name="coverImageUrl"
-                    type="url"
-                    placeholder="https://example.com/cover.jpg"
-            />
-            <div class="helpText">
-              이미지가 없으면 기본 배경이 적용됩니다.
-            </div>
-          </div>
-
-          <div>
-            <label for="gDesc">전시 소개</label>
-            <textarea
-                    id="gDesc"
-                    th:field="*{description}"
-                    placeholder="전시 공간의 분위기와 관람 포인트를 간단히 적어주세요."
-            ></textarea>
-          </div>
-
-          <div
-                  class="row"
-                  style="justify-content: flex-end; flex-wrap: wrap"
-          >
-            <button class="btn btn-primary" type="submit">등록하기</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="stack">
-        <div class="card cardPad">
-          <div class="row">
-            <h2
-                    style="
+          <div class="stack">
+            <div class="card cardPad" style="height: 600px">
+              <div class="row">
+                <h2
+                  style="
                     margin: 0;
                     font-size: 18px;
                     letter-spacing: -0.3px;
@@ -268,12 +274,12 @@
           </div>
           <div style="height: 14px"></div>
 
-          <div id="galleryPreview" class="thumb" style="height: 220px">
-            <div class="thumbLabel">
-              <div id="pName" class="thumbTitle">갤러리명</div>
-              <div id="pMeta" class="thumbMeta">위치 · 수용 인원</div>
-            </div>
-          </div>
+              <div id="galleryPreview" class="thumb" style="height: 300px">
+                <div class="thumbLabel">
+                  <div id="pName" class="thumbTitle">갤러리명</div>
+                  <div id="pMeta" class="thumbMeta">위치 · 수용 인원</div>
+                </div>
+              </div>
 
           <div style="height: 14px"></div>
           <div class="grid" style="gap: 10px">
