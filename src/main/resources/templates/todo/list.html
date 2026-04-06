@@ -240,10 +240,12 @@
 
         function apply() {
           const st = status.value || "ALL";
-          const q = (search.value || "").toLowerCase().trim();
+          const q = (search.value || "").toLowerCase().replace(/\s/g,"");
+
+
           rows.forEach((tr) => {
             const trSt = tr.getAttribute("data-status") || "false";
-            const text = (tr.innerText || "").toLowerCase();
+            const text = (tr.innerText || "").toLowerCase().replace(/\s/g, "");
             const hitSt = st === "ALL" || trSt === st;
             const hitTx = !q || text.includes(q);
             tr.style.display = hitSt && hitTx ? "" : "none";
