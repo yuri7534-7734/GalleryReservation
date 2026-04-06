@@ -67,7 +67,9 @@
 ### ✅ 메인
 
 ![메인 페이지](readme_assets/main1.png)
+
 ![메인 페이지](readme_assets/main2.png)
+
 ![메인 페이지](readme_assets/main3.png)
 
 ---
