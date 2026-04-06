@@ -295,3 +295,5 @@ erDiagram
 | 소셜 로그인 (카카오, 네이버) | 할 일 등록 / 수정 / 삭제 | 예약 목록 / 상세 / 취소 | 갤러리 목록 / 상세 |
 | Spring Security 설정 | | | |
 | 관리자 페이지 | | | |
+
+![API 명세서](readme_assets/ERD.png)
