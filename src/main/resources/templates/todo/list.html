@@ -254,8 +254,8 @@
         search.addEventListener("input", apply);
         search.addEventListener("keydown", function (e){
           if (e.key === "Enter") e.preventDefault();
+          apply();
         });
-        apply();
       })();
     </script>
   </body>
