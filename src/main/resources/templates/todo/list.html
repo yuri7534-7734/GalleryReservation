@@ -37,7 +37,15 @@
       table { min-width: 560px; }
       thead th { font-size: 11px; border-bottom: 1px solid var(--stroke-dark); }
       tbody td { padding: 16px; }
-      .tdTitle { font-weight: 700; color: var(--text); margin-bottom: 3px; }
+      .tdTitle {
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 3px;
+        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 1;          /* 최대 3줄까지만 표시 */
+        -webkit-box-orient: vertical;   /* 세로 방향으로 박스 정렬 */
+        overflow: hidden;               /* 넘치는 텍스트 숨김 */
+      }
       .tdDesc { color: var(--muted); font-size: 12.5px; margin-top: 3px;
         display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
         -webkit-line-clamp: 3;          /* 최대 3줄까지만 표시 */
@@ -226,6 +234,7 @@
       (function () {
         const status = document.getElementById("tStatus");
         const search = document.getElementById("tSearch");
+
         const rows = document.querySelectorAll("#todoRows tr[data-status]");
         if (!status || !search || !rows.length) return;
 
@@ -243,6 +252,9 @@
 
         status.addEventListener("change", apply);
         search.addEventListener("input", apply);
+        search.addEventListener("keydown", function (e){
+          if (e.key === "Enter") e.preventDefault();
+        });
         apply();
       })();
     </script>
