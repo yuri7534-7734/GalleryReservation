@@ -27,7 +27,7 @@ public class ReservationService {
     public Page<Reservation> getList(int page, String keyword) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
         if (keyword != null && !keyword.isBlank()) {
-            return reservationRepository.findByGalleryNameIgnoreSpace(keyword, pageable);
+            return reservationRepository.findByGallery_NameContainingIgnoreCase(keyword, pageable);
         }
         return reservationRepository.findAll(pageable);
     }
@@ -39,9 +39,7 @@ public class ReservationService {
 
         Pageable pageable = PageRequest.of(Math.max(page, 0), 10, Sort.by("createdAt").descending());
         if (keyword != null && !keyword.isBlank()) {
-            String cleanKeyword = keyword.replaceAll("\\s", "");
-            System.out.println("검색어: " + cleanKeyword);
-            return reservationRepository.findByMemberAndGalleryNameIgnoreSpace(member, cleanKeyword, pageable)
+            return reservationRepository.findByMemberAndGallery_NameContainingIgnoreCase(member, keyword, pageable)
                     .map(ReservationResponseDto::from);
         }
         return reservationRepository.findByMember(member, pageable)

@@ -40,7 +40,6 @@
 ## 🛠 기술 스택
 
 ### Backend
-
 <p>
   <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=OpenJDK&logoColor=white"/>
   <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white"/>
@@ -51,13 +50,11 @@
 </p>
 
 ### Database
-
 <p>
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white"/>
 </p>
 
 ### Build & Infra
-
 <p>
   <img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=gradle&logoColor=white"/>
   <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white"/>
@@ -80,11 +77,10 @@
 ### ✅ 회원
 
 - **회원가입 / 로그인**
-
-  > 이메일과 비밀번호로 회원가입 및 로그인할 수 있다.
+> 이메일과 비밀번호로 회원가입 및 로그인할 수 있다.
 
 - **소셜 로그인**
-  > 카카오, 네이버 OAuth2 소셜 로그인을 지원한다.
+> 카카오, 네이버 OAuth2 소셜 로그인을 지원한다.
 
 ![로그인](readme_assets/login.png)
 
@@ -93,11 +89,10 @@
 ### ✅ 갤러리 조회
 
 - **갤러리 목록 조회**
-
-  > 전체 갤러리 목록을 커버 이미지, 위치, 수용 인원과 함께 확인할 수 있다.
+> 전체 갤러리 목록을 커버 이미지, 위치, 수용 인원과 함께 확인할 수 있다.
 
 - **갤러리 상세 조회 및 예약 신청**
-  > 갤러리 상세 페이지에서 날짜, 30분 단위 시간 슬롯, 인원, 연락처를 선택해 바로 예약 신청할 수 있다.
+> 갤러리 상세 페이지에서 날짜, 30분 단위 시간 슬롯, 인원, 연락처를 선택해 바로 예약 신청할 수 있다.
 
 ![갤러리 목록](readme_assets/gallery-list.png)
 
@@ -106,14 +101,14 @@
 ### ✅ 예약 관리
 
 - **내 예약 목록 조회**
-  > 신청한 예약 목록을 페이지네이션과 갤러리명 검색으로 조회할 수 있고, 대기 중인 예약을 취소 신청할 수 있다.
+> 신청한 예약 목록을 페이지네이션과 갤러리명 검색으로 조회할 수 있고, 대기 중인 예약을 취소 신청할 수 있다.
 
 ![예약 조회](readme_assets/reservation-list.png)
 
 > `대기중 → 승인 / 거절 / 취소`
 
 - **예약 상세 조회**
-  > 갤러리 커버 이미지와 함께 예약 정보를 상세하게 확인할 수 있다.
+> 갤러리 커버 이미지와 함께 예약 정보를 상세하게 확인할 수 있다.
 
 ![예약 상세 보기](readme_assets/reservation-detail1.png)
 ![예약 상세 보기](readme_assets/reservation-detail2.png)
@@ -124,22 +119,22 @@
 ### ✅ 관리자 페이지
 
 - **갤러리 관리**
-  > 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
-
+> 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
+ 
 ![관리자 갤러리 관리](readme_assets/admin-gallery.png)
 
 - **갤러리 등록**
-  > 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
+> 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
 
 ![관리자 갤러리 등록](readme_assets/admin-gallery-add.png)
 
 - **갤러리 수정**
-  > 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
+> 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
 
 ![관리자 갤러리 수정](readme_assets/admin-gallery-edit.png)
 
 - **예약 승인/거절**
-  > 전체 예약 목록을 조회하고 예약을 승인하거나 거절할 수 있다.
+> 전체 예약 목록을 조회하고 예약을 승인하거나 거절할 수 있다.
 
 ![관리자 예약 관리](readme_assets/admin-reservation.png)
 
@@ -148,7 +143,7 @@
 ### ✅ 할일 페이지
 
 - **할일 등록/수정**
-  > 전체 예약 목록을 조회하고 예약을 승인하거나 거절할 수 있다.
+> 전체 예약 목록을 조회하고 예약을 승인하거나 거절할 수 있다.
 
 ![할일 리스트](readme_assets/todo-list.png)
 ![할일 등록](readme_assets/todo-add.png)
@@ -295,10 +290,10 @@ erDiagram
 
 ## 💙 팀원 소개
 
-| 김태혁(팀장👑)               | 김민준                   | 이유리                  | 박준현             |
-| ---------------------------- | ------------------------ | ----------------------- | ------------------ |
-| Back-End                     | Back-End                 | Back-End                | Back-End           |
-| 회원가입 / 로그인            | 할 일(Todo) 기능 구현    | Front-End / UX,UI       | 갤러리 기능 구현   |
+| 김태혁(팀장👑) | 김민준 | 이유리               | 박준현 |
+|---|---|-------------------|---|
+| Back-End | Back-End | Back-End          | Back-End |
+| 회원가입 / 로그인 | 할 일(Todo) 기능 구현 | Front-End / UX,UI | 갤러리 기능 구현 |
 | 소셜 로그인 (카카오, 네이버) | 할 일 등록 / 수정 / 삭제 | 예약 기능 구현          | 갤러리 목록 / 상세 |
-| Spring Security 설정         |                          | 예약 목록 / 상세 / 취소 |                    |
-| 관리자 페이지                |                          |                         |                    |
+| Spring Security 설정 | | 예약 목록 / 상세 / 취소   | |
+| 관리자 페이지 | |                   | |

@@ -33,9 +33,7 @@ public class GalleryService {
     public Page<Gallery> getList(int page, String keyword){
         Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
         if (keyword != null && !keyword.isBlank()) {
-            String cleanKeyword = keyword.replaceAll("\\s", "");
-            System.out.println("검색어: " + cleanKeyword);
-            return galleryRepository.findByNameIgnoreSpace(cleanKeyword, pageable);
+            return galleryRepository.findByNameContainingIgnoreCaseOrLocationContainingIgnoreCase(keyword, keyword, pageable);
         }
         return galleryRepository.findAll(pageable);
     }
@@ -118,11 +116,21 @@ public class GalleryService {
                 .startTime(requestDto.getStartTime())
                 .endTime(requestDto.getEndTime())
                 .guests(requestDto.getGuests())
-                .contact(requestDto.getContact())
+                .contact(formatPhoneNumber(requestDto.getContact()))
                 .status(ReservationStatus.PENDING)
                 .build();
 
-
         reservationRepository.save(reservation);
+    }
+
+    // 숫자만 추출 후 자릿수에 따라 하이픈 포맷(010-XXXX-XXXX)으로 변환
+    private String formatPhoneNumber(String phone) {
+        String digits = phone.replaceAll("[^0-9]", "");
+        if (digits.length() == 11) {
+            return digits.substring(0, 3) + "-" + digits.substring(3, 7) + "-" + digits.substring(7);
+        } else if (digits.length() == 10) {
+            return digits.substring(0, 3) + "-" + digits.substring(3, 6) + "-" + digits.substring(6);
+        }
+        return phone;
     }
 }
