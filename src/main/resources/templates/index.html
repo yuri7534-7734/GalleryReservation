@@ -7,9 +7,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>미술관 예약 — Art Museum</title>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title>Art Museum</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
     <style>
       /* ── HERO (이미지 슬라이드만) ── */
       .hero {
@@ -71,7 +71,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease,
+          transform 0.15s ease;
       }
 
       .heroArrow:hover {
@@ -136,7 +139,9 @@
         background: transparent;
         padding: 0;
         cursor: pointer;
-        transition: background 0.2s ease, transform 0.2s ease;
+        transition:
+          background 0.2s ease,
+          transform 0.2s ease;
       }
 
       .heroDot.is-active {
@@ -384,14 +389,12 @@
       }
 
       /* ── QUOTE ── */
-        .quoteBlock {
-          background: #111111;
-          color: #ffffff;
-          padding: 56px 48px;
-          text-align: center;
-        }
-
-
+      .quoteBlock {
+        background: #111111;
+        color: #ffffff;
+        padding: 56px 48px;
+        text-align: center;
+      }
 
       .quoteText {
         font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
@@ -483,7 +486,7 @@
         color: rgba(255, 255, 255, 0.6);
         transition: color 0.1s ease;
       }
-      .footerNavLink[type="submit"]{
+      .footerNavLink[type="submit"] {
         background: none;
         border: none;
         padding: 0;
@@ -646,7 +649,12 @@
             <button
               class="hamburger"
               type="button"
-              onclick="document.getElementById('mobileMenu').dataset.open = document.getElementById('mobileMenu').dataset.open === 'true' ? 'false' : 'true'"
+              onclick="
+                document.getElementById('mobileMenu').dataset.open =
+                  document.getElementById('mobileMenu').dataset.open === 'true'
+                    ? 'false'
+                    : 'true'
+              "
             >
               ☰
             </button>
@@ -687,18 +695,19 @@
                 당신의 일상에<br />예술을 더하는 시간
               </h1>
               <p class="heroIntroSubtitle">
-                취향에 맞는 전시를 발견하고 원하는 관람 일정을 예약하세요.<br/>
-                회화부터 설치미술까지, 당신만의 몰입을 위한 공간이 준비되어 있습니다.
+                취향에 맞는 전시를 발견하고 원하는 관람 일정을 예약하세요.<br />
+                당신만의 몰입을 위한<br />공간을 만드는 것이 우리의 존재
+                이유입니다.
               </p>
             </div>
             <div class="heroIntroActions">
               <a class="navLink" th:href="@{/gallery/list}">전시 둘러보기</a>
-<!--              <a-->
-<!--                      class="btn btn-ghost"-->
-<!--                      sec:authorize="!isAuthenticated()"-->
-<!--                      th:href="@{/member/join}"-->
-<!--              >회원가입</a-->
-<!--              >-->
+              <!--              <a-->
+              <!--                      class="btn btn-ghost"-->
+              <!--                      sec:authorize="!isAuthenticated()"-->
+              <!--                      th:href="@{/member/join}"-->
+              <!--              >회원가입</a-->
+              <!--              >-->
             </div>
           </div>
         </div>
@@ -718,21 +727,21 @@
               class="heroSlide is-active"
               data-slide="0"
               style="
-                background-image: url('https://images.unsplash.com/photo-1737490419239-8b9a7895a17b?q=80&amp;w=1246&amp;auto=format&amp;fit=crop');
+                background-image: url(&quot;https://images.unsplash.com/photo-1737490419239-8b9a7895a17b?q=80&amp;w=1246&amp;auto=format&amp;fit=crop&quot;);
               "
             ></div>
             <div
               class="heroSlide"
               data-slide="1"
               style="
-                background-image: url('https://plus.unsplash.com/premium_photo-1664438942214-fee803f245b5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+                background-image: url(&quot;https://plus.unsplash.com/premium_photo-1664438942214-fee803f245b5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&quot;);
               "
             ></div>
             <div
               class="heroSlide"
               data-slide="2"
               style="
-                background-image: url('https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&w=1166&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+                background-image: url(&quot;https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&w=1166&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&quot;);
               "
             ></div>
             <button
@@ -741,8 +750,18 @@
               id="heroPrev"
               aria-label="이전 이미지"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path
+                  d="M15 18l-6-6 6-6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
             </button>
             <button
@@ -751,8 +770,18 @@
               id="heroNext"
               aria-label="다음 이미지"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path
+                  d="M9 18l6-6-6-6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
             </button>
             <div class="heroDots" role="tablist" aria-label="슬라이드 선택">
@@ -784,9 +813,6 @@
           </div>
         </section>
 
-
-
-
         <!-- FEATURE SECTION -->
         <section class="section">
           <div class="container">
@@ -795,7 +821,9 @@
                 <div class="sectionEyebrow">이용 안내</div>
                 <h2 class="sectionTitle">이런 것들을 할 수 있어요</h2>
               </div>
-              <a class="btn btn-ghost sectionHeaderCta" th:href="@{/gallery/list}"
+              <a
+                class="btn btn-ghost sectionHeaderCta"
+                th:href="@{/gallery/list}"
                 >전시 목록 보기</a
               >
             </div>
@@ -816,7 +844,7 @@
                 <div class="featureTitle">간편 예약</div>
                 <p class="featureDesc">
                   원하는 날짜와 시간에 맞춰 빠르게 예약하고, 예약 상태를
-                  실시간으로 확인할 수 있습니다.
+                  실시간으로 확인할 수 있어요.
                 </p>
               </div>
               <div class="featureCard">
@@ -825,7 +853,7 @@
                 <div class="featureTitle">운영 관리</div>
                 <p class="featureDesc">
                   관리자는 전시 공간 등록·수정, 예약 현황 확인·상태 변경을
-                  효율적으로 처리할 수 있습니다.
+                  효율적으로 처리할 수 있어요.
                 </p>
               </div>
             </div>
@@ -844,9 +872,10 @@
                 </h2>
                 <p class="introPanelText">
                   복잡한 절차 없이 전시를 확인하고, 원하는 날짜에 맞춰
-                  예약하고, 방문 일정을 관리할 수 있도록 구성했습니다.
+                  예약하고,<br />
+                  방문 일정을 관리할 수 있도록 구성했어요.<br />
                   미술관의 고요한 분위기와 작품 감상의 집중감을 자연스럽게
-                  전달하는 화면으로 설계했습니다.
+                  전달하는 화면으로 설계했어요.
                 </p>
               </div>
               <div class="introPanelRight">
@@ -894,8 +923,12 @@
             <nav class="footerNav">
               <div class="footerNavGroup">
                 <div class="footerNavLabel">관람</div>
-                <a class="footerNavLink" th:href="@{/gallery/list}">전시 목록</a>
-                <a class="footerNavLink" th:href="@{/gallery/list}">관람 안내</a>
+                <a class="footerNavLink" th:href="@{/gallery/list}"
+                  >전시 목록</a
+                >
+                <a class="footerNavLink" th:href="@{/gallery/list}"
+                  >관람 안내</a
+                >
               </div>
               <div class="footerNavGroup">
                 <div class="footerNavLabel">예약</div>
@@ -927,9 +960,21 @@
                   method="post"
                   >회원가입</a
                 >
-                <form th:action="@{/member/logout}" method="post" style="margin: 0">
-                  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                  <button type="submit" class="footerNavLink" sec:authorize="isAuthenticated()">
+                <form
+                  th:action="@{/member/logout}"
+                  method="post"
+                  style="margin: 0"
+                >
+                  <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}"
+                  />
+                  <button
+                    type="submit"
+                    class="footerNavLink"
+                    sec:authorize="isAuthenticated()"
+                  >
                     로그아웃
                   </button>
                 </form>

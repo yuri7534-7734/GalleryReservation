@@ -20,7 +20,7 @@ public class Todo {
     @Column(name="title", nullable = false,length = 200)
     private String title;
 
-    @Column(name="content", nullable = false,length = 2000)
+    @Column(name="content", length = 2000)
     private String content;
 
     @Column(name="is_done",nullable = false)

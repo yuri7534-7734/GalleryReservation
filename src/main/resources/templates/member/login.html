@@ -7,41 +7,210 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>로그인 — Art Museum</title>
-    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <title>로그인</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
     <style>
       /* 로그인 전용 */
-      input, select { padding: 12px 14px; font-size: 14.5px; }
-      .authLayout { display: grid; grid-template-columns: 1fr 400px; min-height: calc(100vh - var(--nav-h)); }
-      .authLeft { background: #111111; background-image: url('https://images.unsplash.com/photo-1579783902915-f0b0de2c2eb3?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); background-size: cover; background-position: center; background-blend-mode: luminosity; display: flex; flex-direction: column; justify-content: space-between; padding: 64px 56px 64px max(58px, calc((100vw - var(--container)) / 2 + 16px)); color: #ffffff; position: relative; overflow: hidden; }
-      .authLeft::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.55); pointer-events: none; }
-      .authLeft::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 56px); pointer-events: none; }
-      .authLeftContent { position: relative; z-index: 1; padding-left: 0; }
-      .authEyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin: 0 0 24px; padding-left: 0; display: flex; align-items: center; gap: 0; }
-      .authEyebrow::before { display: none; }
-      .authTitle { font-family: "Plus Jakarta Sans","Noto Sans KR",sans-serif; font-size: clamp(28px, 3.5vw, 44px); font-weight: 700; letter-spacing: -1.2px; line-height: 1.1; margin: 0 0 18px; padding-left: 0; }
-      .authSubtitle { font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.8; margin: 0; padding-left: 0; max-width: 42ch; }
-      .authQuote { position: relative; z-index: 1; font-size: 13px; color: rgba(255,255,255,0.3); padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); font-style: italic; line-height: 1.65; }
-      .authRight { display: flex; flex-direction: column; justify-content: center; padding: 48px 40px; border-left: 1px solid var(--stroke); }
-      .authFormTitle { font-size: 20px; font-weight: 900; letter-spacing: -0.4px; margin: 0 0 4px; }
-      .authFormSubtitle { font-size: 13.5px; color: var(--muted); margin: 0 0 28px; }
-      .alertBox { padding: 12px 14px; border-radius: var(--radius); font-size: 13.5px; font-weight: 700; margin-bottom: 16px; }
-      .alertError { background: rgba(192,57,43,.07); border: 1px solid rgba(192,57,43,.25); color: var(--danger); }
-      .alertSuccess { background: rgba(26,115,65,.07); border: 1px solid rgba(26,115,65,.25); color: var(--ok); }
-      .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-      .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--stroke); }
-      .authRight .btn-primary.btn-full { background: #111111; color: #ffffff; border-color: #111111; }
-      .authRight .btn-primary.btn-full:hover { background: #ffffff; color: #111111; border-color: #111111; }
-      .socialBtns { display: flex; gap: 10px; }
-      .btnKakao { background: #fee500; border-color: #e6cf00; color: #191919; flex: 1; font-weight: 900; }
-      .btnKakao:hover { background: #f5dc00; border-color: #e6cf00; color: #191919; }
-      .btnNaver { background: #03c75a; border-color: #02b050; color: #ffffff; flex: 1; font-weight: 900; }
-      .btnNaver:hover { background: #02b050; border-color: #02b050; color: #ffffff; }
+      input {
+        padding: 12px 14px;
+        font-size: 14.5px;
+      }
+      select {
+        padding: 12px 14px;
+        padding-right: 42px;
+        font-size: 14.5px;
+        background-position: right 13px center;
+      }
+      .authLayout {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        min-height: calc(100vh - var(--nav-h));
+      }
+      .authLeft {
+        background: #111111;
+        background-image: url("https://images.unsplash.com/photo-1579783902915-f0b0de2c2eb3?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: luminosity;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 64px 56px 64px
+          max(58px, calc((100vw - var(--container)) / 2 + 16px));
+        color: #ffffff;
+        position: relative;
+        overflow: hidden;
+      }
+      .authLeft::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        pointer-events: none;
+      }
+      .authLeft::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.02) 0px,
+          rgba(255, 255, 255, 0.02) 1px,
+          transparent 1px,
+          transparent 56px
+        );
+        pointer-events: none;
+      }
+      .authLeftContent {
+        position: relative;
+        z-index: 1;
+        padding-left: 0;
+      }
+      .authEyebrow {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        margin: 0 0 24px;
+        padding-left: 0;
+        display: flex;
+        align-items: center;
+        gap: 0;
+      }
+      .authEyebrow::before {
+        display: none;
+      }
+      .authTitle {
+        font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+        font-size: clamp(28px, 3.5vw, 44px);
+        font-weight: 700;
+        letter-spacing: -1.2px;
+        line-height: 1.1;
+        margin: 0 0 18px;
+        padding-left: 0;
+      }
+      .authSubtitle {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.8;
+        margin: 0;
+        padding-left: 0;
+        max-width: 42ch;
+      }
+      .authQuote {
+        position: relative;
+        z-index: 1;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.3);
+        padding-top: 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-style: italic;
+        line-height: 1.65;
+      }
+      .authRight {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 48px 40px;
+        border-left: 1px solid var(--stroke);
+      }
+      .authFormTitle {
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: -0.4px;
+        margin: 0 0 4px;
+      }
+      .authFormSubtitle {
+        font-size: 13.5px;
+        color: var(--muted);
+        margin: 0 0 28px;
+      }
+      .alertBox {
+        padding: 12px 14px;
+        border-radius: var(--radius);
+        font-size: 13.5px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+      .alertError {
+        background: rgba(192, 57, 43, 0.07);
+        border: 1px solid rgba(192, 57, 43, 0.25);
+        color: var(--danger);
+      }
+      .alertSuccess {
+        background: rgba(26, 115, 65, 0.07);
+        border: 1px solid rgba(26, 115, 65, 0.25);
+        color: var(--ok);
+      }
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 20px 0;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--stroke);
+      }
+      .authRight .btn-primary.btn-full {
+        background: #111111;
+        color: #ffffff;
+        border-color: #111111;
+      }
+      .authRight .btn-primary.btn-full:hover {
+        background: #ffffff;
+        color: #111111;
+        border-color: #111111;
+      }
+      .socialBtns {
+        display: flex;
+        gap: 10px;
+      }
+      .btnKakao {
+        background: #fee500;
+        border-color: #e6cf00;
+        color: #191919;
+        flex: 1;
+        font-weight: 900;
+      }
+      .btnKakao:hover {
+        background: #f5dc00;
+        border-color: #e6cf00;
+        color: #191919;
+      }
+      .btnNaver {
+        background: #03c75a;
+        border-color: #02b050;
+        color: #ffffff;
+        flex: 1;
+        font-weight: 900;
+      }
+      .btnNaver:hover {
+        background: #02b050;
+        border-color: #02b050;
+        color: #ffffff;
+      }
       @media (max-width: 900px) {
         .authLayout {
-          grid-template-columns: 1fr; }
-        .authLeft { display: none; }
-        .authRight { padding: 40px 24px; border-left: none; }
+          grid-template-columns: 1fr;
+        }
+        .authLeft {
+          display: none;
+        }
+        .authRight {
+          padding: 40px 24px;
+          border-left: none;
+        }
       }
     </style>
   </head>
@@ -53,16 +222,15 @@
           <a class="brand" th:href="@{/}">
             <span class="brandMark">
               <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="2" width="6" height="6"/>
-                <rect x="10" y="2" width="6" height="6"/>
-                <rect x="2" y="10" width="6" height="6"/>
-                <rect x="10" y="10" width="6" height="6" opacity="0.4"/>
+                <rect x="2" y="2" width="6" height="6" />
+                <rect x="10" y="2" width="6" height="6" />
+                <rect x="2" y="10" width="6" height="6" />
+                <rect x="10" y="10" width="6" height="6" opacity="0.4" />
               </svg>
             </span>
             <span>Art Museum</span>
           </a>
           <div class="navLinks">
-
             <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
             <a
               class="navLink"
@@ -82,15 +250,31 @@
               th:href="@{/admin/gallery/list}"
               >관리자</a
             >
-
           </div>
           <div class="navActions">
-            <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px">
-              <a class="btn btn-ghost btn-small" th:href="@{/member/login}">로그인</a>
-              <a class="btn btn-primary btn-small" th:href="@{/member/join}">회원가입</a>
+            <div
+              sec:authorize="!isAuthenticated()"
+              style="display: flex; gap: 8px"
+            >
+              <a class="btn btn-ghost btn-small" th:href="@{/member/login}"
+                >로그인</a
+              >
+              <a class="btn btn-primary btn-small" th:href="@{/member/join}"
+                >회원가입</a
+              >
             </div>
-            <button class="hamburger" type="button"
-              onclick="document.getElementById('mobileMenu').dataset.open=document.getElementById('mobileMenu').dataset.open==='true'?'false':'true'">☰</button>
+            <button
+              class="hamburger"
+              type="button"
+              onclick="
+                document.getElementById('mobileMenu').dataset.open =
+                  document.getElementById('mobileMenu').dataset.open === 'true'
+                    ? 'false'
+                    : 'true'
+              "
+            >
+              ☰
+            </button>
           </div>
         </div>
         <div id="mobileMenu">
@@ -106,9 +290,10 @@
           <div class="authLeft">
             <div class="authLeftContent">
               <div class="authEyebrow">Art Museum</div>
-              <h1 class="authTitle">일상에 깊이를 더하는 로그인</h1>
+              <h1 class="authTitle">일상에 깊이를 더하다</h1>
               <p class="authSubtitle">
-                더 편리한 전시 예약과 조회를 위해 로그인이 필요해요.
+                더 편리한 전시 예약과 조회를 위해 로그인이 필요해요. 함께하고
+                다양한 혜택을 만나보세요.
               </p>
             </div>
             <div class="authQuote">
@@ -119,7 +304,9 @@
           <!-- RIGHT FORM -->
           <div class="authRight">
             <div class="authFormTitle">로그인</div>
-            <div class="authFormSubtitle">아이디와 비밀번호로 로그인합니다.</div>
+            <div class="authFormSubtitle">
+              아이디와 비밀번호를 입력해주세요.
+            </div>
 
             <div class="alertError alertBox" th:if="${param.error}">
               아이디 또는 비밀번호가 올바르지 않습니다.
@@ -131,33 +318,91 @@
               회원가입이 완료되었습니다. 로그인해 주세요.
             </div>
 
-            <form th:action="@{/member/loginAction}" method="post" class="stack">
-              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <form
+              th:action="@{/member/loginAction}"
+              method="post"
+              class="stack"
+            >
+              <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+              />
               <div>
                 <label for="loginUsername">아이디</label>
-                <input id="loginUsername" name="username" type="text" placeholder="아이디를 입력하세요" required autofocus/>
+                <input
+                  id="loginUsername"
+                  name="username"
+                  type="text"
+                  placeholder="아이디를 입력하세요"
+                  required
+                  autofocus
+                />
               </div>
               <div>
                 <label for="loginPassword">비밀번호</label>
-                <input id="loginPassword" name="password" type="password" placeholder="비밀번호" required/>
+                <input
+                  id="loginPassword"
+                  name="password"
+                  type="password"
+                  placeholder="비밀번호"
+                  required
+                />
               </div>
-              <label style="display:flex;align-items:center;gap:10px;margin:0;cursor:pointer;text-transform:none;letter-spacing:0;font-size:13.5px;color:var(--muted)">
-                <input type="checkbox" name="remember-me" style="width:auto;margin:0"/>
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  margin: 0;
+                  cursor: pointer;
+                  text-transform: none;
+                  letter-spacing: 0;
+                  font-size: 13.5px;
+                  color: var(--muted);
+                "
+              >
+                <input
+                  type="checkbox"
+                  name="remember-me"
+                  style="width: auto; margin: 0"
+                />
                 로그인 유지
               </label>
-              <button class="btn btn-primary btn-full" type="submit">로그인</button>
+              <button class="btn btn-primary btn-full" type="submit">
+                로그인
+              </button>
             </form>
 
             <div class="divider">또는</div>
 
             <div class="socialBtns">
-              <a class="btn btnKakao" th:href="@{/oauth2/authorization/kakao}">Kakao</a>
-              <a class="btn btnNaver" th:href="@{/oauth2/authorization/naver}">Naver</a>
+              <a class="btn btnKakao" th:href="@{/oauth2/authorization/kakao}"
+                >Kakao</a
+              >
+              <a class="btn btnNaver" th:href="@{/oauth2/authorization/naver}"
+                >Naver</a
+              >
             </div>
 
-            <div style="margin-top:24px;text-align:center;font-size:13.5px;color:var(--muted)">
+            <div
+              style="
+                margin-top: 24px;
+                text-align: center;
+                font-size: 13.5px;
+                color: var(--muted);
+              "
+            >
               계정이 없으신가요?&nbsp;
-              <a th:href="@{/member/join}" style="color:var(--text);font-weight:700;text-decoration:underline">회원가입</a>
+              <a
+                th:href="@{/member/join}"
+                style="
+                  color: var(--text);
+                  font-weight: 700;
+                  text-decoration: underline;
+                "
+                >회원가입</a
+              >
             </div>
           </div>
         </div>
@@ -167,20 +412,50 @@
         <div class="footerInner">
           <div>
             <div class="footerBrand">Art Museum</div>
-            <div class="footerDesc">국립현대미술관 예약 시스템<br/>미술 작품과 공간을 예약하세요.</div>
+            <div class="footerDesc">
+              국립현대미술관 예약 시스템<br />미술 작품과 공간을 예약하세요.
+            </div>
           </div>
-          <div style="display:flex;gap:48px;flex-wrap:wrap">
+          <div style="display: flex; gap: 48px; flex-wrap: wrap">
             <div>
-              <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">관람 안내</div>
-              <div class="footerLinks" style="flex-direction:column;gap:10px">
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 0.1em;
+                  text-transform: uppercase;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-bottom: 14px;
+                "
+              >
+                관람 안내
+              </div>
+              <div
+                class="footerLinks"
+                style="flex-direction: column; gap: 10px"
+              >
                 <a th:href="@{/gallery/list}">전시 목록</a>
                 <a href="#">관람 시간</a>
                 <a href="#">오시는 길</a>
               </div>
             </div>
             <div>
-              <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">계정</div>
-              <div class="footerLinks" style="flex-direction:column;gap:10px">
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 0.1em;
+                  text-transform: uppercase;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-bottom: 14px;
+                "
+              >
+                계정
+              </div>
+              <div
+                class="footerLinks"
+                style="flex-direction: column; gap: 10px"
+              >
                 <a th:href="@{/member/login}">로그인</a>
                 <a th:href="@{/member/join}">회원가입</a>
                 <a th:href="@{/reservation/list}">내 예약</a>
@@ -188,7 +463,9 @@
             </div>
           </div>
         </div>
-        <div class="footerBottom">© 2026 Art Museum Reservation. All rights reserved.</div>
+        <div class="footerBottom">
+          © 2026 Art Museum Reservation. All rights reserved.
+        </div>
       </footer>
     </div>
   </body>
