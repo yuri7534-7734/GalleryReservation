@@ -71,6 +71,5 @@ public class GalleryController {
             galleryService.save(requestDto, sessionUser.getEmail());
             return "redirect:/reservation/list";
 
-
     }
 }
