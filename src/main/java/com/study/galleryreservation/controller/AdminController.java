@@ -1,6 +1,7 @@
 package com.study.galleryreservation.controller;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
+import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
 import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
@@ -8,7 +9,6 @@ import com.study.galleryreservation.service.GalleryService;
 import com.study.galleryreservation.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -109,24 +109,7 @@ public class AdminController {
             model.addAttribute("gallery", galleryService.findById(id));
             return "admin/gallery-edit";
         }
-        
-        try {
-            galleryService.update(id, dto); //업데이트 시도
-        } catch (DataIntegrityViolationException e) { //DB 제약 위반 에러 발생 시 잡음
-            String messege = e.getMessage();
-            if (messege.contains("description")){ //에러 메세지에 "description"이 있으면 "description" 필드 에러 등록
-                bindingResult.rejectValue("description", "tooLong", "설명이 너무 깁니다. (255자 이내)");
-            } else if (messege.contains("cover_image_url")) {
-                bindingResult.rejectValue("cover_image_url", "tooLong", "이미지 URL이 너무 깁니다.");
-            }else if (messege.contains("name")) {
-                bindingResult.rejectValue("name", "tooLong", "갤러리명이 너무 깁니다.");
-            }else if (messege.contains("location")) {
-                bindingResult.rejectValue("location", "tooLong", "위치명이 너무 깁니다.");
-            } else {
-                bindingResult.reject("saveFailed", "저장 중 오류가 발생했습니다.");
-            }
-        }
-        
+        galleryService.update(id, dto);
         return "redirect:/admin/gallery/list";
     }
 }

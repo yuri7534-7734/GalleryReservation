@@ -8,7 +8,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>갤러리 수정 - 관리자</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" th:href="@{/css/common.css}" />
     <style>
       /* 갤러리 수정 전용 */
@@ -296,7 +295,7 @@
                     th:if="${#fields.hasErrors('name')}"
                     th:errors="*{name}"
                   >
-                    갤러리명 오류
+                    이름 오류
                   </div>
                 </div>
 
@@ -391,10 +390,6 @@
                   th:field="*{description}"
                   placeholder="전시 공간의 분위기와 관람 포인트를 간단히 적어주세요."
                 ></textarea>
-                <p th:if="${#fields.hasErrors('description')}"
-                   th:errors="*{description}"
-                   style="color:red; font-size: 13px;"
-                ></p>
                 <div class="helpText">예약 카드에 2줄로 잘려 표시됩니다.</div>
               </div>
 
@@ -430,8 +425,7 @@
                 <div class="thumbBg" id="previewThumbBg"></div>
                 <div class="thumbShade"></div>
                 <div class="thumbLabel">
-                  <div class="thumbTitle" id="pName"
-                       th:text="${gallery.name}">
+                  <div class="thumbTitle" id="pName" th:text="${gallery.name}">
                     갤러리명
                   </div>
                   <div
@@ -469,13 +463,6 @@
                     font-size: 13.5px;
                     color: var(--text);
                     line-height: 1.65;
-                    width: 500px;
-                    height: 65px;
-                    max-width: 500px;
-                    overflow: hidden;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 3;      /* 보여지는 문장 수 */
-                    -webkit-box-orient: vertical;
                   "
                   id="pDesc"
                   th:text="${gallery.description}"

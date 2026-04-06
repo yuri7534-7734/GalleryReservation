@@ -7,8 +7,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>할 일 수정</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>할 일 수정 — Art Museum</title>
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
       /* 할 일 수정 전용 */
@@ -17,61 +16,9 @@
       .pageHeader { padding: 40px 0 32px; margin-bottom: 40px; }
       .contentLayout { display: grid; grid-template-columns: 1fr 360px; gap: 32px; align-items: start; margin-bottom: 80px; }
       @media (max-width: 920px) { .contentLayout { grid-template-columns: 1fr; } }
-      .previewCard {
-        background: var(--bg1); border: 1px solid var(--stroke); padding: 16px; width: 290px; height: 460px;
-        box-sizing: border-box;
-        overflow: hidden;
-        min-width: 0;
-      }
-      .previewCardPad { width: 340px; height: 600px; }
-      .previewCardTitleRow {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        align-items: flex-start;
-        gap: 10px;
-        margin-bottom: 6px;
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-      }
-      .previewCardTitleRow .previewCardTitle {
-        margin-bottom: 0;
-        min-width: 0;
-        overflow-wrap: break-word;
-        word-break: keep-all;
-      }
-      .previewCardTitleRow #prevDue {
-        justify-self: end;
-        max-width: 100%;
-      }
-      .previewCardTitle { font-weight: 700; font-size: 17px; color: var(--text); }
-      .previewCardContent {
-        color: var(--muted); font-size: 13.5px; line-height: 1.65;
-        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
-        -webkit-line-clamp: 18;          /* 최대 3줄까지만 표시 */
-        -webkit-box-orient: vertical;   /* 세로 방향으로 박스 정렬 */
-        overflow: hidden;               /* 넘치는 텍스트 숨김 */
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-      }
-      #todoContent {
-        width: 910px; /* 고정 크기 */
-        height: 240px;
-        resize: none;
-      }
-      .editCardPad {
-        width: 960px;
-        height: 600px;
-      }
-      #prevTitle {
-        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
-        -webkit-line-clamp: 1;          /* 최대 3줄까지만 표시 */
-        -webkit-box-orient: vertical;   /* 세로 방향으로 박스 정렬 */
-        overflow: hidden;               /* 넘치는 텍스트 숨김 */
-      }
+      .previewCard { background: var(--bg1); border: 1px solid var(--stroke); padding: 16px; }
+      .previewCardTitle { font-weight: 700; font-size: 17px; color: var(--text); margin-bottom: 6px; }
+      .previewCardContent { color: var(--muted); font-size: 13.5px; line-height: 1.65; }
     </style>
   </head>
   <body>
@@ -131,11 +78,11 @@
         <div class="pageHeader">
           <div class="label">업무 관리 — 수정</div>
           <h1>할 일 수정</h1>
-          <p>등록된 할 일을 수정할 수 있어요.</p>
+          <p>등록된 할 일을 수정합니다.</p>
         </div>
 
         <div class="contentLayout">
-          <div class="card cardPad editCardPad">
+          <div class="card cardPad">
             <form
               th:action="@{/todo/update/{id}(id=${todo.id})}"
               th:object="${todoUpdateRequestDto}"
@@ -185,17 +132,17 @@
           </div>
 
           <div class="stack">
-            <div class="card cardPad previewCardPad">
+            <div class="card cardPad">
               <div class="row" style="margin-bottom:16px">
                 <div style="font-weight:700;font-size:15px">미리보기</div>
                 <span class="badge badge-warn" id="previewState">미완료</span>
               </div>
               <div class="previewCard">
-                <div class="previewCardTitleRow">
-                  <div class="previewCardTitle" id="prevTitle">할 일 제목</div>
+                <div class="previewCardTitle" id="prevTitle">할 일 제목</div>
+                <div class="previewCardContent" id="prevContent">상세 내용이 여기에 표시됩니다.</div>
+                <div style="margin-top:12px">
                   <span class="badge" id="prevDue">기한 미정</span>
                 </div>
-                <div class="previewCardContent" id="prevContent">상세 내용이 여기에 표시됩니다.</div>
               </div>
               <div class="helpText" style="margin-top:10px">수정값이 카드에 실시간 반영됩니다.</div>
             </div>

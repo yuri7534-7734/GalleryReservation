@@ -8,23 +8,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>예약 상세 - 갤러리 예약</title>
-    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" th:href="@{/css/common.css}" />
     <style>
-      /* 예약 상세 전용 — gallery/detail 과 유사한 풀폭·꽉 찬 레이아웃 */
-
-      /* common .container 제한 해제 → 전시 상세처럼 가로 풀폭 */
-      main.container {
-        max-width: none !important;
-        width: 100%;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-      }
+      /* 예약 상세 전용 — common.css 토큰·컴포넌트와 통일 */
 
       .pageWrap {
-        max-width: none;
-        margin: 0;
-        padding: 0 0 64px;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 40px 0 64px;
       }
 
       .backLink {
@@ -34,8 +25,7 @@
         font-size: 13px;
         font-weight: 700;
         color: var(--muted);
-        margin: 0 24px 24px;
-        padding-top: 40px;
+        margin-bottom: 28px;
         transition: color 0.12s;
       }
       .backLink:hover {
@@ -45,52 +35,34 @@
 
       .layout {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
-        gap: 0;
-        min-height: calc(100vh - var(--nav-h));
-        align-items: stretch;
+        grid-template-columns: minmax(0, 1fr) 400px;
+        gap: 28px;
+        align-items: start;
       }
       @media (max-width: 960px) {
         .layout {
           grid-template-columns: 1fr;
-          min-height: auto;
         }
       }
 
       .leftCol {
         display: flex;
         flex-direction: column;
-        gap: 0;
-        min-width: 0;
-        border-right: 1px solid var(--stroke);
-      }
-      @media (max-width: 960px) {
-        .leftCol {
-          border-right: none;
-        }
+        gap: 20px;
       }
 
       .coverBox {
         width: 100%;
-        max-width: none;
-        min-height: min(52vh, 520px);
-        height: min(52vh, 520px);
-        aspect-ratio: auto;
-        border-radius: 0;
-        border: none;
-        border-bottom: 1px solid var(--stroke);
+        max-width: 400px;
+        aspect-ratio: 4 / 3;
+        border-radius: var(--radius);
+        border: 1px solid var(--stroke);
         background: var(--bg1);
         background-size: cover;
         background-position: center;
-        box-shadow: none;
+        box-shadow: var(--shadow);
         position: relative;
         overflow: hidden;
-      }
-      @media (max-width: 960px) {
-        .coverBox {
-          min-height: min(42vh, 380px);
-          height: min(42vh, 380px);
-        }
       }
       .coverBox .noImg {
         position: absolute;
@@ -107,19 +79,15 @@
         z-index: 1;
       }
 
-      /* gallery/detail 과 동일 톤 — 전시 소개 + 정보 그리드 */
-      .exhibitIntro {
-        padding: 32px 40px;
-        border-bottom: 1px solid var(--stroke);
+      .exhibitCard {
         background: var(--surface);
-      }
-      @media (max-width: 960px) {
-        .exhibitIntro {
-          padding: 24px 28px;
-        }
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        padding: 28px 24px;
+        box-shadow: var(--shadow);
       }
       .exhibitName {
-        margin: 0 0 12px;
+        margin: 0 0 10px;
         font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
         font-size: clamp(24px, 3vw, 34px);
         font-weight: 900;
@@ -127,220 +95,41 @@
         line-height: 1.15;
         color: var(--text);
       }
-      .exhibitHeroMeta {
-        display: flex;
+      .exhibitLocation {
+        display: inline-flex;
         align-items: center;
-        gap: 10px;
-        flex-wrap: wrap;
-        font-size: 13px;
-        color: var(--muted);
-        font-weight: 600;
-      }
-
-      .infoBlock {
-        padding: 32px 40px;
-        border-bottom: 1px solid var(--stroke);
-        background: var(--bg0);
-      }
-      @media (max-width: 960px) {
-        .infoBlock {
-          padding: 24px 28px;
-        }
-      }
-      .infoBlockTitle {
-        font-size: 11px;
-        font-weight: 900;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: var(--muted);
-        margin: 0 0 18px;
-      }
-      .infoGrid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1px;
-        background: var(--stroke);
-        border: 1px solid var(--stroke);
-        margin-bottom: 24px;
-      }
-      .infoItem {
-        background: var(--bg0);
-        padding: 18px 20px;
-      }
-      .infoItemLabel {
-        font-size: 11px;
+        gap: 8px;
+        font-size: 12px;
         font-weight: 700;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
         color: var(--muted);
-        margin-bottom: 6px;
-      }
-      .infoItemValue {
-        font-size: 15px;
-        font-weight: 900;
-        letter-spacing: -0.3px;
-      }
-      .descText {
-        font-size: 14.5px;
-        line-height: 1.9;
-        color: var(--muted);
-        margin: 0;
-      }
-
-      .stepList {
-        display: flex;
-        flex-direction: column;
-        gap: 1px;
-        background: var(--stroke);
-        border: 1px solid var(--stroke);
-      }
-      .stepItem {
-        background: var(--bg0);
-        padding: 18px 22px;
-        display: flex;
-        gap: 16px;
-        align-items: flex-start;
-      }
-      .stepNum {
-        width: 26px;
-        height: 26px;
-        background: #111;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 11px;
-        font-weight: 900;
-        flex-shrink: 0;
-      }
-      .stepTitle {
-        font-size: 14px;
-        font-weight: 900;
-        letter-spacing: -0.2px;
-        margin-bottom: 4px;
-      }
-      .stepDesc {
-        font-size: 13px;
-        color: var(--muted);
-        line-height: 1.55;
-      }
-
-      /* 오른쪽: 예약 카드 하단 안내 */
-      .reservePolicyBlock {
-        padding: 18px 24px 20px;
-        border-top: 1px solid var(--stroke);
+        margin-bottom: 16px;
+        padding: 6px 10px;
         background: var(--bg1);
-      }
-      .reservePolicyBlock + .reservePolicyBlock {
-        border-top-color: rgba(0, 0, 0, 0.06);
-      }
-      /* 제목 + 오른쪽으로 이어지는 선 (Needs 스타일, 테마 컬러 유지) */
-      .reservePolicyTitleBar {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 18px;
-      }
-      .reservePolicyTitleText {
-        flex-shrink: 0;
-        font-size: 15px;
-        font-weight: 800;
-        letter-spacing: -0.35px;
-        color: var(--text);
-        line-height: 1.2;
-      }
-      .reservePolicyTitleLine {
-        flex: 1;
-        min-width: 32px;
-        height: 2px;
-        border-radius: 1px;
-        background: var(--stroke);
-      }
-      .reservePolicyTitleBar--sub {
-        margin-bottom: 12px;
-      }
-      .reservePolicyTitleBar--sub .reservePolicyTitleText {
-        font-size: 13px;
-        font-weight: 800;
-        letter-spacing: -0.2px;
-      }
-      .reservePolicyGroup {
-        margin-bottom: 22px;
-      }
-      .reservePolicyGroup:last-child {
-        margin-bottom: 0;
-      }
-      .reservePolicyCopy {
-        font-size: 13px;
-        color: var(--muted);
-        line-height: 1.75;
-      }
-      .reservePolicyCopy p {
-        margin: 0 0 10px;
-      }
-      .reservePolicyCopy p:last-child {
-        margin-bottom: 0;
-      }
-      .reservePolicyLead {
-        font-size: 13px;
-        color: var(--muted);
-        line-height: 1.75;
-        margin: -6px 0 20px;
-      }
-      .reservePolicyTableWrap {
-        margin-top: 8px;
         border: 1px solid var(--stroke);
         border-radius: var(--radius-sm);
-        overflow: hidden;
       }
-      .reservePolicyTable {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12.5px;
-        color: var(--muted);
-      }
-      .reservePolicyTable th,
-      .reservePolicyTable td {
-        padding: 10px 12px;
-        text-align: left;
-        border-bottom: 1px solid var(--stroke);
-        vertical-align: top;
-        line-height: 1.5;
-      }
-      .reservePolicyTable tr:last-child td {
-        border-bottom: none;
-      }
-      .reservePolicyTable thead th {
-        background: var(--bg0);
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-      .reservePolicyTable td:first-child {
+      .exhibitDesc {
+        font-size: 15px;
+        font-weight: 400;
         color: var(--text);
-        font-weight: 700;
-        width: 44%;
+        line-height: 1.75;
+        border-top: 1px solid var(--stroke);
+        padding-top: 16px;
+        margin: 0;
       }
 
       .reserveCard {
         background: var(--surface);
-        border: none;
-        border-radius: 0;
-        box-shadow: none;
+        border: 1px solid var(--stroke);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-lg);
         overflow: hidden;
         position: sticky;
-        top: var(--nav-h);
-        align-self: start;
-        min-height: calc(100vh - var(--nav-h));
-        display: flex;
-        flex-direction: column;
+        top: calc(var(--nav-h) + 16px);
       }
       @media (max-width: 960px) {
         .reserveCard {
           position: static;
-          min-height: auto;
         }
       }
 
@@ -478,7 +267,6 @@
         padding: 18px 24px 24px;
         border-top: 1px solid var(--stroke);
         background: var(--bg1);
-        margin-top: auto;
       }
       .reserveFooter .btn {
         min-height: 44px;
@@ -512,13 +300,8 @@
       }
 
       @media (max-width: 860px) {
-        .backLink {
-          margin-left: 16px;
-          margin-right: 16px;
-          padding-top: 28px;
-        }
         .pageWrap {
-          padding-bottom: 48px;
+          padding: 28px 0 48px;
         }
         .reserveHeader {
           padding: 20px 20px 18px;
@@ -531,7 +314,7 @@
         }
       }
       @media (max-width: 560px) {
-        .exhibitIntro {
+        .exhibitCard {
           padding: 22px 18px;
         }
         .reserveHeader {
@@ -555,7 +338,7 @@
         <div class="navbarInner">
           <a class="brand" th:href="@{/}">
             <span class="brandMark"></span>
-            <span>Art Museum</span>
+            <span>Gallery</span>
           </a>
           <div class="navLinks">
             <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
@@ -626,110 +409,22 @@
                 </div>
               </div>
 
-              <!-- 전시 제목 · 메타 (gallery/detail 히어로 하단과 동일 톤) -->
-              <div class="exhibitIntro">
+              <!-- 갤러리명 + 소개 -->
+              <div class="exhibitCard">
                 <div class="exhibitName" th:text="${reservation.galleryName}">
                   갤러리명
                 </div>
-                <div class="exhibitHeroMeta" th:if="${gallery != null}">
-                  <span
-                    th:class="${gallery.isActive} ? 'badge badge-ok' : 'badge badge-danger'"
-                    th:text="${gallery.isActive} ? '운영중' : '마감'"
-                    >운영중</span
-                  >
-                  <span
-                    th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : gallery.floorZone) + ' · ' + (gallery.location != null ? gallery.location : '') + ' · ' + gallery.capacity + '석'}"
-                  ></span>
-                </div>
-              </div>
-
-              <!-- 전시 정보 (gallery/detail과 동일 구조) -->
-              <div class="infoBlock" th:if="${gallery != null}">
-                <div class="infoBlockTitle">전시 정보</div>
-                <div class="infoGrid">
-                  <div class="infoItem">
-                    <div class="infoItemLabel">운영 시간</div>
-                    <div
-                      class="infoItemValue"
-                      th:text="${#strings.concat(#temporals.format(gallery.startTime, 'HH:mm'), ' — ', #temporals.format(gallery.endTime, 'HH:mm'))}"
-                    >
-                      10:00 — 18:00
-                    </div>
-                  </div>
-                  <div class="infoItem">
-                    <div class="infoItemLabel">수용 인원</div>
-                    <div
-                      class="infoItemValue"
-                      th:text="${gallery.capacity + '석'}"
-                    >
-                      —
-                    </div>
-                  </div>
-                  <div class="infoItem">
-                    <div class="infoItemLabel">위치</div>
-                    <div
-                      class="infoItemValue"
-                      th:text="${gallery.location != null ? gallery.location : '—'}"
-                    >
-                      —
-                    </div>
-                  </div>
-                  <div class="infoItem">
-                    <div class="infoItemLabel">층 / 구역</div>
-                    <div
-                      class="infoItemValue"
-                      th:text="${gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : gallery.floorZone}"
-                    >
-                      —
-                    </div>
-                  </div>
-                </div>
-                <p
-                  class="descText"
-                  th:text="${gallery.description != null and !#strings.isEmpty(gallery.description) ? gallery.description : '빛이 부드럽게 스며드는 전시 공간에서 천천히 감상하세요.'}"
+                <div
+                  class="exhibitLocation"
+                  th:text="${gallery != null ? gallery.location : ''}"
                 >
-                  전시 공간 소개
-                </p>
-              </div>
-
-              <!-- 관람 안내 (gallery/detail stepList와 동일) -->
-              <div class="infoBlock" style="border-bottom: none">
-                <div class="infoBlockTitle">
-                  관람 안내
-                  <span
-                    class="badge badge-info"
-                    style="margin-left: 8px; vertical-align: middle"
-                    >Guided</span
-                  >
+                  위치
                 </div>
-                <div class="stepList">
-                  <div class="stepItem">
-                    <div class="stepNum">1</div>
-                    <div>
-                      <div class="stepTitle">입장 후 5분 오리엔테이션</div>
-                      <div class="stepDesc">
-                        조명과 동선 안내를 먼저 제공합니다.
-                      </div>
-                    </div>
-                  </div>
-                  <div class="stepItem">
-                    <div class="stepNum">2</div>
-                    <div>
-                      <div class="stepTitle">30분 단독 감상</div>
-                      <div class="stepDesc">
-                        속도를 조절할 수 있는 좌석 배치로 구성됩니다.
-                      </div>
-                    </div>
-                  </div>
-                  <div class="stepItem">
-                    <div class="stepNum">3</div>
-                    <div>
-                      <div class="stepTitle">관람 기록 2분</div>
-                      <div class="stepDesc">
-                        간단한 메모를 남길 수 있습니다.
-                      </div>
-                    </div>
-                  </div>
+                <div
+                  class="exhibitDesc"
+                  th:text="${gallery != null and gallery.description != null and !#strings.isEmpty(gallery.description) ? gallery.description : '소개글이 없습니다.'}"
+                >
+                  전시 공간 소개글이 들어갑니다.
                 </div>
               </div>
             </div>
@@ -793,187 +488,6 @@
                   <span class="infoKey">연락처</span>
                   <div class="infoVal" th:text="${reservation.contact}">
                     010-0000-0000
-                  </div>
-                </div>
-              </div>
-
-              <!-- 관람 주의사항 -->
-              <div class="reservePolicyBlock">
-                <div class="reservePolicyTitleBar">
-                  <span class="reservePolicyTitleText">관람 주의사항</span>
-                  <span
-                    class="reservePolicyTitleLine"
-                    aria-hidden="true"
-                  ></span>
-                </div>
-
-                <div class="reservePolicyGroup">
-                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
-                    <span class="reservePolicyTitleText"
-                      >작품과의 거리 유지</span
-                    >
-                    <span
-                      class="reservePolicyTitleLine"
-                      aria-hidden="true"
-                    ></span>
-                  </div>
-                  <div class="reservePolicyCopy">
-                    <p>
-                      눈으로만 감상하세요: 손의 유분이나 염분이 작품을 훼손할 수
-                      있습니다.
-                    </p>
-                    <p>
-                      안전선 준수: 바닥에 표시된 가이드라인 뒤에서 관람해
-                      주세요.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="reservePolicyGroup">
-                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
-                    <span class="reservePolicyTitleText">촬영 규정 확인</span>
-                    <span
-                      class="reservePolicyTitleLine"
-                      aria-hidden="true"
-                    ></span>
-                  </div>
-                  <div class="reservePolicyCopy">
-                    <p>
-                      플래시 및 삼각대 금지: 강한 빛은 작품의 색상을
-                      변질시킵니다. 촬영이 허용된 곳이라도 플래시는 반드시 꺼야
-                      합니다.
-                    </p>
-                    <p>
-                      무음 촬영: 다른 관람객의 몰입을 방해하지 않도록 무음
-                      카메라 앱을 권장합니다.
-                    </p>
-                    <p>
-                      촬영 불가 구역: ‘No Photo’ 표시가 있는 작품이나 구역은
-                      절대 촬영해서는 안 됩니다.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="reservePolicyGroup">
-                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
-                    <span class="reservePolicyTitleText"
-                      >정숙 및 이동 에티켓</span
-                    >
-                    <span
-                      class="reservePolicyTitleLine"
-                      aria-hidden="true"
-                    ></span>
-                  </div>
-                  <div class="reservePolicyCopy">
-                    <p>
-                      대화는 소곤소곤: 작품에 대한 감상은 낮은 목소리로 나누어
-                      주세요.
-                    </p>
-                    <p>
-                      휴대전화 매너: 진동 모드로 전환하고, 통화는 전시장 밖에서
-                      부탁드립니다.
-                    </p>
-                    <p>
-                      뛰지 않기: 전시장 내에서 뛰는 행위는 본인과 타인의 안전,
-                      그리고 작품 보호를 위해 엄격히 금지됩니다.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="reservePolicyGroup">
-                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
-                    <span class="reservePolicyTitleText">반입 금지 품목</span>
-                    <span
-                      class="reservePolicyTitleLine"
-                      aria-hidden="true"
-                    ></span>
-                  </div>
-                  <div class="reservePolicyCopy">
-                    <p>
-                      음식물 및 음료: 생수를 포함한 모든 음식물은 반입이
-                      어렵습니다.
-                    </p>
-                    <p>
-                      큰 가방 및 우산: 백팩은 가방 보관소에 맡기거나 앞으로 매는
-                      것이 관례입니다. (뒤로 매면 뒤에 있는 작품을 칠 수 있기
-                      때문입니다.)
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 예매 취소 및 위약 규정 -->
-              <div class="reservePolicyBlock">
-                <div class="reservePolicyTitleBar">
-                  <span class="reservePolicyTitleText"
-                    >예매 취소 및 위약 규정</span
-                  >
-                  <span
-                    class="reservePolicyTitleLine"
-                    aria-hidden="true"
-                  ></span>
-                </div>
-                <p class="reservePolicyLead">
-                  대부분의 전시회는 공정거래위원회 소비자분쟁해결기준 및
-                  예매처(인터파크, 네이버 등)의 규정을 따릅니다.
-                </p>
-
-                <div class="reservePolicyGroup">
-                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
-                    <span class="reservePolicyTitleText">취소 가능 기한</span>
-                    <span
-                      class="reservePolicyTitleLine"
-                      aria-hidden="true"
-                    ></span>
-                  </div>
-                  <div class="reservePolicyCopy">
-                    <p>보통 관람 전일 17:00~23:59까지 취소가 가능합니다.</p>
-                    <p>
-                      당일 취소 및 환불은 원칙적으로 불가능한 경우가
-                      대부분입니다.
-                    </p>
-                  </div>
-                </div>
-
-                <div class="reservePolicyGroup">
-                  <div class="reservePolicyTitleBar reservePolicyTitleBar--sub">
-                    <span class="reservePolicyTitleText">취소 수수료</span>
-                    <span
-                      class="reservePolicyTitleLine"
-                      aria-hidden="true"
-                    ></span>
-                  </div>
-                  <div class="reservePolicyTableWrap">
-                    <table class="reservePolicyTable">
-                      <thead>
-                        <tr>
-                          <th scope="col">취소 시점</th>
-                          <th scope="col">취소 수수료</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>예매 후 7일 이내</td>
-                          <td>없음 (단, 관람일 전일까지만)</td>
-                        </tr>
-                        <tr>
-                          <td>예매 8일 후 ~ 관람일 10일 전</td>
-                          <td>장당 1,000원 ~ 2,000원 또는 티켓 금액의 10%</td>
-                        </tr>
-                        <tr>
-                          <td>관람일 9일 전 ~ 7일 전</td>
-                          <td>티켓 금액의 10%</td>
-                        </tr>
-                        <tr>
-                          <td>관람일 6일 전 ~ 3일 전</td>
-                          <td>티켓 금액의 20%</td>
-                        </tr>
-                        <tr>
-                          <td>관람일 2일 전 ~ 1일 전</td>
-                          <td>티켓 금액의 30%</td>
-                        </tr>
-                      </tbody>
-                    </table>
                   </div>
                 </div>
               </div>
