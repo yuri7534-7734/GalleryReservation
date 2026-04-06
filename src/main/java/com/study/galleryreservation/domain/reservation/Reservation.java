@@ -2,7 +2,6 @@ package com.study.galleryreservation.domain.reservation;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
 import com.study.galleryreservation.domain.member.Member;
-import com.study.galleryreservation.domain.session.SnsUser;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,7 +43,7 @@ public class Reservation {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Builder.Default // PENDING으로 초기화
+    @Builder.Default
     private ReservationStatus status = ReservationStatus.PENDING; //예약 상태 (PENDING/APPROVED/REJECTED)
 
     @Column(name = "created_at")
