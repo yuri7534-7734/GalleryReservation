@@ -49,16 +49,6 @@
       .filterGroup:last-child {
         margin-bottom: 0;
       }
-      #applyFilter {
-        border-color: #111111;
-        background: #ffffff;
-        color: #111111;
-      }
-      #applyFilter:hover {
-        background: #111111;
-        color: #ffffff;
-        border-color: #111111;
-      }
 
       .galleryMeta {
         display: flex;
@@ -184,6 +174,7 @@
         margin-bottom: 5px;
         display: -webkit-box;
         -webkit-line-clamp: 3;
+        line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -528,7 +519,6 @@
         const q = document.getElementById("q");
         const region = document.getElementById("region");
         const minCap = document.getElementById("minCap");
-        const applyBtn = document.getElementById("applyFilter");
         const cards = document.querySelectorAll("#galleryCardGrid article");
         if (!q || !region || !minCap) return;
 
@@ -541,18 +531,18 @@
             .querySelectorAll("#galleryCardGrid article")
             .forEach((card) => {
               const text = (card.innerText || "").toLowerCase();
-              const cr = card.getAttribute("data-region") || "ALL";
+              const cr = card.getAttribute("data-floor-zone") || "ALL";
               const cCap = Number(card.getAttribute("data-cap") || 0);
 
               const hitText = !query || text.includes(query);
-              const hitRegion = r === "ALL" || String(cr).includes(r);
+              const hitRegion = r === "ALL" || String(cr) === String(r);
               const hitCap = cCap >= cap;
               card.style.display = hitText && hitRegion && hitCap ? "" : "none";
             });
         }
         [q, minCap].forEach((el) => el.addEventListener("input", apply));
         region.addEventListener("change", apply);
-        if (applyBtn) applyBtn.addEventListener("click", apply);
+        apply();
       })();
     </script>
   </body>
