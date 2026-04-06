@@ -7,7 +7,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>할 일 수정 — Art Museum</title>
+    <title>할 일 수정</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
@@ -65,6 +65,12 @@
       .editCardPad {
         width: 960px;
         height: 600px;
+      }
+      #prevTitle {
+        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 1;          /* 최대 3줄까지만 표시 */
+        -webkit-box-orient: vertical;   /* 세로 방향으로 박스 정렬 */
+        overflow: hidden;               /* 넘치는 텍스트 숨김 */
       }
     </style>
   </head>
