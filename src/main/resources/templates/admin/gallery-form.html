@@ -21,6 +21,23 @@
       .guideBox { background: var(--bg1); border: 1px solid var(--stroke); padding: 20px; }
       .guideBox h3 { margin: 0 0 10px; font-size: 15px; font-weight: 700; }
       .guideBox p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.75; }
+      .formLayoutFixed {
+        align-items: start;
+      }
+      .previewDesc {
+        margin-top: 2px;
+        color: var(--text);
+        line-height: 1.65;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
     </style>
   </head>
   <body>
@@ -96,7 +113,7 @@
           th:text="${errorMessage}"
         ></div>
 
-        <section class="grid grid-2">
+        <section class="grid grid-2 formLayoutFixed">
           <div class="card cardPad">
             <form
               id="galleryForm"
@@ -290,8 +307,7 @@
                   </div>
                 </div>
                 <div
-                  class="helpText"
-                  style="margin-top: 2px; color: var(--text)"
+                  class="helpText previewDesc"
                   id="pDesc"
                 >
                   소개가 여기에 표시됩니다.
