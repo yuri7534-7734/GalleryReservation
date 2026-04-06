@@ -14,47 +14,8 @@
     .pageTitle { font-size: clamp(26px, 3vw, 42px); letter-spacing: -1.2px; line-height: 1.08; }
     .pageSubtitle { max-width: 60ch; }
 
-    /*
-     * 날개: 본문은 기존과 동일하게 .container만으로 중앙 정렬(좌측으로 당기지 않음).
-     * 필터는 뷰포트 기준 fixed로 “컨테이너 오른쪽 + 여백”에만 붙인다.
-     */
-    .galleryListWithWing {
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .filterWing.filterPanel {
-      --wing-w: 280px;
-      --wing-gap: 16px;
-      box-sizing: border-box;
-      width: var(--wing-w);
-      max-width: min(var(--wing-w), calc(100vw - 24px));
-      border: 1px solid var(--stroke);
-      border-radius: 12px;
-      background: var(--surface, #ffffff);
-      padding: 28px 24px;
-      overflow-y: auto;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-      z-index: 30;
-    }
-    @media (min-width: 901px) {
-      .filterWing.filterPanel {
-        position: fixed;
-        /* top·max-height: #galleryFilterAlign(실시간 행) 기준으로 스크립트가 설정 */
-        top: calc(var(--nav-h, 64px) + 20px);
-        max-height: calc(100vh - var(--nav-h, 64px) - 32px);
-        /*
-         * 50vw + (컨테이너 실효 폭)/2 + 간격 = 본문 박스 오른쪽 바깥 시작점.
-         * 좁은 화면에서는 min으로 뷰포트 안에 남도록 클램프.
-         */
-        left: min(
-          calc(
-            50vw + min(var(--container, 1360px), calc(100vw - 32px)) / 2 +
-              var(--wing-gap)
-          ),
-          calc(100vw - var(--wing-w) - 16px)
-        );
-      }
-    }
+    .contentArea { display: grid; grid-template-columns: 280px 1fr; gap: 0; align-items: start; min-height: 600px; }
+    .filterPanel { border-right: 1px solid var(--stroke); padding: 28px 24px; position: sticky; top: var(--nav-h); max-height: calc(100vh - var(--nav-h)); overflow-y: auto; }
     .filterTitle { font-size: 13px; font-weight: 900; letter-spacing: -0.2px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--stroke); }
     .filterGroup { margin-bottom: 22px; }
     .filterGroup:last-child { margin-bottom: 0; }
@@ -95,31 +56,16 @@
     }
     .galleryCardBadge { flex-shrink: 0; margin-top: auto; align-self: flex-start; }
 
+    .galleryCard--inactive {
+      opacity: 0.45;
+      pointer-events: none;
+    }
     .emptyState { padding: 48px 24px; text-align: center; color: var(--muted); margin-top: 1px; border: 1px solid var(--stroke); background: var(--bg1); }
     .emptyStateTitle { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
 
     @media (max-width: 900px) {
-      .galleryListWithWing {
-        display: flex;
-        flex-direction: column;
-      }
-      .galleryListWithWing > .container {
-        order: 2;
-      }
-      .galleryCardBadge { flex-shrink: 0; margin-top: auto; align-self: flex-start; }
-
-      .galleryCard--inactive {
-        opacity: 0.45;
-        pointer-events: none;
-      }
-      .emptyState { padding: 48px 24px; text-align: center; color: var(--muted); margin-top: 1px; border: 1px solid var(--stroke); background: var(--bg1); }
-      .emptyStateTitle { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-
-      @media (max-width: 900px) {
-        .contentArea { grid-template-columns: 1fr; }
-        .filterPanel { position: static; border-right: none; border-bottom: 1px solid var(--stroke); max-height: none; }
-        .grid-3 { grid-template-columns: repeat(2, 1fr); }
-      }
+      .contentArea { grid-template-columns: 1fr; }
+      .filterPanel { position: static; border-right: none; border-bottom: 1px solid var(--stroke); max-height: none; }
       .grid-3 { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 600px) { .galleryGrid { grid-template-columns: 1fr; } }
@@ -199,11 +145,40 @@
       </header>
     </div>
 
-    <!-- CONTENT: 본문만 일반 .container(기존 중앙 영역), 필터는 fixed 날개 -->
-    <div class="galleryListWithWing">
-        <div class="container">
+    <!-- CONTENT -->
+    <div class="container">
+      <div class="contentArea">
+        <!-- FILTER SIDEBAR -->
+        <aside class="filterPanel">
+          <div class="filterTitle">필터</div>
+          <div class="filterGroup">
+            <label for="q">검색</label>
+            <input id="q" type="text" placeholder="갤러리명 / 위치 / 키워드"/>
+          </div>
+          <div class="filterGroup">
+            <label for="region">층 / 구역</label>
+            <select id="region">
+              <option value="ALL" selected>전체</option>
+              <option value="1">1층</option>
+              <option value="2">2층</option>
+              <option value="3">3층</option>
+              <option value="B">지하</option>
+            </select>
+          </div>
+          <div class="filterGroup">
+            <label for="minCap">최소 인원</label>
+            <input id="minCap" type="number" min="1" step="1" value="1"/>
+          </div>
+<!--          <div class="row" style="justify-content: flex-end">-->
+<!--            <button class="btn btn-ghost" type="button" id="applyFilter">-->
+<!--              필터 적용-->
+<!--            </button>-->
+<!--          </div>-->
+        </aside>
+
+        <!-- GALLERY LIST -->
         <section class="galleryPanel">
-          <div class="galleryMeta" id="galleryFilterAlign">
+          <div class="galleryMeta">
             <div>
               <div class="galleryMetaTitle">전시 공간</div>
               <div class="galleryMetaSub">카드를 클릭하면 상세 및 예약 화면으로 이동합니다.</div>
@@ -255,54 +230,70 @@
             <div class="helpText">필터 조건을 변경해 다시 시도해보세요.</div>
           </div>
         </section>
-        </div>
-
-        <aside class="filterPanel filterWing" aria-label="전시 목록 필터 (우측 날개)">
-          <div class="filterTitle">필터</div>
-          <div class="filterGroup">
-            <label for="q">검색</label>
-            <input
-              id="q"
-              type="text"
-              placeholder="전시이름 / 위치 / 키워드"
-            />
-          </div>
-          <div class="filterGroup">
-            <label for="region">층 / 구역</label>
-            <select id="region">
-              <option value="ALL" selected>전체</option>
-              <option value="1">1층</option>
-              <option value="2">2층</option>
-              <option value="3">3층</option>
-              <option value="B">지하</option>
-            </select>
-          </div>
-          <div class="filterGroup">
-            <label for="minCap">최소 인원</label>
-            <input id="minCap" type="number" min="1" step="1" value="1"/>
-          </div>
-          <button class="btn btn-primary" type="button" id="applyFilter" style="width:100%;margin-top:8px">
-            필터 적용
-          </button>
-        </aside>
+      </div>
     </div>
   </main>
 
-        const grid = document.getElementById("galleryCardGrid");
-        if(grid){
-          Array.from(grid.querySelectorAll("article")).forEach(card => {
-            if (card.getAttribute("data-status") === "false") {
-              card.classList.add("galleryCard--inactive");
-              grid.appendChild(card);
-            }
-          })
-        }
+  <footer>
+    <div class="footerInner">
+      <div>
+        <div class="footerBrand">Art Museum</div>
+        <div class="footerDesc">국립현대미술관 예약 시스템<br/>미술 작품과 공간을 예약하세요.</div>
+      </div>
+      <div style="display:flex;gap:48px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">관람 안내</div>
+          <div class="footerLinks" style="flex-direction:column;gap:10px">
+            <a th:href="@{/gallery/list}">전시 목록</a>
+            <a href="#">관람 시간</a>
+            <a href="#">오시는 길</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">계정</div>
+          <div class="footerLinks" style="flex-direction:column;gap:10px">
+            <a th:href="@{/member/login}">로그인</a>
+            <a th:href="@{/member/join}">회원가입</a>
+            <a th:href="@{/reservation/list}">내 예약</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footerBottom">© 2026 Art Museum Reservation. All rights reserved.</div>
+  </footer>
+</div>
 
-        // q.addEventListener("keydown", (e) => { if (e.key === "Enter") apply(); });
-        // region.addEventListener("keydown", (e) => { if (e.key === "Click") apply(); });
-        if (applyBtn) applyBtn.addEventListener("click", apply);
-        apply();
-      })();
-    </script>
-  </body>
+<script>
+  (function () {
+    const q = document.getElementById("q");
+    const region = document.getElementById("region");
+    const minCap = document.getElementById("minCap");
+    const applyBtn = document.getElementById("applyFilter");
+    const cards = document.querySelectorAll("#galleryCardGrid article");
+    if (!q || !region || !minCap) return;
+
+    function apply() {
+      const query = (q.value || "").toLowerCase().trim();
+      const r = region.value || "ALL";
+      const cap = Number(minCap.value || 1);
+
+      document
+        .querySelectorAll("#galleryCardGrid article")
+        .forEach((card) => {
+          const text = (card.innerText || "").toLowerCase();
+          const cr = card.getAttribute("data-region") || "ALL";
+          const cCap = Number(card.getAttribute("data-cap") || 0);
+
+          const hitText = !query || text.includes(query);
+          const hitRegion = r === "ALL" || String(cr).includes(r);
+          const hitCap = cCap >= cap;
+          card.style.display = hitText && hitRegion && hitCap ? "" : "none";
+        });
+    }
+    [q, minCap].forEach((el) => el.addEventListener("input", apply));
+    region.addEventListener("change", apply);
+    if (applyBtn) applyBtn.addEventListener("click", apply);
+  })();
+</script>
+</body>
 </html>
