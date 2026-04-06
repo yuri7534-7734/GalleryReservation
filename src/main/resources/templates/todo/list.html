@@ -7,17 +7,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>할 일 목록 — Art Museum</title>
+    <title>할 일 목록</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
       /* 할 일 목록 전용 */
       :focus-visible { outline: none; box-shadow: var(--ring); border-color: var(--text) !important; }
       .toolbar { align-items: center; justify-content: space-between; border-bottom: none; margin-bottom: 24px; padding-bottom: 0; }
       .toolbarFilters { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-      .toolbarFilters select, .toolbarFilters input {
+      .toolbarFilters input {
         padding: 9px 13px; border: 1px solid var(--stroke-dark); border-radius: var(--radius);
         background: #ffffff; color: var(--text); font-size: 13.5px; font-family: inherit;
         outline: none; transition: border-color .12s;
+      }
+      .toolbarFilters select {
+        padding: 9px 13px;
+        padding-right: 40px;
+        border: 1px solid var(--stroke-dark); border-radius: var(--radius);
+        background-color: #ffffff;
+        color: var(--text); font-size: 13.5px; font-family: inherit;
+        outline: none; transition: border-color .12s;
+        background-position: right 12px center;
+        background-size: 12px 12px;
+        background-repeat: no-repeat;
+        cursor: pointer;
       }
       .toolbarFilters select:focus, .toolbarFilters input:focus { border-color: var(--text); box-shadow: var(--ring); }
       .tableWrap { background: #fff; }
@@ -25,7 +38,11 @@
       thead th { font-size: 11px; border-bottom: 1px solid var(--stroke-dark); }
       tbody td { padding: 16px; }
       .tdTitle { font-weight: 700; color: var(--text); margin-bottom: 3px; }
-      .tdDesc { color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+      .tdDesc { color: var(--muted); font-size: 12.5px; margin-top: 3px;
+        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 3;          /* 최대 3줄까지만 표시 */
+        -webkit-box-orient: vertical;   /* 세로 방향으로 박스 정렬 */
+        overflow: hidden;               /* 넘치는 텍스트 숨김 */ }
       .pageHeader { padding: 40px 0 32px; margin-bottom: 40px; }
     </style>
   </head>
@@ -101,7 +118,7 @@
         <div class="pageHeader">
           <div class="label">Task Management</div>
           <h1>할 일 목록</h1>
-          <p>전시 운영 준비, 점검, 공지 초안을 관리하는 화면입니다.</p>
+          <p>전시 운영 준비, 점검, 공지 초안을 관리할 수 있어요.</p>
         </div>
 
         <div th:if="${errorMessage}" class="flashErr" role="alert" th:text="${errorMessage}"></div>

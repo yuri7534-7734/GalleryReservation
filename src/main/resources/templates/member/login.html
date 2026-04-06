@@ -7,11 +7,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>로그인 — Art Museum</title>
+    <title>로그인</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <style>
       /* 로그인 전용 */
-      input, select { padding: 12px 14px; font-size: 14.5px; }
+      input { padding: 12px 14px; font-size: 14.5px; }
+      select {
+        padding: 12px 14px;
+        padding-right: 42px;
+        font-size: 14.5px;
+        background-position: right 13px center;
+      }
       .authLayout { display: grid; grid-template-columns: 1fr 400px; min-height: calc(100vh - var(--nav-h)); }
       .authLeft { background: #111111; background-image: url('https://images.unsplash.com/photo-1579783902915-f0b0de2c2eb3?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); background-size: cover; background-position: center; background-blend-mode: luminosity; display: flex; flex-direction: column; justify-content: space-between; padding: 64px 56px 64px max(58px, calc((100vw - var(--container)) / 2 + 16px)); color: #ffffff; position: relative; overflow: hidden; }
       .authLeft::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.55); pointer-events: none; }
@@ -106,9 +113,10 @@
           <div class="authLeft">
             <div class="authLeftContent">
               <div class="authEyebrow">Art Museum</div>
-              <h1 class="authTitle">일상에 깊이를 더하는 로그인</h1>
+              <h1 class="authTitle">일상에 깊이를 더하다</h1>
               <p class="authSubtitle">
                 더 편리한 전시 예약과 조회를 위해 로그인이 필요해요.
+                함께하고 다양한 혜택을 만나보세요.
               </p>
             </div>
             <div class="authQuote">
@@ -119,7 +127,7 @@
           <!-- RIGHT FORM -->
           <div class="authRight">
             <div class="authFormTitle">로그인</div>
-            <div class="authFormSubtitle">아이디와 비밀번호로 로그인합니다.</div>
+            <div class="authFormSubtitle">아이디와 비밀번호를 입력해주세요.</div>
 
             <div class="alertError alertBox" th:if="${param.error}">
               아이디 또는 비밀번호가 올바르지 않습니다.
