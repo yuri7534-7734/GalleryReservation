@@ -8,6 +8,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>갤러리 수정 - 관리자</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" th:href="@{/css/common.css}" />
     <style>
       /* 갤러리 수정 전용 */
@@ -159,17 +160,6 @@
         color: var(--muted);
         line-height: 1.65;
       }
-      .previewDesc {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        white-space: normal;
-        overflow-wrap: anywhere;
-        word-break: break-word;
-      }
     </style>
   </head>
   <body>
@@ -309,7 +299,7 @@
                     th:if="${#fields.hasErrors('name')}"
                     th:errors="*{name}"
                   >
-                    이름 오류
+                    갤러리명 오류
                   </div>
                 </div>
 
@@ -404,6 +394,11 @@
                   th:field="*{description}"
                   placeholder="전시 공간의 분위기와 관람 포인트를 간단히 적어주세요."
                 ></textarea>
+                <p
+                  th:if="${#fields.hasErrors('description')}"
+                  th:errors="*{description}"
+                  style="color: red; font-size: 13px"
+                ></p>
                 <div class="helpText">예약 카드에 2줄로 잘려 표시됩니다.</div>
               </div>
 
@@ -477,10 +472,16 @@
                     font-size: 13.5px;
                     color: var(--text);
                     line-height: 1.65;
+                    width: 500px;
+                    height: 65px;
+                    max-width: 500px;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3; /* 보여지는 문장 수 */
+                    -webkit-box-orient: vertical;
                   "
                   id="pDesc"
                   th:text="${gallery.description}"
-                  class="previewDesc"
                 >
                   소개글이 여기에 표시됩니다.
                 </div>

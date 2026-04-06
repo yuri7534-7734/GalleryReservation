@@ -1,7 +1,6 @@
 package com.study.galleryreservation.controller;
 
 import com.study.galleryreservation.domain.gallery.Gallery;
-import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
 import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
@@ -102,7 +101,7 @@ public class AdminController {
         return "admin/gallery-edit";
     }
 
-    // 갤러리 수정
+     // 갤러리 수정
     @PostMapping("/gallery/edit/{id}")
     public String edit(@PathVariable Long id,
                        @Valid @ModelAttribute GalleryUpdateRequestDto dto,
@@ -111,7 +110,7 @@ public class AdminController {
             model.addAttribute("gallery", galleryService.findById(id));
             return "admin/gallery-edit";
         }
-
+        
         try {
             galleryService.update(id, dto); //업데이트 시도
         } catch (DataIntegrityViolationException e) { //DB 제약 위반 에러 발생 시 잡음
@@ -128,7 +127,7 @@ public class AdminController {
                 bindingResult.reject("saveFailed", "저장 중 오류가 발생했습니다.");
             }
         }
-
+        
         return "redirect:/admin/gallery/list";
     }
 }

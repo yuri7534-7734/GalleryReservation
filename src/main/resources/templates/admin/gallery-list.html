@@ -8,12 +8,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>갤러리 관리 — Art Museum</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" th:href="@{/css/common.css}" />
     <style>
       /* 관리자 갤러리 목록: 내 예약·할 일 페이지와 동일한 common.css 기준, 표 영역만 보정 */
       .tableWrap {
         margin-top: 0;
         margin-bottom: 0;
+      }
+      table {
+        table-layout: fixed;
+        width: 100%;
+      }
+
+      /* 위치 컬럼 */
+      td:nth-child(3),
+      th:nth-child(3) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* 갤러리명 컬럼 */
+      .tdMain {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     </style>
   </head>
@@ -143,7 +163,11 @@
                 <option value="INACTIVE">마감</option>
               </select>
             </div>
-            <form method="get" th:action="@{/admin/gallery/list}" style="flex:1;max-width:300px;">
+            <form
+              method="get"
+              th:action="@{/admin/gallery/list}"
+              style="flex: 1; max-width: 300px"
+            >
               <div class="toolbarItem" style="flex: 1; max-width: 300px">
                 <label for="searchText">검색</label>
                 <input
@@ -163,7 +187,6 @@
               >
             </div>
           </div>
-
           <div class="tableWrap" style="margin-bottom: 24px">
             <table aria-label="갤러리 목록">
               <thead>

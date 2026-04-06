@@ -272,37 +272,6 @@
                   </div>
                 </div>
 
-                <div class="row">
-                  <div>
-                    <div style="font-weight: 700; font-size: 16px">
-                      기본 정보
-                    </div>
-                    <div class="helpText" style="margin-top: 4px">
-                      제목 · 기한 · 내용을 입력하세요.
-                    </div>
-                  </div>
-                  <a class="btn btn-ghost btn-small" th:href="@{/todo/list}"
-                    >목록으로</a
-                  >
-                </div>
-
-                <div class="formGrid">
-                  <div>
-                    <label for="todoTitle">제목</label>
-                    <input
-                      id="todoTitle"
-                      th:field="*{title}"
-                      type="text"
-                      placeholder="예: 입장 동선 점검"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label for="todoDue">기한</label>
-                    <input id="todoDue" th:field="*{dueDate}" type="date" />
-                  </div>
-                </div>
-
                 <div>
                   <label for="todoContent">상세 내용</label>
                   <textarea
@@ -320,18 +289,20 @@
             </div>
 
             <div class="stack">
-              <div class="card cardPad">
+              <div class="card cardPad subCardPad">
                 <div class="row" style="margin-bottom: 16px">
                   <div style="font-weight: 700; font-size: 15px">미리보기</div>
                   <span class="badge badge-warn" id="previewState">미완료</span>
                 </div>
                 <div class="previewCard">
-                  <div class="previewCardTitle" id="prevTitle">할 일 제목</div>
+                  <div class="previewCardTitleRow">
+                    <div class="previewCardTitle" id="prevTitle">
+                      할 일 제목
+                    </div>
+                    <span class="badge" id="prevDue">기한 미정</span>
+                  </div>
                   <div class="previewCardContent" id="prevContent">
                     상세 내용이 여기에 표시됩니다.
-                  </div>
-                  <div style="margin-top: 12px">
-                    <span class="badge" id="prevDue">기한 미정</span>
                   </div>
                 </div>
                 <div class="helpText" style="margin-top: 10px">
@@ -339,39 +310,12 @@
                 </div>
               </div>
 
-              <div class="stack">
-                <div class="card cardPad subCardPad">
-                  <div class="row" style="margin-bottom: 16px">
-                    <div style="font-weight: 700; font-size: 15px">
-                      미리보기
-                    </div>
-                    <span class="badge badge-warn" id="previewState"
-                      >미완료</span
-                    >
-                  </div>
-                  <div class="previewCard">
-                    <div class="previewCardTitleRow">
-                      <div class="previewCardTitle" id="prevTitle">
-                        할 일 제목
-                      </div>
-                      <span class="badge" id="prevDue">기한 미정</span>
-                    </div>
-                    <div class="previewCardContent" id="prevContent">
-                      상세 내용이 여기에 표시됩니다.
-                    </div>
-                  </div>
-                  <div class="helpText" style="margin-top: 10px">
-                    입력값이 카드에 실시간 반영됩니다.
-                  </div>
-                </div>
-
-                <div class="guideBox">
-                  <h3>작성 팁</h3>
-                  <p>
-                    "무엇을 · 어디까지 · 어떤 결과를" 한 문장에 담으면, 다음
-                    담당자가 이어서 처리하기 쉬워집니다.
-                  </p>
-                </div>
+              <div class="guideBox">
+                <h3>작성 팁</h3>
+                <p>
+                  "무엇을 · 어디까지 · 어떤 결과를" 한 문장에 담으면, 다음
+                  담당자가 이어서 처리하기 쉬워집니다.
+                </p>
               </div>
             </div>
           </div>

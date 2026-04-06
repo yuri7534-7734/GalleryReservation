@@ -7,7 +7,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>내 예약 — Art Museum</title>
+    <title>내 예약</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" th:href="@{/css/common.css}" />
   </head>
   <body>
@@ -123,6 +124,7 @@
           <header class="pageHeader">
             <div class="pageEyebrow">My Reservation · History</div>
             <h1 class="pageTitle">내 예약</h1>
+            <p>예약 내역과 일정을 한눈에 확인하세요.</p>
           </header>
 
           <!-- TOOLBAR -->
@@ -137,10 +139,20 @@
                 <option value="CANCELLED">취소</option>
               </select>
             </div>
-            <form method="get" th:action="@{/reservation/list}" style="flex:1; max-width:300px;">
+            <form
+              method="get"
+              th:action="@{/reservation/list}"
+              style="flex: 1; max-width: 300px"
+            >
               <div class="toolbarItem" style="flex: 1; max-width: 300px">
                 <label for="mySearch">검색</label>
-                <input id="mySearch" name="keyword" type="text" placeholder="갤러리명" th:value="${keyword}" />
+                <input
+                  id="mySearch"
+                  name="keyword"
+                  type="text"
+                  placeholder="갤러리명"
+                  th:value="${keyword}"
+                />
               </div>
             </form>
             <div style="margin-left: auto; padding-bottom: 0">
@@ -222,11 +234,7 @@
                   >
                     2명
                   </td>
-                  <td
-                    th:text="${reservation.contact != null and !#strings.isEmpty(reservation.contact) ? reservation.contact : '—'}"
-                  >
-                    010-0000-0000
-                  </td>
+                  <td th:text="${reservation.formattedPhone}">010-0000-0000</td>
                   <td>
                     <span
                       th:class="${reservation.status.name() == 'APPROVED'} ? 'badge badge-ok' :

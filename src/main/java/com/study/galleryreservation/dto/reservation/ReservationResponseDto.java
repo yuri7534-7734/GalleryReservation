@@ -22,6 +22,7 @@ public class ReservationResponseDto {
     private LocalTime endTime;
     private Integer guests;
     private String contact;
+    private String formattedPhone;
     private ReservationStatus status;
 
     public static ReservationResponseDto from(Reservation reservation) {
