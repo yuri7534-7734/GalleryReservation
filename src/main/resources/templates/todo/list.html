@@ -226,15 +226,18 @@
       (function () {
         const status = document.getElementById("tStatus");
         const search = document.getElementById("tSearch");
+
         const rows = document.querySelectorAll("#todoRows tr[data-status]");
         if (!status || !search || !rows.length) return;
 
         function apply() {
           const st = status.value || "ALL";
-          const q = (search.value || "").toLowerCase().trim();
+          const q = (search.value || "").toLowerCase().replace(/\s/g,"");
+
+
           rows.forEach((tr) => {
             const trSt = tr.getAttribute("data-status") || "false";
-            const text = (tr.innerText || "").toLowerCase();
+            const text = (tr.innerText || "").toLowerCase().replace(/\s/g, "");
             const hitSt = st === "ALL" || trSt === st;
             const hitTx = !q || text.includes(q);
             tr.style.display = hitSt && hitTx ? "" : "none";
@@ -242,8 +245,12 @@
         }
 
         status.addEventListener("change", apply);
-        search.addEventListener("input", apply);
-        apply();
+        search.addEventListener("keydown", function (e){
+          if (e.key === "Enter") {
+            e.preventDefault();
+            apply();
+          }
+        });
       })();
     </script>
   </body>
