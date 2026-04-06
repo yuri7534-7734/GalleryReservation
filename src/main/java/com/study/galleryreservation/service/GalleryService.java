@@ -5,7 +5,6 @@ import com.study.galleryreservation.domain.member.Member;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.reservation.ReservationStatus;
 import com.study.galleryreservation.dto.gallery.GalleryCreateRequestDto;
-import com.study.galleryreservation.dto.gallery.GalleryResponseDto;
 import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.repository.GalleryRepository;
@@ -21,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +30,11 @@ public class GalleryService {
     private final ReservationRepository reservationRepository;
 
     // 갤러리 조회(관리자 전용)
-    public Page<Gallery> getList(int page){
+    public Page<Gallery> getList(int page, String keyword){
         Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        if (keyword != null && !keyword.isBlank()) {
+            return galleryRepository.findByNameContainingIgnoreCaseOrLocationContainingIgnoreCase(keyword, keyword, pageable);
+        }
         return galleryRepository.findAll(pageable);
     }
 
@@ -73,15 +73,16 @@ public class GalleryService {
 
     // 갤러리 단건 조회
     public Gallery findById(final Long id) {
-        return galleryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
+        return galleryRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
     }
 
      // 갤러리 수정(관리자 전용)
     @Transactional
     public void update(final Long id, final GalleryUpdateRequestDto dto) {
-        Gallery gallery = galleryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
+        Gallery gallery = galleryRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
+
         gallery.update(dto.getName(), dto.getLocation(), dto.getFloorZone(),
                 dto.getDescription(), dto.getCapacity(), dto.getActive(), dto.getCoverImageUrl());
     }
@@ -104,8 +105,7 @@ public class GalleryService {
 
         Gallery gallery = galleryRepository.findById(requestDto.getGalleryId())
                 .orElseThrow(()->new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
-
-
+        
         Reservation reservation = Reservation.builder()
                 .member(member)
                 .gallery(gallery)
@@ -113,10 +113,21 @@ public class GalleryService {
                 .startTime(requestDto.getStartTime())
                 .endTime(requestDto.getEndTime())
                 .guests(requestDto.getGuests())
-                .contact(requestDto.getContact())
+                .contact(formatPhoneNumber(requestDto.getContact()))
                 .status(ReservationStatus.PENDING)
                 .build();
 
         reservationRepository.save(reservation);
+    }
+
+    // 숫자만 추출 후 자릿수에 따라 하이픈 포맷(010-XXXX-XXXX)으로 변환
+    private String formatPhoneNumber(String phone) {
+        String digits = phone.replaceAll("[^0-9]", "");
+        if (digits.length() == 11) {
+            return digits.substring(0, 3) + "-" + digits.substring(3, 7) + "-" + digits.substring(7);
+        } else if (digits.length() == 10) {
+            return digits.substring(0, 3) + "-" + digits.substring(3, 6) + "-" + digits.substring(6);
+        }
+        return phone;
     }
 }

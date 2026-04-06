@@ -106,13 +106,19 @@
       .galleryListWithWing > .container {
         order: 2;
       }
-      .filterWing.filterPanel {
-        position: static;
-        width: 100%;
-        max-width: 100%;
-        max-height: none;
-        margin: 0 16px 16px;
-        order: 1;
+      .galleryCardBadge { flex-shrink: 0; margin-top: auto; align-self: flex-start; }
+
+      .galleryCard--inactive {
+        opacity: 0.45;
+        pointer-events: none;
+      }
+      .emptyState { padding: 48px 24px; text-align: center; color: var(--muted); margin-top: 1px; border: 1px solid var(--stroke); background: var(--bg1); }
+      .emptyStateTitle { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+
+      @media (max-width: 900px) {
+        .contentArea { grid-template-columns: 1fr; }
+        .filterPanel { position: static; border-right: none; border-bottom: 1px solid var(--stroke); max-height: none; }
+        .grid-3 { grid-template-columns: repeat(2, 1fr); }
       }
       .grid-3 { grid-template-columns: repeat(2, 1fr); }
     }
@@ -282,107 +288,21 @@
     </div>
   </main>
 
-  <footer>
-    <div class="footerInner">
-      <div>
-        <div class="footerBrand">Art Museum</div>
-        <div class="footerDesc">국립현대미술관 예약 시스템<br/>미술 작품과 공간을 예약하세요.</div>
-      </div>
-      <div style="display:flex;gap:48px;flex-wrap:wrap">
-        <div>
-          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">관람 안내</div>
-          <div class="footerLinks" style="flex-direction:column;gap:10px">
-            <a th:href="@{/gallery/list}">전시 목록</a>
-            <a href="#">관람 시간</a>
-            <a href="#">오시는 길</a>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">계정</div>
-          <div class="footerLinks" style="flex-direction:column;gap:10px">
-            <a th:href="@{/member/login}">로그인</a>
-            <a th:href="@{/member/join}">회원가입</a>
-            <a th:href="@{/reservation/list}">내 예약</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="footerBottom">© 2026 Art Museum Reservation. All rights reserved.</div>
-  </footer>
-</div>
+        const grid = document.getElementById("galleryCardGrid");
+        if(grid){
+          Array.from(grid.querySelectorAll("article")).forEach(card => {
+            if (card.getAttribute("data-status") === "false") {
+              card.classList.add("galleryCard--inactive");
+              grid.appendChild(card);
+            }
+          })
+        }
 
-<script>
-  (function () {
-    const q = document.getElementById("q");
-    const region = document.getElementById("region");
-    const minCap = document.getElementById("minCap");
-    const applyBtn = document.getElementById("applyFilter");
-    const emptyState = document.getElementById("emptyState");
-    if (!q || !region || !minCap) return;
-
-    function apply() {
-      const query = (q.value || "").toLowerCase().trim();
-      const r = region.value || "ALL";
-      const cap = Number(minCap.value || 1);
-      let visibleCount = 0;
-
-      document.querySelectorAll("#galleryCardGrid article").forEach((card) => {
-        const text = (card.innerText || "").toLowerCase();
-        const fz = card.getAttribute("data-floor-zone") || "";
-        const cCap = Number(card.getAttribute("data-cap") || 0);
-        const hitText = !query || text.includes(query);
-        const hitRegion = r === "ALL" || fz === r;
-        const hitCap = cCap >= cap;
-        const show = hitText && hitRegion && hitCap;
-        card.style.display = show ? "" : "none";
-        if (show) visibleCount++;
-      });
-
-      if (emptyState) emptyState.style.display = visibleCount === 0 ? "block" : "none";
-    }
-
-    [q, minCap].forEach((el) => el.addEventListener("input", apply));
-    region.addEventListener("change", apply);
-    if (applyBtn) applyBtn.addEventListener("click", apply);
-    apply();
-  })();
-
-  (function () {
-    var wing = document.querySelector(".filterWing.filterPanel");
-    var anchor = document.getElementById("galleryFilterAlign");
-    if (!wing || !anchor) return;
-
-    function navHeightPx() {
-      var v = getComputedStyle(document.documentElement).getPropertyValue("--nav-h").trim();
-      if (v.endsWith("px")) return parseFloat(v) || 64;
-      return 64;
-    }
-
-    function syncFilterWingToRealtimeRow() {
-      if (window.matchMedia("(max-width: 900px)").matches) {
-        wing.style.top = "";
-        wing.style.maxHeight = "";
-        return;
-      }
-      var navH = navHeightPx();
-      var topPx = Math.max(navH + 6, anchor.getBoundingClientRect().top);
-      wing.style.top = topPx + "px";
-      wing.style.maxHeight = Math.max(200, window.innerHeight - topPx - 24) + "px";
-    }
-
-    window.addEventListener("load", function () {
-      syncFilterWingToRealtimeRow();
-      requestAnimationFrame(syncFilterWingToRealtimeRow);
-    });
-    window.addEventListener("resize", syncFilterWingToRealtimeRow);
-    window.addEventListener("scroll", syncFilterWingToRealtimeRow, { passive: true });
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", syncFilterWingToRealtimeRow);
-    } else {
-      syncFilterWingToRealtimeRow();
-      requestAnimationFrame(syncFilterWingToRealtimeRow);
-    }
-  })();
-</script>
-</body>
+        // q.addEventListener("keydown", (e) => { if (e.key === "Enter") apply(); });
+        // region.addEventListener("keydown", (e) => { if (e.key === "Click") apply(); });
+        if (applyBtn) applyBtn.addEventListener("click", apply);
+        apply();
+      })();
+    </script>
+  </body>
 </html>

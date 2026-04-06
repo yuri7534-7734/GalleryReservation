@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -51,17 +52,11 @@ public class GalleryController {
 
     //갤러리 전시 예약 등록
     @PostMapping("/gallery/detail")
-    public String postForm(@ModelAttribute ReservationCreateRequestDto requestDto,
+    public String postForm(@Valid @ModelAttribute ReservationCreateRequestDto requestDto,
                            HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
         galleryService.save(requestDto, sessionUser.getEmail());
         return "redirect:/reservation/list";
     }
-    //갤러리 예약 폼
-    @GetMapping("/gallery/form")
-    public String getForm(Model model) {
-        model.addAttribute("reservationCreateRequestDto", new ReservationCreateRequestDto());
-        model.addAttribute("galleries", galleryRepository.findAll());
-        return "reservation/form";
-    }
+
 }

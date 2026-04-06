@@ -24,17 +24,24 @@ public class ReservationService {
     public final MemberRepository memberRepository;
 
     // 전시 예약 리스트 10개씩 조회(관리자 전용)
-    public Page<Reservation> getList(int page) {
+    public Page<Reservation> getList(int page, String keyword) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
+        if (keyword != null && !keyword.isBlank()) {
+            return reservationRepository.findByGallery_NameContainingIgnoreCase(keyword, pageable);
+        }
         return reservationRepository.findAll(pageable);
     }
 
     // 로그인한 유저의 예약 목록을 DTO 페이징으로 조회
-    public Page<ReservationResponseDto> findByEmailPage(String email, int page) {
+    public Page<ReservationResponseDto> findByEmailPage(String email, int page, String keyword) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다."));
 
         Pageable pageable = PageRequest.of(Math.max(page, 0), 10, Sort.by("createdAt").descending());
+        if (keyword != null && !keyword.isBlank()) {
+            return reservationRepository.findByMemberAndGallery_NameContainingIgnoreCase(member, keyword, pageable)
+                    .map(ReservationResponseDto::from);
+        }
         return reservationRepository.findByMember(member, pageable)
                 .map(ReservationResponseDto::from);
     }

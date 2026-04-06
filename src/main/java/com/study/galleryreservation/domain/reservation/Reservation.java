@@ -44,6 +44,7 @@ public class Reservation {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default // PENDING으로 초기화
     private ReservationStatus status = ReservationStatus.PENDING; //예약 상태 (PENDING/APPROVED/REJECTED)
 
     @Column(name = "created_at")

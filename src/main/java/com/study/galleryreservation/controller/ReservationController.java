@@ -1,7 +1,9 @@
 package com.study.galleryreservation.controller;
 
+import com.study.galleryreservation.domain.gallery.Gallery;
 import com.study.galleryreservation.domain.reservation.Reservation;
 import com.study.galleryreservation.domain.session.SessionUser;
+import com.study.galleryreservation.dto.gallery.GalleryUpdateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationCreateRequestDto;
 import com.study.galleryreservation.dto.reservation.ReservationResponseDto;
 import com.study.galleryreservation.repository.GalleryRepository;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,10 +28,13 @@ public class ReservationController {
 
     // 예약 리스트 패이지
     @GetMapping("/list")
-    public String reservationList(@RequestParam(defaultValue = "0") int page, Model model, HttpSession session) {
+    public String reservationList(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "") String keyword,
+                                  Model model, HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-        Page<ReservationResponseDto> reservationPage = reservationService.findByEmailPage(sessionUser.getEmail(), page);
+        Page<ReservationResponseDto> reservationPage = reservationService.findByEmailPage(sessionUser.getEmail(), page, keyword);
         model.addAttribute("page", reservationPage);
+        model.addAttribute("keyword", keyword);
         return "reservation/list";
     }
 
@@ -49,5 +55,4 @@ public class ReservationController {
         reservationService.cancel(id, sessionUser.getEmail());
         return "redirect:/reservation/list";
     }
-
 }

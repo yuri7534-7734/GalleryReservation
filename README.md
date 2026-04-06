@@ -105,18 +105,80 @@ src/main/resources/
 
 ## 🗄️ ERD
 
-```
-member (1) ──────< todo (N)
-member (1) ──────< reservation (N)
-gallery (1) ─────< reservation (N)
+```mermaid
+erDiagram
+    MEMBER {
+        BIGINT id PK
+        VARCHAR username UK
+        VARCHAR password
+        VARCHAR email UK
+        VARCHAR role
+        TIMESTAMP created_at
+    }
+
+    GALLERY {
+        BIGINT id PK
+        VARCHAR name
+        VARCHAR location
+        VARCHAR floor_zone
+        TEXT description
+        INT capacity
+        BOOLEAN is_active
+        TIME start_time
+        TIME end_time
+        VARCHAR cover_image_url
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+
+    RESERVATION {
+        BIGINT id PK
+        BIGINT member_id FK
+        BIGINT gallery_id FK
+        DATE reservation_date
+        TIME start_time
+        TIME end_time
+        INT guests
+        VARCHAR contact_info
+        VARCHAR status
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+
+    TODO {
+        BIGINT id PK
+        BIGINT member_id FK
+        VARCHAR title
+        TEXT content
+        BOOLEAN is_done
+        DATE due_date
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+
+    SNS_USER {
+        BIGINT id PK
+        VARCHAR provider
+        VARCHAR provider_id
+        VARCHAR email
+        VARCHAR name
+        VARCHAR picture
+        VARCHAR user_role
+        DATE created_date
+    }
+
+    MEMBER ||--o{ RESERVATION : "예약"
+    MEMBER ||--o{ TODO : "작성"
+    GALLERY ||--o{ RESERVATION : "포함"
 ```
 
-| 테이블 | 주요 컬럼 |
-|--------|-----------|
-| member | id, username, password, email, role, created_at |
-| gallery | id, name, location, floor_zone, capacity, is_active |
-| reservation | id, member_id, gallery_id, reservation_date, start_time, end_time, status |
-| todo | id, member_id, title, content, is_done, due_date |
+| 테이블 | 설명 |
+|--------|------|
+| member | 회원 정보 (아이디, 비밀번호, 이메일, 권한) |
+| gallery | 갤러리 공간 정보 (위치, 수용인원, 운영시간, 커버이미지) |
+| reservation | 예약 정보 (날짜, 시간, 인원, 연락처, 상태) |
+| todo | 할 일 정보 (제목, 내용, 마감일, 완료 여부) |
+| sns_user | 소셜 로그인 사용자 정보 (provider, 역할) |
 
 ---
 

@@ -9,33 +9,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>미술관 예약 — Art Museum</title>
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <style>
-      /* ── HERO ── */
-        .hero {
-          background: #2a2a2a;
-          color: #ffffff;
-          padding: 100px 0 80px;
-          position: relative;
-          overflow: hidden;
-          /*https://images.unsplash.com/photo-1500856311637-fc0249e33e4c?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D*/
-          background-image: url('https://images.unsplash.com/photo-1737490419239-8b9a7895a17b?q=80&w=1246&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-          background-size: cover;
-          background-position: center;
-          background-blend-mode: overlay;
-        }
-      /* 어둡게 만들어줌 */
-      /*.hero::before {*/
-      /*  content: "";*/
-      /*  position: absolute;*/
-      /*  inset: 0;*/
-      /*  background: rgba(0, 0, 0, 0.55);*/
-      /*  z-index: 0;*/
-      /*}*/
+      /* ── HERO (이미지 슬라이드만) ── */
+      .hero {
+        padding: 0;
+        margin: 0;
+        background: #1a1a1a;
+        position: relative;
+        overflow: hidden;
+      }
 
-      .hero::after {
+      .heroCarousel {
+        position: relative;
+        min-height: min(52vh, 520px);
+        height: min(60vh, 600px);
+      }
+
+      .heroSlide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 0.65s ease;
+        pointer-events: none;
+      }
+
+      .heroSlide.is-active {
+        opacity: 1;
+        z-index: 1;
+      }
+
+      .heroCarousel::after {
         content: "";
         position: absolute;
         inset: 0;
+        z-index: 2;
         background: repeating-linear-gradient(
           0deg,
           rgba(255, 255, 255, 0.02) 0px,
@@ -46,109 +56,160 @@
         pointer-events: none;
       }
 
-      .heroInner {
-        position: relative;
-        z-index: 1;
+      .heroArrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 4;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        background: rgba(0, 0, 0, 0.35);
+        color: #ffffff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
       }
 
-      .heroEyebrow {
+      .heroArrow:hover {
+        background: rgba(0, 0, 0, 0.55);
+        border-color: rgba(255, 255, 255, 0.55);
+      }
+
+      .heroArrow:active {
+        transform: translateY(-50%) scale(0.96);
+      }
+
+      .heroArrow svg {
+        width: 22px;
+        height: 22px;
+        display: block;
+      }
+
+      .heroArrowPrev {
+        left: 16px;
+      }
+
+      .heroArrowNext {
+        right: 16px;
+      }
+
+      @media (max-width: 620px) {
+        .heroCarousel {
+          min-height: min(42vh, 380px);
+          height: min(42vh, 380px);
+        }
+
+        .heroArrow {
+          width: 42px;
+          height: 42px;
+        }
+
+        .heroArrowPrev {
+          left: 10px;
+        }
+
+        .heroArrowNext {
+          right: 10px;
+        }
+      }
+
+      .heroDots {
+        position: absolute;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        z-index: 4;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .heroDot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        background: transparent;
+        padding: 0;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .heroDot.is-active {
+        background: #ffffff;
+        border-color: #ffffff;
+        transform: scale(1.15);
+      }
+
+      /* ── HERO 하단 카피 영역 ── */
+      .heroIntro {
+        background: var(--bg0);
+        border-bottom: 1px solid var(--stroke);
+        padding: 40px 0 46px;
+      }
+
+      .heroIntroInner {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 28px 40px;
+        flex-wrap: wrap;
+      }
+
+      .heroIntroText {
+        flex: 1 1 280px;
+        min-width: 0;
+      }
+
+      .heroIntroEyebrow {
         font-size: 11px;
         font-weight: 700;
-        letter-spacing: 0.28em;
+        letter-spacing: 0.26em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.5);
-        margin-bottom: 20px;
+        color: var(--muted);
+        margin-bottom: 14px;
         display: flex;
         align-items: center;
         gap: 12px;
       }
 
-      .heroEyebrow::before {
+      .heroIntroEyebrow::before {
         content: "";
         display: inline-block;
         width: 28px;
         height: 1px;
-        background: rgba(255, 255, 255, 0.4);
+        background: var(--stroke-dark);
       }
 
-      .heroTitle {
+      .heroIntroTitle {
         font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
-        font-size: clamp(30px, 6vw, 70px);
-        font-weight: 700;
-        line-height: 1.06;
-        letter-spacing: -2px;
-        margin: 0 0 24px;
-        color: #ffffff;
+        font-size: clamp(22px, 3.8vw, 40px);
+        font-weight: 800;
+        line-height: 1.12;
+        letter-spacing: -1.2px;
+        margin: 0 0 18px;
+        color: var(--text);
       }
 
-      .heroSubtitle {
-        font-size: 16px;
-        line-height: 1.8;
-        color: rgba(255, 255, 255, 0.65);
-        max-width: 52ch;
-        margin: 0 0 40px;
+      .heroIntroSubtitle {
+        font-size: 15px;
+        line-height: 1.85;
+        color: var(--muted);
+        max-width: 48ch;
+        margin: 0;
       }
 
-      .heroActions {
+      .heroIntroActions {
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
-      }
-
-      .heroActions .btn-primary {
-        background: #ffffff;
-        color: #111111;
-        border-color: #ffffff;
-        padding: 13px 32px;
-        font-size: 15px;
-      }
-
-      .heroActions .btn-primary:hover {
-        background: #f0f0f0;
-        border-color: #f0f0f0;
-        color: #111111;
-      }
-
-      .heroActions .btn-ghost {
-        border-color: rgba(255, 255, 255, 0.35);
-        color: rgba(255, 255, 255, 0.85);
-        padding: 13px 32px;
-        font-size: 15px;
-        background: transparent;
-      }
-
-      .heroActions .btn-ghost:hover {
-        border-color: rgba(255, 255, 255, 0.7);
-        background: rgba(255, 255, 255, 0.07);
-      }
-
-      .heroStat {
-        display: flex;
-        gap: 48px;
-        margin-top: 60px;
-        padding-top: 40px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        flex-wrap: wrap;
-      }
-
-      .statItem {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-
-      .statNum {
-        font-size: 28px;
-        font-weight: 800;
-        letter-spacing: -1px;
-        color: #ffffff;
-      }
-
-      .statLabel {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.45);
-        font-weight: 600;
-        letter-spacing: 0.05em;
+        align-items: center;
+        flex-shrink: 0;
       }
 
       /* ── CONTENT SECTIONS ── */
@@ -422,6 +483,16 @@
         color: rgba(255, 255, 255, 0.6);
         transition: color 0.1s ease;
       }
+      .footerNavLink[type="submit"]{
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.6);
+        transition: color 0.1s ease;
+      }
 
       .footerNavLink:hover {
         color: #ffffff;
@@ -467,12 +538,18 @@
       }
 
       @media (max-width: 620px) {
-        .hero {
-          padding: 72px 0 56px;
+        .heroIntro {
+          padding: 36px 0 44px;
         }
 
-        .heroStat {
-          gap: 32px;
+        .heroIntroInner {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+        }
+
+        .heroIntroActions {
+          width: 100%;
         }
 
         .introPanel {
@@ -600,47 +677,115 @@
           </div>
         </div>
       </nav>
+      <!-- HERO 하단: 타이틀 · 버튼 · 안내 -->
+      <section class="heroIntro" aria-labelledby="heroIntroHeading">
+        <div class="container">
+          <div class="heroIntroInner">
+            <div class="heroIntroText">
+              <div class="heroIntroEyebrow">Art Museum Reservation</div>
+              <h1 class="heroIntroTitle" id="heroIntroHeading">
+                당신의 일상에<br />예술을 더하는 시간
+              </h1>
+              <p class="heroIntroSubtitle">
+                취향에 맞는 전시를 발견하고 원하는 관람 일정을 예약하세요.<br/>
+                회화부터 설치미술까지, 당신만의 몰입을 위한 공간이 준비되어 있습니다.
+              </p>
+            </div>
+            <div class="heroIntroActions">
+              <a class="navLink" th:href="@{/gallery/list}">전시 둘러보기</a>
+<!--              <a-->
+<!--                      class="btn btn-ghost"-->
+<!--                      sec:authorize="!isAuthenticated()"-->
+<!--                      th:href="@{/member/join}"-->
+<!--              >회원가입</a-->
+<!--              >-->
+            </div>
+          </div>
+        </div>
+      </section>
 
       <main>
-        <!-- HERO -->
-        <section class="hero">
-          <div class="container heroInner">
-            <div class="heroEyebrow">Art Museum Reservation</div>
-            <h1 class="heroTitle">
-              예술과 마주하는<br />조용하고 특별한 시간
-            </h1>
-            <p class="heroSubtitle">
-              원하는 전시를 선택하고 관람 일정을 예약하세요. 회화, 조각,
-              설치미술 등 다양한 작품을 차분한 공간에서 더욱 깊이 있게
-              감상할 수 있습니다.
-            </p>
-            <div class="heroActions">
-              <a class="btn btn-primary" th:href="@{/gallery/list}"
-                >전시 둘러보기</a
-              >
-              <a
-                class="btn btn-ghost"
-                sec:authorize="!isAuthenticated()"
-                th:href="@{/member/join}"
-                >회원가입</a
-              >
-            </div>
-            <div class="heroStat">
-              <div class="statItem">
-                <span class="statNum">10:00</span>
-                <span class="statLabel">개관 시간</span>
-              </div>
-              <div class="statItem">
-                <span class="statNum">18:00</span>
-                <span class="statLabel">폐관 시간</span>
-              </div>
-              <div class="statItem">
-                <span class="statNum">월요일</span>
-                <span class="statLabel">정기 휴관</span>
-              </div>
+        <!-- HERO: 이미지 슬라이드 -->
+        <section class="hero" aria-label="메인 비주얼">
+          <div
+            class="heroCarousel"
+            id="heroCarousel"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="미술관 이미지"
+          >
+            <div
+              class="heroSlide is-active"
+              data-slide="0"
+              style="
+                background-image: url('https://images.unsplash.com/photo-1737490419239-8b9a7895a17b?q=80&amp;w=1246&amp;auto=format&amp;fit=crop');
+              "
+            ></div>
+            <div
+              class="heroSlide"
+              data-slide="1"
+              style="
+                background-image: url('https://plus.unsplash.com/premium_photo-1664438942214-fee803f245b5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+              "
+            ></div>
+            <div
+              class="heroSlide"
+              data-slide="2"
+              style="
+                background-image: url('https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&w=1166&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+              "
+            ></div>
+            <button
+              type="button"
+              class="heroArrow heroArrowPrev"
+              id="heroPrev"
+              aria-label="이전 이미지"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="heroArrow heroArrowNext"
+              id="heroNext"
+              aria-label="다음 이미지"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="heroDots" role="tablist" aria-label="슬라이드 선택">
+              <button
+                type="button"
+                class="heroDot is-active"
+                data-go="0"
+                role="tab"
+                aria-selected="true"
+                aria-label="1번 이미지"
+              ></button>
+              <button
+                type="button"
+                class="heroDot"
+                data-go="1"
+                role="tab"
+                aria-selected="false"
+                aria-label="2번 이미지"
+              ></button>
+              <button
+                type="button"
+                class="heroDot"
+                data-go="2"
+                role="tab"
+                aria-selected="false"
+                aria-label="3번 이미지"
+              ></button>
             </div>
           </div>
         </section>
+
+
+
 
         <!-- FEATURE SECTION -->
         <section class="section">
@@ -778,9 +923,16 @@
                 <a
                   class="footerNavLink"
                   sec:authorize="!isAuthenticated()"
-                  th:href="@{/member/join}"
+                  th:action="@{/member/logout}"
+                  method="post"
                   >회원가입</a
                 >
+                <form th:action="@{/member/logout}" method="post" style="margin: 0">
+                  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                  <button type="submit" class="footerNavLink" sec:authorize="isAuthenticated()">
+                    로그아웃
+                  </button>
+                </form>
               </div>
             </nav>
           </div>
@@ -804,6 +956,47 @@
           document.location.reload();
         }
       };
+
+      (function () {
+        var root = document.getElementById("heroCarousel");
+        if (!root) return;
+
+        var slides = root.querySelectorAll(".heroSlide");
+        var dots = root.querySelectorAll(".heroDot");
+        var prev = document.getElementById("heroPrev");
+        var next = document.getElementById("heroNext");
+        var total = slides.length;
+        var current = 0;
+
+        function goTo(i) {
+          if (total === 0) return;
+          current = ((i % total) + total) % total;
+          slides.forEach(function (el, idx) {
+            el.classList.toggle("is-active", idx === current);
+          });
+          dots.forEach(function (el, idx) {
+            var on = idx === current;
+            el.classList.toggle("is-active", on);
+            el.setAttribute("aria-selected", on ? "true" : "false");
+          });
+        }
+
+        if (prev)
+          prev.addEventListener("click", function () {
+            goTo(current - 1);
+          });
+        if (next)
+          next.addEventListener("click", function () {
+            goTo(current + 1);
+          });
+
+        dots.forEach(function (dot) {
+          dot.addEventListener("click", function () {
+            var n = parseInt(dot.getAttribute("data-go"), 10);
+            if (!isNaN(n)) goTo(n);
+          });
+        });
+      })();
     </script>
   </body>
 </html>

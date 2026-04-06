@@ -51,5 +51,6 @@ src/main/resources/static/docu/sql추가04.sql
 src/main/resources/application.yml
 src/main/resources/application-secret.yml
 src/main/resources/db.sql
-
+src/main/resources/application.yml
+src/main/resources/application-secret.yml
 
