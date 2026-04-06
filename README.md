@@ -155,22 +155,6 @@
 
 ---
 
-### 🔧 관리자 (Admin)
-
-| Method | URL | 설명 | 권한 |
-|:------:|-----|------|:----:|
-| `GET` | `/admin/gallery/list` | 갤러리 목록 관리 | `ADMIN` |
-| `GET` | `/admin/gallery/form` | 갤러리 등록 페이지 | `ADMIN` |
-| `POST` | `/admin/gallery/form` | 갤러리 등록 | `ADMIN` |
-| `GET` | `/admin/gallery/edit/{id}` | 갤러리 수정 페이지 | `ADMIN` |
-| `POST` | `/admin/gallery/edit/{id}` | 갤러리 수정 | `ADMIN` |
-| `POST` | `/admin/gallery/delete/{id}` | 갤러리 삭제 | `ADMIN` |
-| `GET` | `/admin/reservation/list` | 전체 예약 목록 관리 | `ADMIN` |
-| `POST` | `/admin/reservation/approve/{id}` | 예약 승인 | `ADMIN` |
-| `POST` | `/admin/reservation/reject/{id}` | 예약 거절 | `ADMIN` |
-
----
-
 ## 🗂 프로젝트 구조
 
 ```
