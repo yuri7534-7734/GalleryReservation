@@ -18,7 +18,17 @@
       @media (max-width: 920px) { .contentLayout { grid-template-columns: 1fr; } }
       .previewCard { background: var(--bg1); border: 1px solid var(--stroke); padding: 16px; }
       .previewCardTitle { font-weight: 700; font-size: 17px; color: var(--text); margin-bottom: 6px; }
-      .previewCardContent { color: var(--muted); font-size: 13.5px; line-height: 1.65; }
+      .previewCardContent {
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.65;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+      }
     </style>
   </head>
   <body>

@@ -156,6 +156,17 @@
         color: var(--muted);
         line-height: 1.65;
       }
+      .previewDesc {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
     </style>
   </head>
   <body>
@@ -466,6 +477,7 @@
                   "
                   id="pDesc"
                   th:text="${gallery.description}"
+                  class="previewDesc"
                 >
                   소개글이 여기에 표시됩니다.
                 </div>
