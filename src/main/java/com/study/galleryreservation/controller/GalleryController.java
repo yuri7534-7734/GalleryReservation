@@ -55,10 +55,9 @@ public class GalleryController {
     }
 
     //갤러리 예약 등록
-    //bindingResult : @Valid 의 검증결과를 담는 객체
     @PostMapping("/gallery/detail")
     public String postForm(@Valid @ModelAttribute ReservationCreateRequestDto requestDto,
-                           HttpSession session) {
+                           HttpSession session, BindingResult bindingResult, Model model) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("user");
 
         if (bindingResult.hasErrors()) {
