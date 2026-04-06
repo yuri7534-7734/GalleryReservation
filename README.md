@@ -111,9 +111,7 @@
 > 갤러리 커버 이미지와 함께 예약 정보를 상세하게 확인할 수 있다.
 
 ![예약 상세 보기](readme_assets/reservation-detail1.png)
->
 ![예약 상세 보기](readme_assets/reservation-detail2.png)
->
 ![예약 상세 보기](readme_assets/reservation-detail3.png)
 
 ---
@@ -289,6 +287,18 @@ erDiagram
 ```
 
 ---
+
+## 💙 팀원 소개
+
+| 김태혁(팀장👑) | 김민준 | 이유리             | 박준현 |
+|---|---|-----------------|---|
+| Back-End | Back-End | Back-End        | Back-End |
+| 회원가입 / 로그인 | 할 일(Todo) 기능 구현 | Front-End/ UX,UI | 갤러리 기능 구현 |
+| 소셜 로그인 (카카오, 네이버) | 할 일 등록 / 수정 / 삭제 | 예약 기능 구현 | 갤러리 목록 / 상세 |
+| Spring Security 설정 | | 예약 목록 / 상세 / 취소 | |
+| 관리자 페이지 | |                 | |
+
+
 
 ## 💙 팀원 소개
 
