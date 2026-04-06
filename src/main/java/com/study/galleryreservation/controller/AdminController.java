@@ -9,6 +9,7 @@ import com.study.galleryreservation.service.GalleryService;
 import com.study.galleryreservation.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -100,7 +101,7 @@ public class AdminController {
         return "admin/gallery-edit";
     }
 
-     // 갤러리 수정
+    // 갤러리 수정
     @PostMapping("/gallery/edit/{id}")
     public String edit(@PathVariable Long id,
                        @Valid @ModelAttribute GalleryUpdateRequestDto dto,
@@ -109,7 +110,24 @@ public class AdminController {
             model.addAttribute("gallery", galleryService.findById(id));
             return "admin/gallery-edit";
         }
-        galleryService.update(id, dto);
+
+        try {
+            galleryService.update(id, dto); //업데이트 시도
+        } catch (DataIntegrityViolationException e) { //DB 제약 위반 에러 발생 시 잡음
+            String messege = e.getMessage();
+            if (messege.contains("description")){ //에러 메세지에 "description"이 있으면 "description" 필드 에러 등록
+                bindingResult.rejectValue("description", "tooLong", "설명이 너무 깁니다. (255자 이내)");
+            } else if (messege.contains("cover_image_url")) {
+                bindingResult.rejectValue("cover_image_url", "tooLong", "이미지 URL이 너무 깁니다.");
+            }else if (messege.contains("name")) {
+                bindingResult.rejectValue("name", "tooLong", "갤러리명이 너무 깁니다.");
+            }else if (messege.contains("location")) {
+                bindingResult.rejectValue("location", "tooLong", "위치명이 너무 깁니다.");
+            } else {
+                bindingResult.reject("saveFailed", "저장 중 오류가 발생했습니다.");
+            }
+        }
+
         return "redirect:/admin/gallery/list";
     }
 }
