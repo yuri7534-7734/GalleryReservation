@@ -33,7 +33,9 @@ public class GalleryService {
     public Page<Gallery> getList(int page, String keyword){
         Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
         if (keyword != null && !keyword.isBlank()) {
-            return galleryRepository.findByNameContainingIgnoreCaseOrLocationContainingIgnoreCase(keyword, keyword, pageable);
+            String cleanKeyword = keyword.replaceAll("\\s", "");
+            System.out.println("검색어: " + cleanKeyword);
+            return galleryRepository.findByNameIgnoreSpace(cleanKeyword, pageable);
         }
         return galleryRepository.findAll(pageable);
     }
@@ -116,6 +118,7 @@ public class GalleryService {
                 .contact(requestDto.getContact())
                 .status(ReservationStatus.PENDING)
                 .build();
+
 
         reservationRepository.save(reservation);
     }

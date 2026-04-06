@@ -17,12 +17,55 @@
       .pageHeader { padding: 40px 0 32px; margin-bottom: 40px; }
       .contentLayout { display: grid; grid-template-columns: 1fr 360px; gap: 32px; align-items: start; margin-bottom: 80px; }
       @media (max-width: 920px) { .contentLayout { grid-template-columns: 1fr; } }
-      .previewCard { background: var(--bg1); border: 1px solid var(--stroke); padding: 16px; }
-      .previewCardTitle { font-weight: 700; font-size: 17px; color: var(--text); margin-bottom: 6px; }
-      .previewCardContent { color: var(--muted); font-size: 13.5px; line-height: 1.65; }
-      .guideBox { background: var(--bg1); border: 1px solid var(--stroke); padding: 20px; }
+      .previewCard {
+        width: 300px;
+        height: 280px;
+        background: var(--bg1); border: 1px solid var(--stroke); padding: 16px;
+      }
+      .previewCardTitleRow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .previewCardTitleRow #prevDue {
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+      .previewCardTitle {
+        font-weight: 700; font-size: 17px; color: var(--text); margin-bottom: 6px;
+        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 1;          /* 최대 3줄까지만 표시 */
+        -webkit-box-orient: vertical;   /* 세로 방향으로 박스 정렬 */
+        overflow: hidden;               /* 넘치는 텍스트 숨김 */
+      }
+      .previewCardContent {
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.65;
+        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 9;          /* 최대 3줄까지만 표시 */
+        -webkit-box-orient: vertical;   /* 세로 방향으로 박스 정렬 */
+        overflow: hidden;               /* 넘치는 텍스트 숨김 */
+      }
+      .guideBox { background: var(--bg1); border: 1px solid var(--stroke); padding: 20px; margin-top: 15px; }
       .guideBox h3 { margin: 0 0 10px; font-size: 15px; font-weight: 700; }
       .guideBox p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.75; }
+      #todoContent {
+        height: 280px;
+        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 3;          /* 최대 3줄까지만 표시 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        resize: none;
+      }
+      .mainCardPad {
+        width: 1000px;
+        height: 550px;
+      }
+      .subCardPad{
+        height: 400px;
+      }
     </style>
   </head>
   <body>
@@ -101,7 +144,7 @@
         </div>
 
         <div class="contentLayout">
-          <div class="card cardPad">
+          <div class="card cardPad mainCardPad">
             <form
               th:action="@{/todo/create}"
               th:object="${todoCreateRequestDto}"
@@ -143,17 +186,17 @@
           </div>
 
           <div class="stack">
-            <div class="card cardPad">
+            <div class="card cardPad subCardPad">
               <div class="row" style="margin-bottom:16px">
                 <div style="font-weight:700;font-size:15px">미리보기</div>
                 <span class="badge badge-warn" id="previewState">미완료</span>
               </div>
               <div class="previewCard">
-                <div class="previewCardTitle" id="prevTitle">할 일 제목</div>
-                <div class="previewCardContent" id="prevContent">상세 내용이 여기에 표시됩니다.</div>
-                <div style="margin-top:12px">
+                <div class="previewCardTitleRow">
+                  <div class="previewCardTitle" id="prevTitle">할 일 제목</div>
                   <span class="badge" id="prevDue">기한 미정</span>
                 </div>
+                <div class="previewCardContent" id="prevContent">상세 내용이 여기에 표시됩니다.</div>
               </div>
               <div class="helpText" style="margin-top:10px">입력값이 카드에 실시간 반영됩니다.</div>
             </div>

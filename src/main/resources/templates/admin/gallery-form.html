@@ -22,6 +22,18 @@
       .guideBox { background: var(--bg1); border: 1px solid var(--stroke); padding: 20px; }
       .guideBox h3 { margin: 0 0 10px; font-size: 15px; font-weight: 700; }
       .guideBox p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.75; }
+      .helpText {
+        width: 600px;
+        display: -webkit-box;           /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 5;          /* 최대 3줄까지만 표시 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        resize: none;
+      }
+      #gDesc {
+        resize: none;
+      }
     </style>
   </head>
   <body>
@@ -97,7 +109,7 @@
           th:text="${errorMessage}"
         ></div>
 
-        <section class="grid grid-2">
+        <section class="grid grid-2" style="align-items: start; padding-bottom: 60px">
           <div class="card cardPad">
             <form
               id="galleryForm"
@@ -164,6 +176,7 @@
                     <option value="3">3층</option>
                     <option value="B">지하</option>
                   </select>
+                  <div></div>
                 </div>
                 <div>
                   <label for="gCapacity">수용 인원</label>
@@ -236,7 +249,7 @@
           </div>
 
           <div class="stack">
-            <div class="card cardPad">
+            <div class="card cardPad" style="height: 600px">
               <div class="row">
                 <h2
                   style="
@@ -252,7 +265,7 @@
               </div>
               <div style="height: 14px"></div>
 
-              <div id="galleryPreview" class="thumb" style="height: 220px">
+              <div id="galleryPreview" class="thumb" style="height: 300px">
                 <div class="thumbLabel">
                   <div id="pName" class="thumbTitle">갤러리명</div>
                   <div id="pMeta" class="thumbMeta">위치 · 수용 인원</div>
