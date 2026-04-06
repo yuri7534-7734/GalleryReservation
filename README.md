@@ -151,47 +151,7 @@
 
 ## 📡 API 명세
 
-### 👤 회원 (Member)
-
-| Method | URL | 설명 | 권한 |
-|:------:|-----|------|:----:|
-| `GET` | `/member/login` | 로그인 페이지 | - |
-| `GET` | `/member/join` | 회원가입 페이지 | - |
-| `POST` | `/member/join` | 회원가입 처리 | - |
-
----
-
-### 🏛️ 갤러리 (Gallery)
-
-| Method | URL | 설명 | 권한 |
-|:------:|-----|------|:----:|
-| `GET` | `/` | 메인 페이지 | - |
-| `GET` | `/gallery/list` | 갤러리 목록 조회 | - |
-| `GET` | `/gallery/detail?galleryId={id}` | 갤러리 상세 조회 + 예약 폼 | - |
-| `POST` | `/gallery/detail` | 예약 신청 | `USER` |
-
----
-
-### 🗓️ 예약 (Reservation)
-
-| Method | URL | 설명 | 권한 |
-|:------:|-----|------|:----:|
-| `GET` | `/reservation/list` | 내 예약 목록 조회 | `USER` |
-| `GET` | `/reservation/detail/{id}` | 예약 상세 조회 | `USER` |
-| `POST` | `/reservation/cancel/{id}` | 예약 취소 | `USER` |
-
----
-
-### ✅ 할 일 (Todo)
-
-| Method | URL | 설명 | 권한 |
-|:------:|-----|------|:----:|
-| `GET` | `/todo/list` | 할 일 목록 조회 | `USER` |
-| `GET` | `/todo/form` | 할 일 등록 페이지 | `USER` |
-| `POST` | `/todo/create` | 할 일 등록 | `USER` |
-| `GET` | `/todo/update/{id}` | 할 일 수정 페이지 | `USER` |
-| `POST` | `/todo/update/{id}` | 할 일 수정 | `USER` |
-| `POST` | `/todo/delete/{id}` | 할 일 삭제 | `USER` |
+![API 명세서](readme_assets/api명세서.png)
 
 ---
 
@@ -339,12 +299,6 @@ erDiagram
     MEMBER ||--o{ TODO : "작성"
     GALLERY ||--o{ RESERVATION : "포함"
 ```
-
----
-
-### ✅ API 명세서
-
-![API 명세서](readme_assets/api명세서.png)
 
 ---
 
