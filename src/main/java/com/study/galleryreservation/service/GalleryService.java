@@ -106,6 +106,9 @@ public class GalleryService {
         Gallery gallery = galleryRepository.findById(requestDto.getGalleryId())
                 .orElseThrow(()->new IllegalArgumentException("갤러리를 찾을 수 없습니다."));
         
+        // 갤러리의 남은 수용 인원에서 예약 인원을 차감
+        gallery.reduceCapacity(requestDto.getGuests());
+        
         Reservation reservation = Reservation.builder()
                 .member(member)
                 .gallery(gallery)

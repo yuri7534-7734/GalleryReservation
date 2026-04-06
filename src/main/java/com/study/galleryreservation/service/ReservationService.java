@@ -70,6 +70,9 @@ public class ReservationService {
             throw new IllegalArgumentException("대기 중인 예약만 취소할 수 있습니다.");
         }
 
+        // 예약 취소 시 갤러리 수용 인원 복원
+        reservation.getGallery().restoreCapacity(reservation.getGuests());
+        
         reservation.cancel();
     }
 
