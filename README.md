@@ -110,7 +110,9 @@
 - **예약 상세 조회**
 > 갤러리 커버 이미지와 함께 예약 정보를 상세하게 확인할 수 있다.
 
-![예약 상세 보기](readme_assets/reservation-detail.png)
+![예약 상세 보기](readme_assets/reservation-detail1.png)
+![예약 상세 보기](readme_assets/reservation-detail2.png)
+![예약 상세 보기](readme_assets/reservation-detail3.png)
 
 ---
 

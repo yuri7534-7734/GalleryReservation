@@ -76,7 +76,7 @@ public class Gallery {
         }
         this.updatedAt = LocalDateTime.now();
     }
-    
+
     public String getCoverImageUrlForDisplay() {
         if (coverImageUrl == null || coverImageUrl.isBlank()) {
             return null;
