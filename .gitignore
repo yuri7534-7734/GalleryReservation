@@ -1,0 +1,56 @@
+HELP.md
+.gradle
+build/
+### Eclipse / VS Code Java / 일부 IDE 컴파일 출력 ###
+bin/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### 올리지 않는 파일 ###
+src/main/resources/application-secret.properties
+src/main/java/com/study/galleryreservation/controller/ViewController.java
+src/main/resources/static/docu/20260401_GalleryReservation_001.md
+src/main/resources/static/docu/20260401_GalleryReservation_002.md
+src/main/resources/static/docu/20260401_GalleryReservation_003.md
+src/main/resources/static/docu/20260401_GalleryReservation_004.md
+src/main/resources/static/docu/20260401_GalleryReservation_005.md
+src/main/resources/static/docu/20260401_GalleryReservation_006.md
+src/main/resources/static/docu/20260401_GalleryReservation_007.md
+src/main/resources/static/docu/20260401_GalleryReservation_008.md
+src/main/resources/static/docu/20260401_GalleryReservation_009.md
+src/main/resources/static/docu/20260401_GalleryReservation_010.md
+src/main/resources/static/docu/20260401_GalleryReservation_011.md
+src/main/resources/static/docu/20260401_GalleryReservation_012.md
+src/main/resources/static/docu/20260401_GalleryReservation_013.md
+src/main/resources/static/docu/20260401_GalleryReservation_014.md
+src/main/resources/static/docu/20260401_GalleryReservation_015.md
+src/main/resources/static/docu/20260402_GalleryReservation_001.md
+src/main/resources/static/docu/20260403_GalleryReservation_001.md
+src/main/resources/static/docu/20260403_GalleryReservation_002.md
+src/main/resources/static/docu/20260401_prompt.txt
+src/main/resources/static/docu/20260401_sql추가01.sql
+src/main/resources/static/docu/sql추가02.sql
+src/main/resources/static/docu/sql추가03.sql
+src/main/resources/static/docu/sql추가04.sql
+src/main/resources/application.yml
+src/main/resources/application-secret.yml
+src/main/resources/db.sql
+src/main/resources/application.yml
+src/main/resources/application-secret.yml
+
