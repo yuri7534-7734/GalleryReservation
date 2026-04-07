@@ -1,106 +1,171 @@
 <!doctype html>
 <html
-        lang="ko"
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
 >
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>갤러리 등록 — Art Museum Admin</title>
-  <link rel="stylesheet" th:href="@{/css/common.css}"/>
-  <style>
-    /* 갤러리 등록 전용 */
-    :focus-visible { outline: none; box-shadow: var(--ring); border-color: var(--text) !important; }
-    input:focus, select:focus, textarea:focus { box-shadow: var(--ring); }
-    .pageHeader { padding: 40px 0 32px; margin-bottom: 40px; }
-    .thumb { height: 200px; border: 1px solid var(--stroke); background: #111111; overflow: hidden; position: relative; }
-    .thumbLabel { position: absolute; left: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
-    .thumbTitle { font-weight: 900; font-size: 18px; color: #ffffff; letter-spacing: -.3px; }
-    .thumbMeta { color: rgba(255,255,255,.65); font-weight: 600; font-size: 12.5px; }
-    .guideBox { background: var(--bg1); border: 1px solid var(--stroke); padding: 20px; }
-    .guideBox h3 { margin: 0 0 10px; font-size: 15px; font-weight: 700; }
-    .guideBox p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.75; }
-    .formLayoutFixed {
-      align-items: start;
-    }
-    .previewDesc {
-      margin-top: 2px;
-      color: var(--text);
-      line-height: 1.65;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
-      white-space: normal;
-      overflow-wrap: anywhere;
-      word-break: break-word;
-    }
-  </style>
-</head>
-<body>
-<div class="appShell">
-  <nav class="navbar">
-    <div class="navbarInner">
-      <a class="brand" th:href="@{/}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>갤러리 등록 — Art Museum Admin</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
+    <style>
+      /* 갤러리 등록 전용 */
+      :focus-visible {
+        outline: none;
+        box-shadow: var(--ring);
+        border-color: var(--text) !important;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        box-shadow: var(--ring);
+      }
+      .pageHeader {
+        padding: 40px 0 32px;
+        margin-bottom: 40px;
+      }
+      .thumb {
+        height: 200px;
+        border: 1px solid var(--stroke);
+        background: #111111;
+        overflow: hidden;
+        position: relative;
+      }
+      .thumbLabel {
+        position: absolute;
+        left: 16px;
+        bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .thumbTitle {
+        font-weight: 900;
+        font-size: 18px;
+        color: #ffffff;
+        letter-spacing: -0.3px;
+      }
+      .thumbMeta {
+        color: rgba(255, 255, 255, 0.65);
+        font-weight: 600;
+        font-size: 12.5px;
+      }
+      .guideBox {
+        background: var(--bg1);
+        border: 1px solid var(--stroke);
+        padding: 20px;
+      }
+      .guideBox h3 {
+        margin: 0 0 10px;
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .guideBox p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.75;
+      }
+      .helpText {
+        width: 600px;
+        display: -webkit-box; /* 웹킷 기반 박스 레이아웃 활성화 */
+        -webkit-line-clamp: 3; /* 최대 3줄까지만 표시 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        resize: none;
+      }
+      #gDesc {
+        resize: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="appShell">
+      <nav class="navbar">
+        <div class="navbarInner">
+          <a class="brand" th:href="@{/}">
             <span class="brandMark">
               <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="2" width="6" height="6"/><rect x="10" y="2" width="6" height="6"/>
-                <rect x="2" y="10" width="6" height="6"/><rect x="10" y="10" width="6" height="6" opacity="0.4"/>
+                <rect x="2" y="2" width="6" height="6" />
+                <rect x="10" y="2" width="6" height="6" />
+                <rect x="2" y="10" width="6" height="6" />
+                <rect x="10" y="10" width="6" height="6" opacity="0.4" />
               </svg>
             </span>
-        <span>Art Museum</span>
-      </a>
-      <div class="navLinks">
-
-        <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
-        <a
-                class="navLink"
-                sec:authorize="isAuthenticated()"
-                th:href="@{/reservation/list}"
-        >내 예약</a
-        >
-        <a
-                class="navLink"
-                sec:authorize="hasRole('ADMIN')"
-                th:href="@{/todo/list}"
-        >할 일</a
-        >
-        <a
-                class="navLink"
-                sec:authorize="hasRole('ADMIN')"
-                th:href="@{/admin/gallery/list}"
-        >관리자</a
-        >
-
-      </div>
-      <div class="navActions">
-        <div sec:authorize="!isAuthenticated()" style="display:flex;gap:8px">
-          <a class="btn btn-ghost btn-small" th:href="@{/member/login}">로그인</a>
-          <a class="btn btn-primary btn-small" th:href="@{/member/join}">회원가입</a>
+            <span>Art Museum</span>
+          </a>
+          <div class="navLinks">
+            <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
+            <a
+              class="navLink"
+              sec:authorize="isAuthenticated()"
+              th:href="@{/reservation/list}"
+              >내 예약</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/todo/list}"
+              >할 일</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/admin/gallery/list}"
+              >관리자</a
+            >
+          </div>
+          <div class="navActions">
+            <div
+              sec:authorize="!isAuthenticated()"
+              style="display: flex; gap: 8px"
+            >
+              <a class="btn btn-ghost btn-small" th:href="@{/member/login}"
+                >로그인</a
+              >
+              <a class="btn btn-primary btn-small" th:href="@{/member/join}"
+                >회원가입</a
+              >
+            </div>
+            <div
+              sec:authorize="isAuthenticated()"
+              style="display: flex; gap: 8px"
+            >
+              <form
+                th:action="@{/member/logout}"
+                method="post"
+                style="margin: 0"
+              >
+                <input
+                  type="hidden"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"
+                />
+                <button type="submit" class="btn btn-ghost btn-small">
+                  로그아웃
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
-        <div sec:authorize="isAuthenticated()" style="display:flex;gap:8px">
-          <form th:action="@{/member/logout}" method="post" style="margin:0">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            <button type="submit" class="btn btn-ghost btn-small">로그아웃</button>
-          </form>
+      </nav>
+
+      <main class="container">
+        <div class="pageHeader">
+          <div class="label">관리자 — 갤러리 관리</div>
+          <h1>갤러리 등록</h1>
+          <p>
+            전시 공간을 새로 추가하고, 예약 운영 정보를 한 번에 관리하세요.
+            입력값은 미리보기에 즉시 반영됩니다.
+          </p>
         </div>
-      </div>
-    </div>
-  </nav>
 
-  <main class="container">
-    <div class="pageHeader">
-      <div class="label">관리자 — 갤러리 관리</div>
-      <h1>갤러리 등록</h1>
-      <p>전시 공간을 새로 추가하고, 예약 운영 정보를 한 번에 관리하세요. 입력값은 미리보기에 즉시 반영됩니다.</p>
-    </div>
-
-    <div
-            th:if="${errorMessage}"
-            style="
+        <div
+          th:if="${errorMessage}"
+          style="
             background: rgba(255, 77, 79, 0.08);
             border: 1px solid rgba(255, 77, 79, 0.2);
             color: #ff4d4f;
@@ -110,320 +175,363 @@
             font-weight: 700;
             font-size: 14px;
           "
-            th:text="${errorMessage}"
-    ></div>
+          th:text="${errorMessage}"
+        ></div>
 
-    <section class="grid grid-2 formLayoutFixed">
-      <div class="card cardPad">
-        <form
-                id="galleryForm"
-                th:action="${gallery != null} ? @{/admin/gallery/edit/{id}(id=${gallery.id})} : @{/admin/gallery/form}"
-                th:object="${galleryCreateRequestDto}"
-                method="post"
-                class="stack"
+        <section
+          class="grid grid-2"
+          style="align-items: start; padding-bottom: 60px"
         >
-          <input
-                  type="hidden"
-                  th:name="${_csrf.parameterName}"
-                  th:value="${_csrf.token}"
-          />
-          <div>
-            <div class="row">
-              <h2
-                      style="
+          <div class="card cardPad">
+            <form
+              id="galleryForm"
+              th:action="${gallery != null} ? @{/admin/gallery/edit/{id}(id=${gallery.id})} : @{/admin/gallery/form}"
+              th:object="${galleryCreateRequestDto}"
+              method="post"
+              class="stack"
+            >
+              <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+              />
+              <div>
+                <div class="row">
+                  <h2
+                    style="
                       margin: 0;
                       font-size: 18px;
                       letter-spacing: -0.3px;
                       font-weight: 800;
                     "
+                  >
+                    기본 정보
+                  </h2>
+                  <a
+                    class="btn btn-ghost btn-small"
+                    href="#"
+                    th:href="@{/admin/gallery/list}"
+                    >목록으로</a
+                  >
+                </div>
+                <p class="helpText">
+                  갤러리명 · 위치 · 수용 인원은 예약 카드에 표시됩니다.
+                </p>
+              </div>
+
+              <div class="formGrid">
+                <div>
+                  <label for="gName">갤러리명</label>
+                  <input
+                    id="gName"
+                    th:field="*{name}"
+                    type="text"
+                    placeholder="예: Monochrome Hall"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="gLocation">위치</label>
+                  <input
+                    id="gLocation"
+                    th:field="*{location}"
+                    type="text"
+                    placeholder="예: 서울시 종로구 사직로 161"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="gFloorZone">층 / 구역</label>
+                  <select id="gFloorZone" th:field="*{floorZone}" required>
+                    <option value="1">1층</option>
+                    <option value="2">2층</option>
+                    <option value="3">3층</option>
+                    <option value="B">지하</option>
+                  </select>
+                  <div></div>
+                </div>
+                <div>
+                  <label for="gCapacity">수용 인원</label>
+                  <input
+                    id="gCapacity"
+                    th:field="*{capacity}"
+                    type="number"
+                    min="1"
+                    step="1"
+                    placeholder="예: 35"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="formGrid">
+                <div>
+                  <label for="gStartTime">운영 시작</label>
+                  <input
+                    id="gStartTime"
+                    th:field="*{startTime}"
+                    type="time"
+                    step="1800"
+                  />
+                </div>
+                <div>
+                  <label for="gEndTime">운영 종료</label>
+                  <input
+                    id="gEndTime"
+                    th:field="*{endTime}"
+                    type="time"
+                    step="1800"
+                  />
+                </div>
+              </div>
+              <p class="helpText" style="margin-top: -6px">
+                30분 단위로 선택할 수 있습니다. 비워 두면 등록 시 10:00 ~
+                18:00이 기본 적용됩니다.
+              </p>
+
+              <div>
+                <label for="gCover">커버 이미지 URL (선택)</label>
+                <input
+                  id="gCover"
+                  name="coverImageUrl"
+                  type="url"
+                  placeholder="https://example.com/cover.jpg"
+                />
+                <div class="helpText">
+                  이미지가 없으면 기본 배경이 적용됩니다.
+                </div>
+              </div>
+
+              <div>
+                <label for="gDesc">전시 소개</label>
+                <textarea
+                  id="gDesc"
+                  th:field="*{description}"
+                  placeholder="전시 공간의 분위기와 관람 포인트를 간단히 적어주세요."
+                ></textarea>
+              </div>
+
+              <div
+                class="row"
+                style="justify-content: flex-end; flex-wrap: wrap"
               >
-                기본 정보
-              </h2>
-              <a
-                      class="btn btn-ghost btn-small"
-                      href="#"
-                      th:href="@{/admin/gallery/list}"
-              >목록으로</a
-              >
-            </div>
-            <p class="helpText">
-              갤러리명 · 위치 · 수용 인원은 예약 카드에 표시됩니다.
-            </p>
+                <button class="btn btn-primary" type="submit">등록하기</button>
+              </div>
+            </form>
           </div>
 
-          <div class="formGrid">
-            <div>
-              <label for="gName">갤러리명</label>
-              <input
-                      id="gName"
-                      th:field="*{name}"
-                      type="text"
-                      placeholder="예: Monochrome Hall"
-                      required
-              />
-            </div>
-            <div>
-              <label for="gLocation">위치</label>
-              <input
-                      id="gLocation"
-                      th:field="*{location}"
-                      type="text"
-                      placeholder="예: 서울시 종로구 사직로 161"
-                      required
-              />
-            </div>
-            <div>
-              <label for="gFloorZone">층 / 구역</label>
-              <select id="gFloorZone" th:field="*{floorZone}" required>
-                <option value="1">1층</option>
-                <option value="2">2층</option>
-                <option value="3">3층</option>
-                <option value="B">지하</option>
-              </select>
-            </div>
-            <div>
-              <label for="gCapacity">수용 인원</label>
-              <input
-                      id="gCapacity"
-                      th:field="*{capacity}"
-                      type="number"
-                      min="1"
-                      step="1"
-                      placeholder="예: 35"
-                      required
-              />
-            </div>
-          </div>
-
-          <div class="formGrid">
-            <div>
-              <label for="gStartTime">운영 시작</label>
-              <input
-                      id="gStartTime"
-                      th:field="*{startTime}"
-                      type="time"
-                      step="1800"
-              />
-            </div>
-            <div>
-              <label for="gEndTime">운영 종료</label>
-              <input
-                      id="gEndTime"
-                      th:field="*{endTime}"
-                      type="time"
-                      step="1800"
-              />
-            </div>
-          </div>
-          <p class="helpText" style="margin-top: -6px">
-            30분 단위로 선택할 수 있습니다. 비워 두면 등록 시 10:00 ~
-            18:00이 기본 적용됩니다.
-          </p>
-
-          <div>
-            <label for="gCover">커버 이미지 URL (선택)</label>
-            <input
-                    id="gCover"
-                    name="coverImageUrl"
-                    type="url"
-                    placeholder="https://example.com/cover.jpg"
-            />
-            <div class="helpText">
-              이미지가 없으면 기본 배경이 적용됩니다.
-            </div>
-          </div>
-
-          <div>
-            <label for="gDesc">전시 소개</label>
-            <textarea
-                    id="gDesc"
-                    th:field="*{description}"
-                    placeholder="전시 공간의 분위기와 관람 포인트를 간단히 적어주세요."
-            ></textarea>
-          </div>
-
-          <div
-                  class="row"
-                  style="justify-content: flex-end; flex-wrap: wrap"
-          >
-            <button class="btn btn-primary" type="submit">등록하기</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="stack">
-        <div class="card cardPad">
-          <div class="row">
-            <h2
-                    style="
+          <div class="stack">
+            <div class="card cardPad" style="height: 600px; overflow: hidden">
+              <div class="row">
+                <h2
+                  style="
                     margin: 0;
                     font-size: 18px;
                     letter-spacing: -0.3px;
                     font-weight: 800;
                   "
-            >
-              실시간 미리보기
-            </h2>
-            <span id="previewBadge" class="badge badge-ok">운영중</span>
-          </div>
-          <div style="height: 14px"></div>
+                >
+                  실시간 미리보기
+                </h2>
+                <span id="previewBadge" class="badge badge-ok">운영중</span>
+              </div>
+              <div style="height: 14px"></div>
 
-          <div id="galleryPreview" class="thumb" style="height: 220px">
-            <div class="thumbLabel">
-              <div id="pName" class="thumbTitle">갤러리명</div>
-              <div id="pMeta" class="thumbMeta">위치 · 수용 인원</div>
-            </div>
-          </div>
+              <div id="galleryPreview" class="thumb" style="height: 300px">
+                <div class="thumbLabel">
+                  <div id="pName" class="thumbTitle">갤러리명</div>
+                  <div id="pMeta" class="thumbMeta">위치 · 수용 인원</div>
+                </div>
+              </div>
 
-          <div style="height: 14px"></div>
-          <div class="grid" style="gap: 10px">
-            <div
-                    class="card"
-                    style="
+              <div style="height: 14px"></div>
+              <div class="grid" style="gap: 10px">
+                <div
+                  class="card"
+                  style="
                     box-shadow: none;
                     padding: 14px;
                     background: var(--bg1);
                     border-color: var(--stroke);
                   "
-            >
-              <div class="row" style="align-items: flex-start">
-                <div>
-                  <div style="font-weight: 950; letter-spacing: -0.3px">
-                    운영 정보
-                  </div>
-                  <div
-                          id="pHours"
-                          style="
+                >
+                  <div class="row" style="align-items: flex-start">
+                    <div>
+                      <div style="font-weight: 950; letter-spacing: -0.3px">
+                        운영 정보
+                      </div>
+                      <div
+                        id="pHours"
+                        style="
                           color: var(--muted);
                           margin-top: 6px;
                           line-height: 1.6;
                           font-weight: 750;
                         "
-                  >
-                    10:00 - 18:00
+                      >
+                        10:00 - 18:00
+                      </div>
+                    </div>
+                    <div class="badge" id="pCapacity">인원 0</div>
                   </div>
                 </div>
-                <div class="badge" id="pCapacity">인원 0</div>
+                <div
+                  class="helpText"
+                  style="
+                    margin-top: 2px;
+                    color: var(--text);
+                    overflow: hidden;
+                    word-break: break-all;
+                  "
+                  id="pDesc"
+                >
+                  소개가 여기에 표시됩니다.
+                </div>
               </div>
             </div>
-            <div
-                    class="helpText previewDesc"
-                    id="pDesc"
-            >
-              소개가 여기에 표시됩니다.
+
+            <div class="guideBox">
+              <h3>작성 가이드</h3>
+              <p>
+                관람자가 "어떤 분위기인지" 한 줄로 이해하도록 문장을 짧게
+                유지하면 예약 전환율이 높아집니다.<br />
+                예: "빛이 부드럽게 스며드는 단색 전시 공간에서 30분 동안 천천히
+                감상하세요."
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div class="footerInner">
+          <div>
+            <div class="footerBrand">Art Museum</div>
+            <div class="footerDesc">
+              국립현대미술관 예약 시스템<br />미술 작품과 공간을 예약하세요.
+            </div>
+          </div>
+          <div style="display: flex; gap: 48px; flex-wrap: wrap">
+            <div>
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 0.1em;
+                  text-transform: uppercase;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-bottom: 14px;
+                "
+              >
+                관람 안내
+              </div>
+              <div
+                class="footerLinks"
+                style="flex-direction: column; gap: 10px"
+              >
+                <a th:href="@{/gallery/list}">전시 목록</a>
+                <a href="#">관람 시간</a>
+                <a href="#">오시는 길</a>
+              </div>
+            </div>
+            <div>
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 0.1em;
+                  text-transform: uppercase;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-bottom: 14px;
+                "
+              >
+                계정
+              </div>
+              <div
+                class="footerLinks"
+                style="flex-direction: column; gap: 10px"
+              >
+                <a th:href="@{/member/login}">로그인</a>
+                <a th:href="@{/member/join}">회원가입</a>
+                <a th:href="@{/reservation/list}">내 예약</a>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="guideBox">
-          <h3>작성 가이드</h3>
-          <p>
-            관람자가 "어떤 분위기인지" 한 줄로 이해하도록 문장을 짧게
-            유지하면 예약 전환율이 높아집니다.<br />
-            예: "빛이 부드럽게 스며드는 단색 전시 공간에서 30분 동안 천천히 감상하세요."
-          </p>
+        <div class="footerBottom">
+          © 2026 Art Museum Reservation. All rights reserved.
         </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footerInner">
-      <div>
-        <div class="footerBrand">Art Museum</div>
-        <div class="footerDesc">국립현대미술관 예약 시스템<br/>미술 작품과 공간을 예약하세요.</div>
-      </div>
-      <div style="display:flex;gap:48px;flex-wrap:wrap">
-        <div>
-          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">관람 안내</div>
-          <div class="footerLinks" style="flex-direction:column;gap:10px">
-            <a th:href="@{/gallery/list}">전시 목록</a>
-            <a href="#">관람 시간</a>
-            <a href="#">오시는 길</a>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:14px">계정</div>
-          <div class="footerLinks" style="flex-direction:column;gap:10px">
-            <a th:href="@{/member/login}">로그인</a>
-            <a th:href="@{/member/join}">회원가입</a>
-            <a th:href="@{/reservation/list}">내 예약</a>
-          </div>
-        </div>
-      </div>
+      </footer>
     </div>
-    <div class="footerBottom">© 2026 Art Museum Reservation. All rights reserved.</div>
-  </footer>
-</div>
 
-<script>
-  (function () {
-    const form = document.getElementById("galleryForm");
-    const preview = document.getElementById("galleryPreview");
-    const badge = document.getElementById("previewBadge");
-    const pName = document.getElementById("pName");
-    const pMeta = document.getElementById("pMeta");
-    const pHours = document.getElementById("pHours");
-    const pDesc = document.getElementById("pDesc");
-    const pCapacity = document.getElementById("pCapacity");
-    if (!form || !preview) return;
+    <script>
+      (function () {
+        const form = document.getElementById("galleryForm");
+        const preview = document.getElementById("galleryPreview");
+        const badge = document.getElementById("previewBadge");
+        const pName = document.getElementById("pName");
+        const pMeta = document.getElementById("pMeta");
+        const pHours = document.getElementById("pHours");
+        const pDesc = document.getElementById("pDesc");
+        const pCapacity = document.getElementById("pCapacity");
+        if (!form || !preview) return;
 
-    const floorLabels = { 1: "1층", 2: "2층", 3: "3층", B: "지하" };
-    const ids = [
-      "gName",
-      "gLocation",
-      "gFloorZone",
-      "gCapacity",
-      "gStartTime",
-      "gEndTime",
-      "gDesc",
-      "gCover",
-    ];
-    const el = {};
-    ids.forEach((id) => (el[id] = document.getElementById(id)));
+        const floorLabels = { 1: "1층", 2: "2층", 3: "3층", B: "지하" };
+        const ids = [
+          "gName",
+          "gLocation",
+          "gFloorZone",
+          "gCapacity",
+          "gStartTime",
+          "gEndTime",
+          "gDesc",
+          "gCover",
+        ];
+        const el = {};
+        ids.forEach((id) => (el[id] = document.getElementById(id)));
 
-    function applyBadge() {
-      badge.className = "badge badge-ok";
-      badge.textContent = "운영 중";
-    }
+        function applyBadge() {
+          badge.className = "badge badge-ok";
+          badge.textContent = "운영 중";
+        }
 
-    function applyPreview() {
-      const name = el.gName?.value?.trim() || "갤러리명";
-      const loc = el.gLocation?.value?.trim() || "위치";
-      const fv = el.gFloorZone?.value || "1";
-      const floorLabel = floorLabels[fv] || "층";
-      const cap = el.gCapacity?.value?.trim() || "0";
-      const startT = el.gStartTime?.value?.trim() || "10:00";
-      const endT = el.gEndTime?.value?.trim() || "18:00";
-      const hours = `${startT} - ${endT}`;
-      const desc = el.gDesc?.value?.trim() || "소개가 여기에 표시됩니다.";
-      const cover = el.gCover?.value?.trim();
+        function applyPreview() {
+          const name = el.gName?.value?.trim() || "갤러리명";
+          const loc = el.gLocation?.value?.trim() || "위치";
+          const fv = el.gFloorZone?.value || "1";
+          const floorLabel = floorLabels[fv] || "층";
+          const cap = el.gCapacity?.value?.trim() || "0";
+          const startT = el.gStartTime?.value?.trim() || "10:00";
+          const endT = el.gEndTime?.value?.trim() || "18:00";
+          const hours = `${startT} - ${endT}`;
+          const desc = el.gDesc?.value?.trim() || "소개가 여기에 표시됩니다.";
+          const cover = el.gCover?.value?.trim();
 
-      pName.textContent = name;
-      pMeta.textContent = `${floorLabel} · ${loc} · 수용 ${cap}명`;
-      pHours.textContent = hours;
-      pDesc.textContent = desc;
-      pCapacity.textContent = `인원 ${cap}`;
+          pName.textContent = name;
+          pMeta.textContent = `${floorLabel} · ${loc} · 수용 ${cap}명`;
+          pHours.textContent = hours;
+          pDesc.textContent = desc;
+          pCapacity.textContent = `인원 ${cap}`;
 
-      applyBadge();
+          applyBadge();
 
-      if (cover && cover.startsWith("http")) {
-        preview.style.backgroundImage = `url("${cover}"), linear-gradient(135deg, #fdfdfd 0%, #f1f3f5 100%)`;
-        preview.style.backgroundSize = "cover, auto";
-        preview.style.backgroundPosition = "center";
-      } else {
-        preview.style.backgroundImage = "";
-        preview.style.backgroundSize = "";
-      }
-    }
+          if (cover && cover.startsWith("http")) {
+            preview.style.backgroundImage = `url("${cover}"), linear-gradient(135deg, #fdfdfd 0%, #f1f3f5 100%)`;
+            preview.style.backgroundSize = "cover, auto";
+            preview.style.backgroundPosition = "center";
+          } else {
+            preview.style.backgroundImage = "";
+            preview.style.backgroundSize = "";
+          }
+        }
 
-    ["input", "change"].forEach((evt) => {
-      ids.forEach(
-        (id) => el[id] && el[id].addEventListener(evt, applyPreview),
-      );
-    });
-    applyPreview();
-  })();
-</script>
-</body>
+        ["input", "change"].forEach((evt) => {
+          ids.forEach(
+            (id) => el[id] && el[id].addEventListener(evt, applyPreview),
+          );
+        });
+        applyPreview();
+      })();
+    </script>
+  </body>
 </html>
