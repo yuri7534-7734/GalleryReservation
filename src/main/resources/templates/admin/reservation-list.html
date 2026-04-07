@@ -144,22 +144,14 @@
                 <option value="CANCELLED">취소</option>
               </select>
             </div>
-            <form
-              method="get"
-              th:action="@{/admin/reservation/list}"
-              style="flex: 1; max-width: 320px; display: contents"
-            >
-              <div class="toolbarItem" style="flex: 1; max-width: 320px">
-                <label for="resSearch">검색</label>
-                <input
-                  id="resSearch"
-                  name="keyword"
-                  type="text"
-                  placeholder="갤러리명"
-                  th:value="${keyword}"
-                />
-              </div>
-            </form>
+            <div class="toolbarItem" style="flex: 1; max-width: 320px">
+              <label for="resSearch">검색</label>
+              <input
+                id="resSearch"
+                type="text"
+                placeholder="갤러리명"
+              />
+            </div>
           </div>
 
           <div class="tableWrap" style="margin-bottom: 24px">
@@ -386,18 +378,29 @@
     <script>
       (function () {
         const status = document.getElementById("resStatus");
+        const search = document.getElementById("resSearch");
         const rows = document.querySelectorAll(
           "#reservationRows tr[data-status]",
         );
-        if (!status) return;
+        if (!status || !search) return;
         function apply() {
           const s = status.value || "ALL";
+          const q = (search.value || "").toLowerCase().replace(/\s+/g, "");
           rows.forEach(function (tr) {
             const st = tr.getAttribute("data-status") || "";
-            tr.style.display = s === "ALL" || st === s ? "" : "none";
+            const text = (tr.innerText || "").toLowerCase().replace(/\s+/g, "");
+            const hitSt = s === "ALL" || st === s;
+            const hitTx = !q || text.includes(q);
+            tr.style.display = hitSt && hitTx ? "" : "none";
           });
         }
         status.addEventListener("change", apply);
+        search.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            apply();
+          }
+        });
       })();
     </script>
   </body>

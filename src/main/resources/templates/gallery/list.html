@@ -346,7 +346,7 @@
         if (!q || !region || !minCap) return;
 
         function apply() {
-          const query = (q.value || "").toLowerCase().trim();
+          const query = (q.value || "").toLowerCase().replace(/\s+/g, "");
           const r = region.value || "ALL";
           const cap = Number(minCap.value || 1);
 
@@ -354,7 +354,7 @@
             .querySelectorAll("#galleryCardGrid article")
             .forEach((card) => {
               const nameEl = card.querySelector(".galleryThumbName");
-              const name = (nameEl ? nameEl.innerText : "").toLowerCase();
+              const name = (nameEl ? nameEl.innerText : "").toLowerCase().replace(/\s+/g, "");
               const cr = card.getAttribute("data-floor-zone") || "ALL";
               const cCap = Number(card.getAttribute("data-cap") || 0);
 
@@ -374,7 +374,13 @@
           });
         }
 
-        [q, minCap].forEach((el) => el.addEventListener("input", apply));
+        q.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            apply();
+          }
+        });
+        minCap.addEventListener("input", apply);
         region.addEventListener("change", apply);
         apply();
       })();

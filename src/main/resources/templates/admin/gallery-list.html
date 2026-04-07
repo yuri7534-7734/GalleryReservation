@@ -175,22 +175,14 @@
                 <option value="INACTIVE">마감</option>
               </select>
             </div>
-            <form
-              method="get"
-              th:action="@{/admin/gallery/list}"
-              style="flex: 1; max-width: 300px"
-            >
-              <div class="toolbarItem" style="flex: 1; max-width: 300px">
-                <label for="searchText">검색</label>
-                <input
-                  id="searchText"
-                  name="keyword"
-                  type="text"
-                  placeholder="갤러리명 / 위치"
-                  th:value="${keyword}"
-                />
-              </div>
-            </form>
+            <div class="toolbarItem" style="flex: 1; max-width: 300px">
+              <label for="searchText">검색</label>
+              <input
+                id="searchText"
+                type="text"
+                placeholder="갤러리명 / 위치"
+              />
+            </div>
             <div style="margin-left: auto; padding-bottom: 0">
               <a
                 class="btn btn-primary invertHover"
@@ -384,16 +376,28 @@
     <script>
       (function () {
         const status = document.getElementById("statusFilter");
+        const search = document.getElementById("searchText");
         const rows = document.querySelectorAll("#galleryRows tr[data-status]");
-        if (!status) return;
+        if (!status || !search) return;
         function apply() {
           const s = status.value || "ALL";
+          const q = (search.value || "").toLowerCase().replace(/\s+/g, "");
           rows.forEach(function (tr) {
             const st = tr.getAttribute("data-status") || "";
-            tr.style.display = s === "ALL" || st === s ? "" : "none";
+            const nameEl = tr.querySelector(".tdMain");
+            const text = (nameEl ? nameEl.innerText : "").toLowerCase().replace(/\s+/g, "");
+            const hitSt = s === "ALL" || st === s;
+            const hitTx = !q || text.includes(q);
+            tr.style.display = hitSt && hitTx ? "" : "none";
           });
         }
         status.addEventListener("change", apply);
+        search.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            apply();
+          }
+        });
       })();
     </script>
   </body>

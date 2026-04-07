@@ -365,7 +365,8 @@
 
           rows.forEach((tr) => {
             const trSt = tr.getAttribute("data-status") || "false";
-            const text = (tr.innerText || "").toLowerCase().replace(/\s/g, "");
+            const titleEl = tr.querySelector(".tdTitle");
+            const text = (titleEl ? titleEl.innerText : "").toLowerCase().replace(/\s/g, "");
             const hitSt = st === "ALL" || trSt === st;
             const hitTx = !q || text.includes(q);
             tr.style.display = hitSt && hitTx ? "" : "none";
