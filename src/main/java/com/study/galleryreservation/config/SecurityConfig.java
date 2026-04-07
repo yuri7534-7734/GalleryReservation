@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID")
         );
 
-        http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
+//        http.addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
 
         http.oauth2Login(oauth -> oauth
                 .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
@@ -84,18 +84,18 @@ public class SecurityConfig {
     // CSS 렌더링 도중 응답 버퍼가 flush되어 Set-Cookie 헤더가 누락될 수 있음.
     // 이 필터가 렌더링 시작 전에 csrfToken.getToken()을 호출하여
     // CSRF 쿠키를 응답 헤더에 미리 세팅함으로써 로그인 직후 403 에러를 방지함.
-    private static final class CsrfCookieFilter extends OncePerRequestFilter {
-        @Override
-        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-                throws ServletException, IOException {
-            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-            if (csrfToken != null) {
-                // getToken() 호출로 지연 로드(lazy load)를 강제 실행 → Set-Cookie 헤더 즉시 세팅
-                csrfToken.getToken();
-            }
-            filterChain.doFilter(request, response);
-        }
-    }
+//    private static final class CsrfCookieFilter extends OncePerRequestFilter {
+//        @Override
+//        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+//                throws ServletException, IOException {
+//            CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+//            if (csrfToken != null) {
+//                // getToken() 호출로 지연 로드(lazy load)를 강제 실행 → Set-Cookie 헤더 즉시 세팅
+//                csrfToken.getToken();
+//            }
+//            filterChain.doFilter(request, response);
+//        }
+//    }
 
     @Bean
     public SimpleUrlAuthenticationSuccessHandler oauthSuccessHandler() {
