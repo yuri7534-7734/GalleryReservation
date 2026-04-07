@@ -137,15 +137,16 @@
           <div class="toolbar">
             <div class="toolbarFilters">
               <select id="tStatus">
-                <option value="ALL" selected>전체 상태</option>
-                <option value="false">미완료</option>
-                <option value="true">완료</option>
+                <option value="ALL" th:selected="${isDone == null}">전체 상태</option>
+                <option value="false" th:selected="${isDone != null and !isDone}">미완료</option>
+                <option value="true" th:selected="${isDone != null and isDone}">완료</option>
               </select>
               <input
                 id="tSearch"
                 type="text"
                 placeholder="제목 검색…"
                 style="min-width: 200px"
+                th:value="${keyword}"
               />
             </div>
             <a class="btn btn-primary invertHover" th:href="@{/todo/form}"
@@ -355,29 +356,28 @@
       (function () {
         const status = document.getElementById("tStatus");
         const search = document.getElementById("tSearch");
+        if (!status || !search) return;
 
-        const rows = document.querySelectorAll("#todoRows tr[data-status]");
-        if (!status || !search || !rows.length) return;
+        const memberId = /*[[${memberId}]]*/ null;
 
-        function apply() {
-          const st = status.value || "ALL";
-          const q = (search.value || "").toLowerCase().replace(/\s/g, "");
-
-          rows.forEach((tr) => {
-            const trSt = tr.getAttribute("data-status") || "false";
-            const titleEl = tr.querySelector(".tdTitle");
-            const text = (titleEl ? titleEl.innerText : "").toLowerCase().replace(/\s/g, "");
-            const hitSt = st === "ALL" || trSt === st;
-            const hitTx = !q || text.includes(q);
-            tr.style.display = hitSt && hitTx ? "" : "none";
-          });
+        function navigate() {
+          const st = status.value;
+          const q = search.value.trim();
+          const params = new URLSearchParams({ page: 0 });
+          if (memberId != null) params.set("memberId", memberId);
+          if (q) params.set("keyword", q);
+          if (st !== "ALL") params.set("isDone", st);
+          location.href = "/todo/list?" + params.toString();
         }
 
-        status.addEventListener("change", apply);
+        // 상태 필터: 서버 사이드 (isDone 백엔드 지원)
+        status.addEventListener("change", navigate);
+
+        // 키워드 검색: 서버 사이드 (전체 페이지 검색)
         search.addEventListener("keydown", function (e) {
           if (e.key === "Enter") {
             e.preventDefault();
-            apply();
+            navigate();
           }
         });
       })();

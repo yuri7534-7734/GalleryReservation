@@ -4,6 +4,8 @@ import com.study.galleryreservation.domain.todo.Todo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,7 +24,12 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     //제목 검색
     List<Todo>findByMember_IdAndTitleContaining(Long memberId,String keyword);
-    Page<Todo> findByMember_IdAndTitleContaining(Long memberId, String keyword, Pageable pageable);
+
+    @Query("SELECT t FROM Todo t WHERE t.member.id = :memberId AND LOWER(FUNCTION('replace', t.title, ' ', '')) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<Todo> searchByMemberIdAndTitle(@Param("memberId") Long memberId, @Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT t FROM Todo t WHERE LOWER(FUNCTION('replace', t.title, ' ', '')) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<Todo> searchByTitle(@Param("keyword") String keyword, Pageable pageable);
 
     //마감일 오름차순 정렬
     List<Todo>findByMember_IdOrderByDueDateAsc(Long memberId);

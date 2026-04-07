@@ -136,12 +136,16 @@ public class TodoService {
     public Page<TodoResponseDto> getPage(Long memberId, String keyword, Boolean isDone, int page) {
         Pageable pageable = PageRequest.of(Math.max(page, 0), 10, Sort.by("id").descending());
 
+        if (keyword != null && !keyword.isBlank()) {
+            String normalized = keyword.replaceAll("\\s+", "");
+            if (memberId != null) {
+                return todoRepository.searchByMemberIdAndTitle(memberId, normalized, pageable)
+                        .map(this::toResponseDto);
+            }
+            return todoRepository.searchByTitle(normalized, pageable).map(this::toResponseDto);
+        }
         if (memberId == null) {
             return todoRepository.findAll(pageable).map(this::toResponseDto);
-        }
-        if (keyword != null && !keyword.isBlank()) {
-            return todoRepository.findByMember_IdAndTitleContaining(memberId, keyword, pageable)
-                    .map(this::toResponseDto);
         }
         if (isDone != null) {
             return todoRepository.findByMember_IdAndIsDone(memberId, isDone, pageable)

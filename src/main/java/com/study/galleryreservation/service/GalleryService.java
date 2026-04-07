@@ -33,7 +33,8 @@ public class GalleryService {
     public Page<Gallery> getList(int page, String keyword){
         Pageable pageable = PageRequest.of(page, 10, Sort.by("id").descending());
         if (keyword != null && !keyword.isBlank()) {
-            return galleryRepository.findByNameContainingIgnoreCaseOrLocationContainingIgnoreCase(keyword, keyword, pageable);
+            String normalized = keyword.replaceAll("\\s+", "");
+            return galleryRepository.searchByKeyword(normalized, pageable);
         }
         return galleryRepository.findAll(pageable);
     }

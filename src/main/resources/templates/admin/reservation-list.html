@@ -150,6 +150,7 @@
                 id="resSearch"
                 type="text"
                 placeholder="갤러리명"
+                th:value="${keyword}"
               />
             </div>
           </div>
@@ -383,22 +384,23 @@
           "#reservationRows tr[data-status]",
         );
         if (!status || !search) return;
-        function apply() {
+
+        // 상태 필터: 클라이언트 사이드 (백엔드 미지원)
+        function applyStatus() {
           const s = status.value || "ALL";
-          const q = (search.value || "").toLowerCase().replace(/\s+/g, "");
           rows.forEach(function (tr) {
             const st = tr.getAttribute("data-status") || "";
-            const text = (tr.innerText || "").toLowerCase().replace(/\s+/g, "");
-            const hitSt = s === "ALL" || st === s;
-            const hitTx = !q || text.includes(q);
-            tr.style.display = hitSt && hitTx ? "" : "none";
+            tr.style.display = s === "ALL" || st === s ? "" : "none";
           });
         }
-        status.addEventListener("change", apply);
+        status.addEventListener("change", applyStatus);
+
+        // 키워드 검색: 서버 사이드 (전체 페이지 검색)
         search.addEventListener("keydown", function (e) {
           if (e.key === "Enter") {
             e.preventDefault();
-            apply();
+            const q = search.value.trim();
+            location.href = "/admin/reservation/list?page=0&keyword=" + encodeURIComponent(q);
           }
         });
       })();
