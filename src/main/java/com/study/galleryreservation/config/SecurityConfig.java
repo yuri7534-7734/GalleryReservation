@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
 
         http.authorizeHttpRequests(authz -> authz
-                .requestMatchers("/css/**", "/js/**", "/*.css", "/*.js").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/*.css", "/*.js", "/gallery/*.css", "/member/*.css", "/reservation/*.css", "/admin/*.css", "/todo/*.css").permitAll()
                 .requestMatchers("/", "/member/join", "/member/login").permitAll()
                 .requestMatchers("/gallery/list", "/gallery/detail", "/gallery/detail/**").permitAll()
                 .requestMatchers("/admin/**", "/todo/**").hasRole("ADMIN")
