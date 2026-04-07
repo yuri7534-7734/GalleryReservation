@@ -347,6 +347,8 @@
                       value="2"
                       required
               />
+              <span th:if="${capacityError}" th:text="${capacityError}"
+                    style="color: red; font-size: 12px;"></span>
             </div>
             <div>
               <label for="rStartTime">시작 시간</label>
