@@ -170,11 +170,11 @@ src/main/java/com/study/galleryreservation/
 ├── config/                         # 설정 클래스
 │   ├── SecurityConfig.java         # Spring Security 설정
 │   ├── CustomAuthenticationSuccessHandler.java
-│   ├── OAuthAttributes.java        # OAuth2 속성 매핑
-│   └── CustomUserDetailsService.java
+│   └── OAuthAttributes.java        # OAuth2 속성 매핑
 │
 ├── controller/                     # 컨트롤러
 │   ├── AdminController.java        # 관리자 전용 (갤러리 관리, 예약 승인)
+│   ├── GalleryController.java      # 갤러리 상세 / 예약 신청
 │   ├── MemberController.java       # 회원가입 / 로그인
 │   ├── ReservationController.java  # 예약 신청 / 조회 / 취소
 │   ├── TodoController.java         # 할 일 CRUD
@@ -186,6 +186,9 @@ src/main/java/com/study/galleryreservation/
 │   ├── member/MemberRole.java
 │   ├── reservation/Reservation.java
 │   ├── reservation/ReservationStatus.java
+│   ├── session/SessionUser.java
+│   ├── session/SnsUser.java
+│   ├── session/UserRole.java
 │   └── todo/Todo.java
 │
 ├── dto/                            # DTO
@@ -198,14 +201,16 @@ src/main/java/com/study/galleryreservation/
 │   ├── GalleryRepository.java
 │   ├── MemberRepository.java
 │   ├── ReservationRepository.java
+│   ├── SnsUserRepository.java
 │   └── TodoRepository.java
 │
 └── service/                        # 서비스
+    ├── CustomOAuth2UserService.java
+    ├── CustomUserDetailsService.java
     ├── GalleryService.java
     ├── MemberService.java
     ├── ReservationService.java
-    ├── TodoService.java
-    └── CustomOAuth2UserService.java
+    └── TodoService.java
 
 src/main/resources/
 ├── templates/
