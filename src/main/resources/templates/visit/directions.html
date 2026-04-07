@@ -7,14 +7,94 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>전시 목록 — Art Museum</title>
+    <title>오시는 길 — Art Museum</title>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=30fa2123e4502fb9df009f63207cf162"></script>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" th:href="@{/css/common.css}" />
-    <link rel="stylesheet" th:href="@{/gallery/list.css}" />
+    <style>
+      .visitLead {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 65ch;
+        margin: 0 0 28px;
+      }
+      .addrBlock {
+        font-size: 18px;
+        font-weight: 900;
+        letter-spacing: -0.3px;
+        margin: 0 0 8px;
+        line-height: 1.35;
+      }
+      .addrSub {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.6;
+        margin: 0 0 24px;
+      }
+      .visitCard {
+        border: 1px solid var(--stroke);
+        background: var(--bg0);
+        padding: 24px;
+        margin-bottom: 16px;
+      }
+      .visitCardTitle {
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: -0.2px;
+        margin: 0 0 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--stroke);
+      }
+      .routeItem {
+        display: flex;
+        gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--stroke);
+        align-items: flex-start;
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .routeItem:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .routeBadge {
+        flex-shrink: 0;
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 800;
+        border: 1px solid var(--stroke);
+        border-radius: 2px;
+        background: var(--bg1);
+        color: var(--text);
+        letter-spacing: 0.02em;
+      }
+      .routeBody {
+        color: var(--text);
+      }
+      .routeBody span.muted {
+        color: var(--muted);
+        font-size: 13px;
+        display: block;
+        margin-top: 4px;
+      }
+      #map {
+        margin-top: 20px;
+        width: 100%;
+        height: 360px;
+        border: 1px solid var(--stroke);
+        background: var(--bg1);
+      }
+      .visitCross {
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid var(--stroke);
+      }
+    </style>
   </head>
   <body>
     <div class="appShell">
-      <!-- NAVBAR -->
       <nav class="navbar">
         <div class="navbarInner">
           <a class="brand" th:href="@{/}">
@@ -89,6 +169,7 @@
                     ? 'false'
                     : 'true'
               "
+              aria-label="메뉴 열기"
             >
               ☰
             </button>
@@ -120,124 +201,68 @@
       </nav>
 
       <main>
-        <!-- PAGE HEADER -->
-        <div class="container">
+        <div class="container" style="padding-bottom: 80px">
           <header class="pageHeader">
-            <div class="pageEyebrow">Gallery · Exhibition</div>
-            <h1 class="pageTitle">지금 예약 가능한<br />전시 공간</h1>
-            <p class="pageSubtitle">
-              전시 공간을 선택하면 상세 정보와 예약 화면으로 이동합니다.
+            <div class="pageEyebrow">Visit · Directions</div>
+            <h1 class="pageTitle">오시는 길</h1>
+            <p class="visitLead">
+              대중교통 이용을 권장합니다. 주말·공휴일에는 인근 도로가 혼잡할 수
+              있으니 여유 있게 출발해 주세요.
             </p>
           </header>
-        </div>
 
-        <!-- CONTENT -->
-        <div class="container">
-          <div class="contentArea">
-            <!-- FILTER SIDEBAR -->
-            <aside class="filterPanel">
-              <div class="filterTitle">필터</div>
-              <div class="filterGroup">
-                <label for="q">검색</label>
-                <input
-                  id="q"
-                  type="text"
-                  placeholder="갤러리명 / 위치 / 키워드"
-                />
-              </div>
-              <div class="filterGroup">
-                <label for="region">층 / 구역</label>
-                <select id="region">
-                  <option value="ALL" selected>전체</option>
-                  <option value="1">1층</option>
-                  <option value="2">2층</option>
-                  <option value="3">3층</option>
-                  <option value="B">지하</option>
-                </select>
-              </div>
-              <div class="filterGroup">
-                <label for="minCap">최소 인원</label>
-                <input id="minCap" type="number" min="1" step="1" value="1" />
-              </div>
-              <!--          <div class="row" style="justify-content: flex-end">-->
-              <!--            <button class="btn btn-ghost" type="button" id="applyFilter">-->
-              <!--              필터 적용-->
-              <!--            </button>-->
-              <!--          </div>-->
-            </aside>
+          <section class="visitCard">
+            <p class="addrBlock">서울특별시 종로구 삼청로 30</p>
+            <p class="addrSub">
+              지번 · 경복궁 동측, 삼청동 일대 · 우편번호 03062
+            </p>
+            <div id="map"></div>
+            <p class="addrSub" style="margin-top: 12px">
+              지도 앱에서 「Art Museum 서울」 또는 주소를 검색하면 길찾기를
+              이용하실 수 있습니다.
+            </p>
+          </section>
 
-            <!-- GALLERY LIST -->
-            <section class="galleryPanel">
-              <div class="galleryMeta">
-                <div>
-                  <div class="galleryMetaTitle">전시 공간</div>
-                  <div class="galleryMetaSub">
-                    카드를 클릭하면 상세 및 예약 화면으로 이동합니다.
-                  </div>
-                </div>
-              </div>
-
-              <div class="galleryGrid" id="galleryCardGrid">
-                <article
-                  th:each="gallery : ${galleries}"
-                  class="galleryCard"
-                  th:data-floor-zone="${gallery.floorZone}"
-                  th:data-cap="${gallery.capacity}"
-                  th:data-status="${gallery.isActive}"
+          <section class="visitCard">
+            <h2 class="visitCardTitle">대중교통</h2>
+            <div class="routeItem">
+              <span class="routeBadge">지하철</span>
+              <div class="routeBody">
+                <strong>3호선 안국역</strong> 1번 출구 도보 약 10분
+                <span class="muted"
+                  >직진 후 삼청로 방향 이정표를 따라 이동</span
                 >
-                  <a th:href="@{/gallery/detail(id=${gallery.id})}">
-                    <div class="galleryThumb">
-                      <img
-                        th:if="${gallery.coverImageUrlForDisplay != null}"
-                        th:src="${gallery.coverImageUrlForDisplay}"
-                        class="galleryThumbBg"
-                        alt=""
-                      />
-                      <div class="galleryThumbOverlay"></div>
-                      <div class="galleryThumbLabel">
-                        <div class="galleryThumbName" th:text="${gallery.name}">
-                          갤러리명
-                        </div>
-                        <div
-                          class="galleryThumbMeta"
-                          th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : '층') + ' · ' + (gallery.location != null ? gallery.location : '') + ' · ' + gallery.capacity + '석'}"
-                        >
-                          위치 · 석수
-                        </div>
-                      </div>
-                    </div>
-                    <div class="galleryCardBody">
-                      <div
-                        class="galleryCardDesc"
-                        th:text="${gallery.description}"
-                      >
-                        소개
-                      </div>
-                      <span
-                        class="galleryCardBadge"
-                        th:classappend="${gallery.isActive} ? ' badge badge-ok' : ' badge badge-danger'"
-                        th:text="${gallery.isActive} ? '운영중' : '마감'"
-                        >상태</span
-                      >
-                    </div>
-                  </a>
-                </article>
               </div>
+            </div>
+            <div class="routeItem">
+              <span class="routeBadge">버스</span>
+              <div class="routeBody">
+                <strong>경복궁·국립민속박물관</strong> 정류장 하차 도보 약 7분
+                <span class="muted"
+                  >간선 109, 171, 272 등 · 마을버스 종로 11 확인</span
+                >
+              </div>
+            </div>
+          </section>
 
-              <div
-                class="emptyState"
-                id="emptyState"
-                th:style="${galleries == null or #lists.isEmpty(galleries)} ? 'display:block' : 'display:none'"
+          <section class="visitCard" style="margin-bottom: 0">
+            <h2 class="visitCardTitle">승용차 · 주차</h2>
+            <p class="helpText" style="margin-top: 0">
+              인근 공영·민영 주차장을 이용해 주세요. 전시장 내 방문자 주차는
+              수량이 한정되어 있으며, 사전 예약 또는 안내에 따라 배정됩니다.
+            </p>
+            <div class="visitCross">
+              <a class="btn btn-ghost" th:href="@{/visit/hours}"
+                >관람 시간 안내</a
               >
-                <div class="emptyStateTitle">
-                  조건에 맞는 전시 공간이 없습니다.
-                </div>
-                <div class="helpText">
-                  필터 조건을 변경해 다시 시도해보세요.
-                </div>
-              </div>
-            </section>
-          </div>
+              <a
+                class="btn btn-primary invertHover"
+                style="margin-left: 10px"
+                th:href="@{/gallery/list}"
+                >전시 목록</a
+              >
+            </div>
+          </section>
         </div>
       </main>
 
@@ -336,48 +361,17 @@
         </div>
       </footer>
     </div>
-
     <script>
-      (function () {
-        const q = document.getElementById("q");
-        const region = document.getElementById("region");
-        const minCap = document.getElementById("minCap");
-        const cards = document.querySelectorAll("#galleryCardGrid article");
-        if (!q || !region || !minCap) return;
-
-        function apply() {
-          const query = (q.value || "").toLowerCase().trim();
-          const r = region.value || "ALL";
-          const cap = Number(minCap.value || 1);
-
-          document
-            .querySelectorAll("#galleryCardGrid article")
-            .forEach((card) => {
-              const nameEl = card.querySelector(".galleryThumbName");
-              const name = (nameEl ? nameEl.innerText : "").toLowerCase();
-              const cr = card.getAttribute("data-floor-zone") || "ALL";
-              const cCap = Number(card.getAttribute("data-cap") || 0);
-
-              const hitText = !query || name.includes(query);
-              const hitRegion = r === "ALL" || String(cr) === String(r);
-              const hitCap = cCap >= cap;
-              card.style.display = hitText && hitRegion && hitCap ? "" : "none";
-            });
-        }
-        const grid = document.getElementById("galleryCardGrid");
-        if (grid) {
-          Array.from(grid.querySelectorAll("article")).forEach((card) => {
-            if (card.getAttribute("data-status") === "false") {
-              card.classList.add("galleryCard--inactive");
-              grid.appendChild(card);
-            }
-          });
-        }
-
-        [q, minCap].forEach((el) => el.addEventListener("input", apply));
-        region.addEventListener("change", apply);
-        apply();
-      })();
+      var container = document.getElementById("map");
+      var options = {
+        center: new kakao.maps.LatLng(37.5796, 126.9809),
+        level: 3,
+      };
+      var map = new kakao.maps.Map(container, options);
+      new kakao.maps.Marker({
+        position: options.center,
+        map: map,
+      });
     </script>
   </body>
 </html>

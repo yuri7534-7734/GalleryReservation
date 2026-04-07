@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/*.css", "/*.js", "/gallery/*.css", "/member/*.css", "/reservation/*.css", "/admin/*.css", "/todo/*.css").permitAll()
                 .requestMatchers("/", "/member/join", "/member/login").permitAll()
                 .requestMatchers("/gallery/list", "/gallery/detail", "/gallery/detail/**").permitAll()
+                .requestMatchers("/visit/**").permitAll()
                 .requestMatchers("/admin/**", "/todo/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );

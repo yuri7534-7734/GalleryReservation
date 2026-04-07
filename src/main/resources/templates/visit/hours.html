@@ -7,14 +7,76 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>전시 목록 — Art Museum</title>
+    <title>관람 시간 — Art Museum</title>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="stylesheet" th:href="@{/css/common.css}" />
-    <link rel="stylesheet" th:href="@{/gallery/list.css}" />
+    <style>
+      .visitLead {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 65ch;
+        margin: 0 0 28px;
+      }
+      .visitGrid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-bottom: 24px;
+      }
+      @media (max-width: 900px) {
+        .visitGrid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .visitCard {
+        border: 1px solid var(--stroke);
+        background: var(--bg0);
+        padding: 24px;
+      }
+      .visitCardTitle {
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: -0.2px;
+        margin: 0 0 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--stroke);
+      }
+      .timeRow {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--stroke);
+        font-size: 14px;
+      }
+      .timeRow:last-child {
+        border-bottom: none;
+      }
+      .timeLabel {
+        font-weight: 700;
+        color: var(--text);
+      }
+      .timeVal {
+        color: var(--muted);
+        text-align: right;
+      }
+      .visitNote {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.65;
+        margin: 0;
+      }
+      .visitCross {
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid var(--stroke);
+      }
+    </style>
   </head>
   <body>
     <div class="appShell">
-      <!-- NAVBAR -->
       <nav class="navbar">
         <div class="navbarInner">
           <a class="brand" th:href="@{/}">
@@ -89,6 +151,7 @@
                     ? 'false'
                     : 'true'
               "
+              aria-label="메뉴 열기"
             >
               ☰
             </button>
@@ -120,124 +183,69 @@
       </nav>
 
       <main>
-        <!-- PAGE HEADER -->
-        <div class="container">
-          <header class="pageHeader">
-            <div class="pageEyebrow">Gallery · Exhibition</div>
-            <h1 class="pageTitle">지금 예약 가능한<br />전시 공간</h1>
-            <p class="pageSubtitle">
-              전시 공간을 선택하면 상세 정보와 예약 화면으로 이동합니다.
+        <div class="container" style="padding-bottom: 80px">
+          <header class="pageHeader" style="margin-bottom: 25px">
+            <div class="pageEyebrow">Visit · Hours</div>
+            <h1 class="pageTitle">관람 시간</h1>
+            <p class="visitLead">
+              예약하신 전시·공간의 관람 및 입장 안내입니다. 특별전·휴관일은
+              공지를 함께 확인해 주세요.
             </p>
           </header>
-        </div>
 
-        <!-- CONTENT -->
-        <div class="container">
-          <div class="contentArea">
-            <!-- FILTER SIDEBAR -->
-            <aside class="filterPanel">
-              <div class="filterTitle">필터</div>
-              <div class="filterGroup">
-                <label for="q">검색</label>
-                <input
-                  id="q"
-                  type="text"
-                  placeholder="갤러리명 / 위치 / 키워드"
-                />
+          <div class="visitGrid">
+            <section class="visitCard">
+              <h2 class="visitCardTitle">정규 관람</h2>
+              <div class="timeRow">
+                <span class="timeLabel">화요일 — 일요일</span>
+                <span class="timeVal">10:00 — 18:00</span>
               </div>
-              <div class="filterGroup">
-                <label for="region">층 / 구역</label>
-                <select id="region">
-                  <option value="ALL" selected>전체</option>
-                  <option value="1">1층</option>
-                  <option value="2">2층</option>
-                  <option value="3">3층</option>
-                  <option value="B">지하</option>
-                </select>
+              <div class="timeRow">
+                <span class="timeLabel">입장 마감</span>
+                <span class="timeVal">폐관 1시간 전</span>
               </div>
-              <div class="filterGroup">
-                <label for="minCap">최소 인원</label>
-                <input id="minCap" type="number" min="1" step="1" value="1" />
+              <div class="timeRow">
+                <span class="timeLabel">야간 개방</span>
+                <span class="timeVal">특별전 기간 중 금·토 21:00까지</span>
               </div>
-              <!--          <div class="row" style="justify-content: flex-end">-->
-              <!--            <button class="btn btn-ghost" type="button" id="applyFilter">-->
-              <!--              필터 적용-->
-              <!--            </button>-->
-              <!--          </div>-->
-            </aside>
+            </section>
 
-            <!-- GALLERY LIST -->
-            <section class="galleryPanel">
-              <div class="galleryMeta">
-                <div>
-                  <div class="galleryMetaTitle">전시 공간</div>
-                  <div class="galleryMetaSub">
-                    카드를 클릭하면 상세 및 예약 화면으로 이동합니다.
-                  </div>
-                </div>
+            <section class="visitCard">
+              <h2 class="visitCardTitle">휴관 · 예약</h2>
+              <div class="timeRow">
+                <span class="timeLabel">정기 휴관</span>
+                <span class="timeVal">매주 월요일</span>
               </div>
-
-              <div class="galleryGrid" id="galleryCardGrid">
-                <article
-                  th:each="gallery : ${galleries}"
-                  class="galleryCard"
-                  th:data-floor-zone="${gallery.floorZone}"
-                  th:data-cap="${gallery.capacity}"
-                  th:data-status="${gallery.isActive}"
-                >
-                  <a th:href="@{/gallery/detail(id=${gallery.id})}">
-                    <div class="galleryThumb">
-                      <img
-                        th:if="${gallery.coverImageUrlForDisplay != null}"
-                        th:src="${gallery.coverImageUrlForDisplay}"
-                        class="galleryThumbBg"
-                        alt=""
-                      />
-                      <div class="galleryThumbOverlay"></div>
-                      <div class="galleryThumbLabel">
-                        <div class="galleryThumbName" th:text="${gallery.name}">
-                          갤러리명
-                        </div>
-                        <div
-                          class="galleryThumbMeta"
-                          th:text="${(gallery.floorZone == '1' ? '1층' : gallery.floorZone == '2' ? '2층' : gallery.floorZone == '3' ? '3층' : gallery.floorZone == 'B' ? '지하' : '층') + ' · ' + (gallery.location != null ? gallery.location : '') + ' · ' + gallery.capacity + '석'}"
-                        >
-                          위치 · 석수
-                        </div>
-                      </div>
-                    </div>
-                    <div class="galleryCardBody">
-                      <div
-                        class="galleryCardDesc"
-                        th:text="${gallery.description}"
-                      >
-                        소개
-                      </div>
-                      <span
-                        class="galleryCardBadge"
-                        th:classappend="${gallery.isActive} ? ' badge badge-ok' : ' badge badge-danger'"
-                        th:text="${gallery.isActive} ? '운영중' : '마감'"
-                        >상태</span
-                      >
-                    </div>
-                  </a>
-                </article>
+              <div class="timeRow">
+                <span class="timeLabel">법정 공휴일</span>
+                <span class="timeVal">별도 공지 (일부 개방될 수 있음)</span>
               </div>
-
-              <div
-                class="emptyState"
-                id="emptyState"
-                th:style="${galleries == null or #lists.isEmpty(galleries)} ? 'display:block' : 'display:none'"
-              >
-                <div class="emptyStateTitle">
-                  조건에 맞는 전시 공간이 없습니다.
-                </div>
-                <div class="helpText">
-                  필터 조건을 변경해 다시 시도해보세요.
-                </div>
+              <div class="timeRow">
+                <span class="timeLabel">예약 확인</span>
+                <span class="timeVal">내 예약</span>
               </div>
             </section>
           </div>
+
+          <section class="visitCard" style="margin-bottom: 0">
+            <h2 class="visitCardTitle">유의 사항</h2>
+            <p class="visitNote">
+              원활한 관람을 위해 예약 시간 10분 전까지 매표소 또는 안내 데스크에
+              도착해 주세요. 지연 입장 시 슬롯이 조정될 수 있습니다. 단체·교육
+              프로그램은 별도 일정이 적용됩니다.
+            </p>
+            <div class="visitCross">
+              <a class="btn btn-ghost" th:href="@{/visit/directions}"
+                >오시는 길 안내</a
+              >
+              <a
+                class="btn btn-primary invertHover"
+                style="margin-left: 10px"
+                th:href="@{/gallery/list}"
+                >전시 목록</a
+              >
+            </div>
+          </section>
         </div>
       </main>
 
@@ -336,48 +344,5 @@
         </div>
       </footer>
     </div>
-
-    <script>
-      (function () {
-        const q = document.getElementById("q");
-        const region = document.getElementById("region");
-        const minCap = document.getElementById("minCap");
-        const cards = document.querySelectorAll("#galleryCardGrid article");
-        if (!q || !region || !minCap) return;
-
-        function apply() {
-          const query = (q.value || "").toLowerCase().trim();
-          const r = region.value || "ALL";
-          const cap = Number(minCap.value || 1);
-
-          document
-            .querySelectorAll("#galleryCardGrid article")
-            .forEach((card) => {
-              const nameEl = card.querySelector(".galleryThumbName");
-              const name = (nameEl ? nameEl.innerText : "").toLowerCase();
-              const cr = card.getAttribute("data-floor-zone") || "ALL";
-              const cCap = Number(card.getAttribute("data-cap") || 0);
-
-              const hitText = !query || name.includes(query);
-              const hitRegion = r === "ALL" || String(cr) === String(r);
-              const hitCap = cCap >= cap;
-              card.style.display = hitText && hitRegion && hitCap ? "" : "none";
-            });
-        }
-        const grid = document.getElementById("galleryCardGrid");
-        if (grid) {
-          Array.from(grid.querySelectorAll("article")).forEach((card) => {
-            if (card.getAttribute("data-status") === "false") {
-              card.classList.add("galleryCard--inactive");
-              grid.appendChild(card);
-            }
-          });
-        }
-
-        [q, minCap].forEach((el) => el.addEventListener("input", apply));
-        region.addEventListener("change", apply);
-        apply();
-      })();
-    </script>
   </body>
 </html>

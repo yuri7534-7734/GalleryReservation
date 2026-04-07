@@ -24,5 +24,13 @@ public class ViewController {
         return "gallery/list";
     }
 
+    @GetMapping("/visit/hours")
+    public String visitHours() {
+        return "visit/hours";
+    }
 
+    @GetMapping("/visit/directions")
+    public String visitDirections() {
+        return "visit/directions";
+    }
 }
