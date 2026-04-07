@@ -1,0 +1,188 @@
+<svg width="1100" height="660" viewBox="0 0 1100 660" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#9ca3af"/>
+    </marker>
+    <marker id="arr-rev" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto">
+      <polygon points="8 0, 0 3, 8 6" fill="#9ca3af"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="660" fill="#f1f5f9"/>
+
+  <!-- Title -->
+  <text x="550" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">Art Museum — System Architecture (AWS EC2)</text>
+
+  <!-- ═══════════════ BROWSER ═══════════════ -->
+  <rect x="15" y="195" width="158" height="225" rx="9" fill="white" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="15" y="195" width="158" height="36" rx="9" fill="#1e293b"/>
+  <rect x="15" y="219" width="158" height="12" fill="#1e293b"/>
+  <circle cx="32" cy="213" r="5" fill="#f87171"/>
+  <circle cx="47" cy="213" r="5" fill="#fbbf24"/>
+  <circle cx="62" cy="213" r="5" fill="#34d399"/>
+  <text x="94" y="217" text-anchor="middle" font-size="11" font-weight="700" fill="white">Browser</text>
+  <text x="94" y="251" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">사용자 브라우저</text>
+  <line x1="25" y1="258" x2="163" y2="258" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="94" y="275" text-anchor="middle" font-size="9" fill="#64748b">HTML / CSS / JS</text>
+  <text x="94" y="291" text-anchor="middle" font-size="9" fill="#64748b">Thymeleaf 렌더링</text>
+  <text x="94" y="307" text-anchor="middle" font-size="9" fill="#64748b">Form Submit</text>
+  <text x="94" y="323" text-anchor="middle" font-size="9" fill="#64748b">Session Cookie</text>
+  <text x="94" y="339" text-anchor="middle" font-size="9" fill="#64748b">CSRF Token</text>
+  <text x="94" y="358" text-anchor="middle" font-size="9" fill="#94a3b8">Port 8080</text>
+  <text x="94" y="406" text-anchor="middle" font-size="8.5" fill="#94a3b8">HTTP / HTTPS</text>
+
+  <!-- Arrows Browser <-> EC2 -->
+  <line x1="173" y1="293" x2="197" y2="293" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="197" y1="310" x2="173" y2="310" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr-rev)"/>
+  <text x="185" y="287" text-anchor="middle" font-size="7.5" fill="#94a3b8">req</text>
+  <text x="185" y="323" text-anchor="middle" font-size="7.5" fill="#94a3b8">res</text>
+
+  <!-- ═══════════════ AWS EC2 BOX ═══════════════ -->
+  <rect x="200" y="50" width="625" height="568" rx="12" fill="white" stroke="#f97316" stroke-width="2.5" stroke-dasharray="9,4"/>
+  <rect x="200" y="50" width="625" height="44" rx="12" fill="#ea580c"/>
+  <rect x="200" y="78" width="625" height="16" fill="#ea580c"/>
+  <text x="512" y="76" text-anchor="middle" font-size="12.5" font-weight="700" fill="white">AWS EC2   ·   Spring Boot 3.4.1   ·   Java 21   ·   Port 8080</text>
+
+  <!-- Security Layer: y=102, h=62 -->
+  <rect x="218" y="102" width="589" height="62" rx="7" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="512" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#15803d">Spring Security 6</text>
+  <text x="512" y="137" text-anchor="middle" font-size="9" fill="#166534">Form Login (BCrypt 12)  ·  OAuth2 Client (Kakao · Naver)  ·  CSRF (CookieCsrfTokenRepository, HttpOnly=false)  ·  HTTP Session</text>
+  <text x="512" y="153" text-anchor="middle" font-size="8.5" fill="#166534">Public: / · /gallery/** · /member/**   /   ADMIN: /admin/** · /todo/**   /   LOGIN Required: 그 외 모든 경로</text>
+
+  <!-- Presentation Layer: y=176, h=130 -->
+  <rect x="218" y="176" width="589" height="130" rx="7" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="512" y="193" text-anchor="middle" font-size="11" font-weight="700" fill="#1d4ed8">Presentation Layer  (MVC Controllers + Thymeleaf 14 Templates)</text>
+
+  <!-- Controller boxes -->
+  <rect x="226" y="201" width="106" height="94" rx="5" fill="white" stroke="#93c5fd" stroke-width="1"/>
+  <text x="279" y="216" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1e40af">MemberController</text>
+  <line x1="231" y1="221" x2="327" y2="221" stroke="#dbeafe" stroke-width="1"/>
+  <text x="279" y="233" text-anchor="middle" font-size="7.5" fill="#475569">GET /member/login</text>
+  <text x="279" y="246" text-anchor="middle" font-size="7.5" fill="#475569">GET /member/join</text>
+  <text x="279" y="259" text-anchor="middle" font-size="7.5" fill="#475569">POST /member/join</text>
+  <text x="279" y="272" text-anchor="middle" font-size="7.5" fill="#475569">POST /member/loginAction</text>
+  <text x="279" y="285" text-anchor="middle" font-size="7.5" fill="#475569">GET /member/logout</text>
+
+  <rect x="338" y="201" width="107" height="94" rx="5" fill="white" stroke="#93c5fd" stroke-width="1"/>
+  <text x="392" y="216" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1e40af">GalleryController</text>
+  <line x1="343" y1="221" x2="440" y2="221" stroke="#dbeafe" stroke-width="1"/>
+  <text x="392" y="233" text-anchor="middle" font-size="7.5" fill="#475569">GET /gallery/list</text>
+  <text x="392" y="246" text-anchor="middle" font-size="7.5" fill="#475569">GET /gallery/detail</text>
+  <text x="392" y="259" text-anchor="middle" font-size="7.5" fill="#475569">POST /gallery/detail</text>
+  <text x="392" y="273" text-anchor="middle" font-size="7.5" fill="#94a3b8">(예약 신청 제출)</text>
+
+  <rect x="451" y="201" width="122" height="94" rx="5" fill="white" stroke="#93c5fd" stroke-width="1"/>
+  <text x="512" y="216" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1e40af">ReservationController</text>
+  <line x1="456" y1="221" x2="568" y2="221" stroke="#dbeafe" stroke-width="1"/>
+  <text x="512" y="233" text-anchor="middle" font-size="7.5" fill="#475569">GET /reservation/list</text>
+  <text x="512" y="246" text-anchor="middle" font-size="7.5" fill="#475569">GET /reservation/detail/{id}</text>
+  <text x="512" y="259" text-anchor="middle" font-size="7.5" fill="#475569">POST /reservation/cancel/{id}</text>
+
+  <rect x="579" y="201" width="107" height="94" rx="5" fill="white" stroke="#93c5fd" stroke-width="1"/>
+  <text x="633" y="216" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1e40af">AdminController</text>
+  <line x1="584" y1="221" x2="681" y2="221" stroke="#dbeafe" stroke-width="1"/>
+  <text x="633" y="233" text-anchor="middle" font-size="7.5" fill="#475569">/admin/gallery/**</text>
+  <text x="633" y="246" text-anchor="middle" font-size="7.5" fill="#475569">/admin/reservation/**</text>
+  <text x="633" y="259" text-anchor="middle" font-size="7.5" fill="#475569">갤러리 등록·수정·삭제</text>
+  <text x="633" y="272" text-anchor="middle" font-size="7.5" fill="#475569">예약 승인·거절</text>
+  <text x="633" y="285" text-anchor="middle" font-size="7.5" fill="#94a3b8">ADMIN 권한</text>
+
+  <rect x="692" y="201" width="107" height="94" rx="5" fill="white" stroke="#93c5fd" stroke-width="1"/>
+  <text x="746" y="216" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1e40af">TodoController</text>
+  <line x1="697" y1="221" x2="794" y2="221" stroke="#dbeafe" stroke-width="1"/>
+  <text x="746" y="233" text-anchor="middle" font-size="7.5" fill="#475569">GET /todo/list</text>
+  <text x="746" y="246" text-anchor="middle" font-size="7.5" fill="#475569">GET /todo/form</text>
+  <text x="746" y="259" text-anchor="middle" font-size="7.5" fill="#475569">POST /todo/create</text>
+  <text x="746" y="272" text-anchor="middle" font-size="7.5" fill="#475569">GET·POST /todo/update/{id}</text>
+  <text x="746" y="285" text-anchor="middle" font-size="7.5" fill="#475569">POST /todo/delete/{id}</text>
+
+  <!-- Arrow: Presentation -> Service -->
+  <line x1="512" y1="306" x2="512" y2="322" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Service Layer: y=322, h=108 -->
+  <rect x="218" y="322" width="589" height="108" rx="7" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text x="512" y="340" text-anchor="middle" font-size="11" font-weight="700" fill="#b45309">Service Layer</text>
+
+  <rect x="226" y="347" width="108" height="72" rx="5" fill="white" stroke="#fde68a" stroke-width="1"/>
+  <text x="280" y="362" text-anchor="middle" font-size="8.5" font-weight="700" fill="#92400e">MemberService</text>
+  <text x="280" y="376" text-anchor="middle" font-size="7.5" fill="#64748b">회원가입 · BCrypt 암호화</text>
+  <text x="280" y="389" text-anchor="middle" font-size="7.5" fill="#64748b">중복 이메일 검증</text>
+  <text x="280" y="402" text-anchor="middle" font-size="7.5" fill="#64748b">UserDetailsService</text>
+
+  <rect x="340" y="347" width="108" height="72" rx="5" fill="white" stroke="#fde68a" stroke-width="1"/>
+  <text x="394" y="362" text-anchor="middle" font-size="8.5" font-weight="700" fill="#92400e">GalleryService</text>
+  <text x="394" y="376" text-anchor="middle" font-size="7.5" fill="#64748b">갤러리 CRUD</text>
+  <text x="394" y="389" text-anchor="middle" font-size="7.5" fill="#64748b">수용인원 차감·복구</text>
+  <text x="394" y="402" text-anchor="middle" font-size="7.5" fill="#64748b">검색 · 페이징</text>
+
+  <rect x="454" y="347" width="120" height="72" rx="5" fill="white" stroke="#fde68a" stroke-width="1"/>
+  <text x="514" y="362" text-anchor="middle" font-size="8.5" font-weight="700" fill="#92400e">ReservationService</text>
+  <text x="514" y="376" text-anchor="middle" font-size="7.5" fill="#64748b">예약 생성·취소</text>
+  <text x="514" y="389" text-anchor="middle" font-size="7.5" fill="#64748b">승인·거절 처리</text>
+  <text x="514" y="402" text-anchor="middle" font-size="7.5" fill="#64748b">이메일 기반 조회·페이징</text>
+
+  <rect x="580" y="347" width="100" height="72" rx="5" fill="white" stroke="#fde68a" stroke-width="1"/>
+  <text x="630" y="362" text-anchor="middle" font-size="8.5" font-weight="700" fill="#92400e">TodoService</text>
+  <text x="630" y="376" text-anchor="middle" font-size="7.5" fill="#64748b">할일 CRUD</text>
+  <text x="630" y="389" text-anchor="middle" font-size="7.5" fill="#64748b">완료 여부 필터</text>
+  <text x="630" y="402" text-anchor="middle" font-size="7.5" fill="#64748b">마감일 정렬·페이징</text>
+
+  <rect x="686" y="347" width="113" height="72" rx="5" fill="white" stroke="#fde68a" stroke-width="1"/>
+  <text x="743" y="362" text-anchor="middle" font-size="8.5" font-weight="700" fill="#92400e">OAuth2UserService</text>
+  <text x="743" y="376" text-anchor="middle" font-size="7.5" fill="#64748b">SNS 사용자 생성·조회</text>
+  <text x="743" y="389" text-anchor="middle" font-size="7.5" fill="#64748b">Member 테이블 동기화</text>
+  <text x="743" y="402" text-anchor="middle" font-size="7.5" fill="#64748b">Session 저장 · Role 부여</text>
+
+  <!-- Arrow: Service -> Repository -->
+  <line x1="512" y1="430" x2="512" y2="446" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Repository Layer: y=446, h=90 -->
+  <rect x="218" y="446" width="589" height="90" rx="7" fill="#faf5ff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="512" y="465" text-anchor="middle" font-size="11" font-weight="700" fill="#6d28d9">Repository Layer  (Spring Data JPA)</text>
+  <text x="295" y="487" text-anchor="middle" font-size="9.5" fill="#374151">MemberRepository</text>
+  <text x="408" y="487" text-anchor="middle" font-size="9.5" fill="#374151">GalleryRepository</text>
+  <text x="530" y="487" text-anchor="middle" font-size="9.5" fill="#374151">ReservationRepository</text>
+  <text x="650" y="487" text-anchor="middle" font-size="9.5" fill="#374151">TodoRepository</text>
+  <text x="762" y="487" text-anchor="middle" font-size="9.5" fill="#374151">SnsUserRepository</text>
+  <text x="512" y="507" text-anchor="middle" font-size="8.5" fill="#7c3aed">Hibernate ORM  ·  PostgreSQL Dialect  ·  HikariCP Connection Pool (max 10)  ·  DDL validate</text>
+  <text x="512" y="523" text-anchor="middle" font-size="8" fill="#a78bfa">@Transactional  ·  커스텀 JPQL  ·  Pageable  ·  Sort</text>
+
+  <!-- ═══════════════ EXTERNAL SERVICES ═══════════════ -->
+
+  <!-- Arrow: EC2 -> Kakao -->
+  <line x1="825" y1="155" x2="868" y2="165" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="848" y="150" text-anchor="middle" font-size="8" fill="#64748b">OAuth2</text>
+
+  <!-- Arrow: EC2 -> Naver -->
+  <line x1="825" y1="175" x2="868" y2="258" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="858" y="220" text-anchor="middle" font-size="8" fill="#64748b">OAuth2</text>
+
+  <!-- Arrow: EC2 -> PostgreSQL -->
+  <line x1="825" y1="488" x2="868" y2="488" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="846" y="481" text-anchor="middle" font-size="8" fill="#64748b">JDBC/SSL</text>
+
+  <!-- Kakao box: x=870, y=130, w=195, h=72 -->
+  <rect x="870" y="130" width="195" height="72" rx="8" fill="#FEE500" stroke="#ca9f00" stroke-width="1.5"/>
+  <text x="967" y="155" text-anchor="middle" font-size="12" font-weight="700" fill="#1c0a00">Kakao OAuth2</text>
+  <text x="967" y="172" text-anchor="middle" font-size="9" fill="#3d1e00">카카오 소셜 로그인</text>
+  <text x="967" y="188" text-anchor="middle" font-size="8" fill="#7a4a20">profile_nickname · account_email</text>
+
+  <!-- Naver box: x=870, y=222, w=195, h=72 -->
+  <rect x="870" y="222" width="195" height="72" rx="8" fill="#03C75A" stroke="#029947" stroke-width="1.5"/>
+  <text x="967" y="247" text-anchor="middle" font-size="12" font-weight="700" fill="white">Naver OAuth2</text>
+  <text x="967" y="264" text-anchor="middle" font-size="9" fill="#d4ffe9">네이버 소셜 로그인</text>
+  <text x="967" y="280" text-anchor="middle" font-size="8" fill="#a3f0cc">name · email · profile_image</text>
+
+  <!-- PostgreSQL box: x=870, y=455, w=195, h=88 -->
+  <rect x="870" y="455" width="195" height="88" rx="8" fill="white" stroke="#1d4ed8" stroke-width="1.5"/>
+  <rect x="870" y="455" width="195" height="34" rx="8" fill="#1d4ed8"/>
+  <rect x="870" y="473" width="195" height="16" fill="#1d4ed8"/>
+  <text x="967" y="472" text-anchor="middle" font-size="12" font-weight="700" fill="white">PostgreSQL</text>
+  <text x="967" y="503" text-anchor="middle" font-size="10" fill="#374151">Supabase Cloud DB</text>
+  <text x="967" y="519" text-anchor="middle" font-size="8.5" fill="#64748b">5 Tables · HikariCP max 10</text>
+  <text x="967" y="533" text-anchor="middle" font-size="8" fill="#94a3b8">member · gallery · reservation · todo · sns_user</text>
+
+  <!-- Footer -->
+  <text x="550" y="648" text-anchor="middle" font-size="9" fill="#94a3b8">Art Museum Gallery Reservation  ·  Spring Boot MVC  ·  AWS EC2 Deployment  ·  Supabase PostgreSQL</text>
+</svg>

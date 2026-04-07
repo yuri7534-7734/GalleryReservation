@@ -1,0 +1,553 @@
+/* 예약 상세 전용 — gallery/detail 과 유사한 풀폭·꽉 찬 레이아웃 */
+
+/* common .container 제한 해제 → 전시 상세처럼 가로 풀폭 */
+main.container {
+  max-width: none !important;
+  width: 100%;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.pageWrap {
+  max-width: none;
+  margin: 0;
+  padding: 0 0 64px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 0 24px 24px;
+  padding-top: 40px;
+  transition: color 0.12s;
+}
+.backLink:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
+  gap: 0;
+  min-height: calc(100vh - var(--nav-h));
+  align-items: stretch;
+}
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  border-right: 1px solid var(--stroke);
+}
+@media (max-width: 960px) {
+  .leftCol {
+    border-right: none;
+  }
+}
+
+.coverBox {
+  width: 100%;
+  max-width: none;
+  min-height: min(52vh, 520px);
+  height: min(52vh, 520px);
+  aspect-ratio: auto;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--stroke);
+  background: var(--bg1);
+  background-size: cover;
+  background-position: center;
+  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+}
+@media (max-width: 960px) {
+  .coverBox {
+    min-height: min(42vh, 380px);
+    height: min(42vh, 380px);
+  }
+}
+.coverBox .noImg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface2);
+  z-index: 1;
+}
+
+/* gallery/detail 과 동일 톤 — 전시 소개 + 정보 그리드 */
+.exhibitIntro {
+  padding: 32px 40px;
+  border-bottom: 1px solid var(--stroke);
+  background: var(--surface);
+}
+@media (max-width: 960px) {
+  .exhibitIntro {
+    padding: 24px 28px;
+  }
+}
+.exhibitName {
+  margin: 0 0 12px;
+  font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  color: var(--text);
+}
+.exhibitHeroMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.infoBlock {
+  padding: 32px 40px;
+  border-bottom: 1px solid var(--stroke);
+  background: var(--bg0);
+}
+@media (max-width: 960px) {
+  .infoBlock {
+    padding: 24px 28px;
+  }
+}
+.infoBlockTitle {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--stroke);
+  border: 1px solid var(--stroke);
+  margin-bottom: 24px;
+}
+.infoItem {
+  background: var(--bg0);
+  padding: 18px 20px;
+}
+.infoItemLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.infoItemValue {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+}
+.descText {
+  font-size: 14.5px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin: 0;
+}
+
+.stepList {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--stroke);
+  border: 1px solid var(--stroke);
+}
+.stepItem {
+  background: var(--bg0);
+  padding: 18px 22px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.stepNum {
+  width: 26px;
+  height: 26px;
+  background: #111;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.stepTitle {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: -0.2px;
+  margin-bottom: 4px;
+}
+.stepDesc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* 오른쪽: 예약 카드 하단 안내 */
+.reservePolicyBlock {
+  padding: 18px 24px 20px;
+  border-top: 1px solid var(--stroke);
+  background: var(--bg1);
+}
+.reservePolicyBlock + .reservePolicyBlock {
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
+/* 제목 + 오른쪽으로 이어지는 선 (Needs 스타일, 테마 컬러 유지) */
+.reservePolicyTitleBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.reservePolicyTitleText {
+  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.35px;
+  color: var(--text);
+  line-height: 1.2;
+}
+.reservePolicyTitleLine {
+  flex: 1;
+  min-width: 32px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--stroke);
+}
+.reservePolicyTitleBar--sub {
+  margin-bottom: 12px;
+}
+.reservePolicyTitleBar--sub .reservePolicyTitleText {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+.reservePolicyGroup {
+  margin-bottom: 22px;
+}
+.reservePolicyGroup:last-child {
+  margin-bottom: 0;
+}
+.reservePolicyCopy {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.reservePolicyCopy p {
+  margin: 0 0 10px;
+}
+.reservePolicyCopy p:last-child {
+  margin-bottom: 0;
+}
+.reservePolicyLead {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.75;
+  margin: -6px 0 20px;
+}
+.reservePolicyTableWrap {
+  margin-top: 8px;
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.reservePolicyTable {
+  width: 100%;
+  min-width: 420px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.reservePolicyTable th,
+.reservePolicyTable td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--stroke);
+  vertical-align: top;
+  line-height: 1.5;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.reservePolicyTable tr:last-child td {
+  border-bottom: none;
+}
+.reservePolicyTable thead th {
+  background: var(--bg0);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.reservePolicyTable td:first-child {
+  color: var(--text);
+  font-weight: 700;
+  width: 44%;
+}
+
+@media (max-width: 420px) {
+  .reservePolicyTable {
+    min-width: 360px;
+  }
+  .reservePolicyTable th,
+  .reservePolicyTable td {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+}
+
+.reserveCard {
+  background: var(--surface);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+  position: sticky;
+  top: var(--nav-h);
+  align-self: start;
+  min-height: calc(100vh - var(--nav-h));
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 960px) {
+  .reserveCard {
+    position: static;
+    min-height: auto;
+  }
+}
+
+.reserveHeader,
+.reserveBody,
+.cancelArea,
+.reserveFooter {
+  position: relative;
+  z-index: 1;
+}
+
+.reserveHeader {
+  padding: 22px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.reserveHeaderLeft .rLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+.reserveHeaderLeft .rId {
+  font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-top: 4px;
+  color: #ffffff;
+}
+.reserveHeader .badge {
+  min-width: auto;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.92);
+  box-shadow: none;
+}
+.reserveHeader .badge-ok {
+  background: rgba(26, 115, 65, 0.28);
+  border-color: rgba(26, 115, 65, 0.45);
+  color: #c8e6d5;
+}
+.reserveHeader .badge-warn {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.88);
+}
+.reserveHeader .badge-danger {
+  background: rgba(192, 57, 43, 0.35);
+  border-color: rgba(192, 57, 43, 0.5);
+  color: #ffc9c2;
+}
+
+.reserveBody {
+  padding: 0;
+}
+.infoRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--stroke);
+}
+.infoRow:last-child {
+  border-bottom: none;
+}
+.infoKey {
+  width: 72px;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 4px;
+}
+.infoVal {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.45;
+}
+.infoValSub {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.noteBox {
+  background: var(--bg1);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.65;
+}
+
+.cancelArea {
+  margin: 16px;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(192, 57, 43, 0.25);
+  background: rgba(192, 57, 43, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.cancelAreaText {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--danger);
+}
+.cancelAreaSub {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.reserveFooter {
+  padding: 18px 24px 24px;
+  border-top: 1px solid var(--stroke);
+  background: var(--bg1);
+  margin-top: auto;
+}
+.reserveFooter .btn {
+  min-height: 44px;
+}
+
+/* 푸터: common.css 다크 푸터와 통일 (기존 인라인 스타일 덮어쓰기) */
+.appShell > footer {
+  border-top: none !important;
+  padding: 48px 0 32px !important;
+  margin-top: 0 !important;
+  background: #111111 !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: none !important;
+}
+.appShell footer .container {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.55) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+.appShell footer .container a {
+  color: rgba(255, 255, 255, 0.55) !important;
+  transition: color 0.12s;
+}
+.appShell footer .container a:hover {
+  color: #ffffff !important;
+}
+
+@media (max-width: 860px) {
+  .backLink {
+    margin-left: 16px;
+    margin-right: 16px;
+    padding-top: 28px;
+  }
+  .pageWrap {
+    padding-bottom: 48px;
+  }
+  .reserveHeader {
+    padding: 20px 20px 18px;
+  }
+  .infoRow {
+    padding: 14px 20px;
+  }
+  .reserveFooter {
+    padding: 16px 20px 22px;
+  }
+}
+@media (max-width: 560px) {
+  .exhibitIntro {
+    padding: 22px 18px;
+  }
+  .reserveHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .cancelArea {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .appShell footer .container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}

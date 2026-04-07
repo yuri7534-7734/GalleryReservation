@@ -1,0 +1,329 @@
+<!doctype html>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security6"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입 — Art Museum</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
+    <link rel="stylesheet" th:href="@{/member/join.css}" />
+  </head>
+  <body>
+    <div class="appShell">
+      <!-- NAVBAR -->
+      <nav class="navbar">
+        <div class="navbarInner">
+          <a class="brand" th:href="@{/}">
+            <span class="brandMark">
+              <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="6" height="6" />
+                <rect x="10" y="2" width="6" height="6" />
+                <rect x="2" y="10" width="6" height="6" />
+                <rect x="10" y="10" width="6" height="6" opacity="0.4" />
+              </svg>
+            </span>
+            <span>Art Museum</span>
+          </a>
+          <div class="navLinks">
+            <a class="navLink" th:href="@{/gallery/list}">전시 목록</a>
+            <a
+              class="navLink"
+              sec:authorize="isAuthenticated()"
+              th:href="@{/reservation/list}"
+              >내 예약</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/todo/list}"
+              >할 일</a
+            >
+            <a
+              class="navLink"
+              sec:authorize="hasRole('ADMIN')"
+              th:href="@{/admin/gallery/list}"
+              >관리자</a
+            >
+          </div>
+          <div class="navActions">
+            <!--            <div-->
+            <!--              sec:authorize="!isAuthenticated()"-->
+            <!--              style="display: flex; gap: 8px"-->
+            <!--            >-->
+            <!--              <a class="btn btn-ghost btn-small" th:href="@{/member/login}"-->
+            <!--                >로그인</a-->
+            <!--              >-->
+            <!--              <a class="btn btn-primary btn-small" th:href="@{/member/join}"-->
+            <!--                >회원가입</a-->
+            <!--              >-->
+            <!--            </div>-->
+            <button
+              class="hamburger"
+              type="button"
+              onclick="
+                document.getElementById('mobileMenu').dataset.open =
+                  document.getElementById('mobileMenu').dataset.open === 'true'
+                    ? 'false'
+                    : 'true'
+              "
+            >
+              ☰
+            </button>
+          </div>
+        </div>
+        <div id="mobileMenu">
+          <div class="mobileMenuInner">
+            <a class="navLink" th:href="@{/gallery/list}">전시·관람</a>
+          </div>
+        </div>
+      </nav>
+
+      <main>
+        <div class="container">
+          <header class="pageHeader">
+            <div class="pageEyebrow">Member · Sign Up</div>
+            <h1 class="pageTitle">회원가입</h1>
+            <p class="pageSubtitle">
+              미술관 예약을 더 빠르게. 계정을 만들고 전시 공간을 미리
+              계획하세요.
+            </p>
+          </header>
+        </div>
+
+        <div class="container" style="padding-left: 0; padding-right: 0">
+          <div class="joinLayout">
+            <!-- FORM -->
+            <div class="joinMain">
+              <form
+                th:action="@{/member/join}"
+                th:object="${memberJoinRequestDto}"
+                method="post"
+                class="stack"
+              >
+                <input
+                  type="hidden"
+                  th:name="${_csrf.parameterName}"
+                  th:value="${_csrf.token}"
+                />
+
+                <!-- 변경: 서비스 예외(예: 중복 아이디) 시 컨트롤러가 넣은 signupError — 기존 alert 대체 -->
+                <div
+                  class="alertError alertBox"
+                  th:if="${signupError != null}"
+                  th:text="${signupError}"
+                >
+                  오류
+                </div>
+
+                <div class="formGrid">
+                  <div>
+                    <label for="joinName">아이디</label>
+                    <input
+                      id="joinName"
+                      th:field="*{username}"
+                      type="text"
+                      placeholder="5자 이상"
+                      required
+                    />
+                    <!-- 변경: Bean Validation 실패 시 메시지 — BindingResult 연동(th:object와 세트) -->
+                    <p
+                      class="errorText"
+                      th:if="${#fields.hasErrors('username')}"
+                      th:text="${#fields.errors('username')[0]}"
+                    ></p>
+                  </div>
+                  <div>
+                    <label for="joinEmail">이메일</label>
+                    <input
+                      id="joinEmail"
+                      th:field="*{email}"
+                      type="email"
+                      placeholder="name@example.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label for="joinPassword">비밀번호</label>
+                    <input
+                      id="joinPassword"
+                      th:field="*{password}"
+                      type="password"
+                      placeholder="8자 이상"
+                      required
+                    />
+                    <p
+                      class="errorText"
+                      th:if="${#fields.hasErrors('password')}"
+                      th:text="${#fields.errors('password')[0]}"
+                    ></p>
+                  </div>
+                  <div>
+                    <label for="joinRole">역할</label>
+                    <select id="joinRole" th:field="*{role}">
+                      <option value="ROLE_USER" selected>사용자</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="termsBox">
+                  <div class="termsTitle">이용 약관 동의</div>
+                  <label class="termsItem">
+                    <input
+                      id="agree1"
+                      type="checkbox"
+                      name="agreeTerms"
+                      required
+                    />
+                    <span class="termsItemLabel"
+                      >이용약관 및 개인정보 처리방침 동의 (필수)</span
+                    >
+                  </label>
+                  <label class="termsItem">
+                    <input id="agree2" type="checkbox" name="agreeMarketing" />
+                    <span class="termsItemLabel"
+                      >마케팅 정보 수신 동의 (선택)</span
+                    >
+                  </label>
+                </div>
+
+                <div style="display: flex; gap: 8px; justify-content: flex-end">
+                  <a class="btn btn-ghost" th:href="@{/member/login}"
+                    >이미 계정이 있어요</a
+                  >
+                  <button class="btn btn-primary" type="submit">
+                    가입하기
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- SIDE -->
+            <div class="joinSide">
+              <div class="sideTitle">가입하면 얻는 것</div>
+              <div class="benefitList">
+                <div class="benefitItem">
+                  <div class="benefitNum">1</div>
+                  <div>
+                    <div class="benefitTitle">빠른 예약</div>
+                    <div class="benefitDesc">
+                      전시 공간 선택 후 날짜와 시간을 바로 입력합니다.
+                    </div>
+                  </div>
+                </div>
+                <div class="benefitItem">
+                  <div class="benefitNum">2</div>
+                  <div>
+                    <div class="benefitTitle">상태 확인</div>
+                    <div class="benefitDesc">
+                      대기·확정·취소 상태를 한 화면에서 확인합니다.
+                    </div>
+                  </div>
+                </div>
+                <div class="benefitItem">
+                  <div class="benefitNum">3</div>
+                  <div>
+                    <div class="benefitTitle">관람 메모</div>
+                    <div class="benefitDesc">
+                      요청 사항을 메모로 남길 수 있습니다.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style="
+                  margin-top: 24px;
+                  padding-top: 20px;
+                  border-top: 1px solid var(--stroke);
+                "
+              >
+                <div
+                  style="
+                    font-size: 12px;
+                    font-weight: 700;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    color: var(--muted);
+                    margin-bottom: 8px;
+                  "
+                >
+                  보안 안내
+                </div>
+                <div
+                  style="font-size: 13px; color: var(--muted); line-height: 1.7"
+                >
+                  비밀번호는 안전하게 암호화되어 저장됩니다. 타인과 공유하지
+                  마세요.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <div class="footerInner">
+          <div>
+            <div class="footerBrand">Art Museum</div>
+            <div class="footerDesc">
+              국립현대미술관 예약 시스템<br />미술 작품과 공간을 예약하세요.
+            </div>
+          </div>
+          <div style="display: flex; gap: 48px; flex-wrap: wrap">
+            <div>
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 0.1em;
+                  text-transform: uppercase;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-bottom: 14px;
+                "
+              >
+                관람 안내
+              </div>
+              <div
+                class="footerLinks"
+                style="flex-direction: column; gap: 10px"
+              >
+                <a th:href="@{/gallery/list}">전시 목록</a>
+                <a th:href="@{/visit/hours}">관람 시간</a>
+                <a th:href="@{/visit/directions}">오시는 길</a>
+              </div>
+            </div>
+            <div>
+              <div
+                style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  letter-spacing: 0.1em;
+                  text-transform: uppercase;
+                  color: rgba(255, 255, 255, 0.4);
+                  margin-bottom: 14px;
+                "
+              >
+                계정
+              </div>
+              <div
+                class="footerLinks"
+                style="flex-direction: column; gap: 10px"
+              >
+                <a th:href="@{/member/login}">로그인</a>
+                <a th:href="@{/member/join}">회원가입</a>
+                <a th:href="@{/reservation/list}">내 예약</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footerBottom">
+          © 2026 Art Museum Reservation. All rights reserved.
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
