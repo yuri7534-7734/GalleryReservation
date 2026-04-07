@@ -28,22 +28,35 @@
       }
       .contentLayout {
         display: grid;
-        grid-template-columns: 1fr 360px;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
         gap: 32px;
         align-items: start;
         margin-bottom: 80px;
       }
+      @media (max-width: 1200px) {
+        .contentLayout {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+      }
       @media (max-width: 920px) {
         .contentLayout {
           grid-template-columns: 1fr;
+          gap: 16px;
         }
       }
       .previewCard {
-        width: 300px;
-        height: 280px;
+        width: 100%;
+        max-width: 300px;
+        min-height: 280px;
         background: var(--bg1);
         border: 1px solid var(--stroke);
         padding: 16px;
+      }
+      @media (max-width: 1200px) {
+        .previewCard {
+          max-width: none;
+        }
       }
       .previewCardTitleRow {
         display: flex;
@@ -61,6 +74,7 @@
         margin-bottom: 6px;
         display: -webkit-box; /* 웹킷 기반 박스 레이아웃 활성화 */
         -webkit-line-clamp: 1; /* 최대 3줄까지만 표시 */
+        line-clamp: 1;
         -webkit-box-orient: vertical; /* 세로 방향으로 박스 정렬 */
         overflow: hidden; /* 넘치는 텍스트 숨김 */
       }
@@ -70,6 +84,7 @@
         line-height: 1.65;
         display: -webkit-box; /* 웹킷 기반 박스 레이아웃 활성화 */
         -webkit-line-clamp: 9; /* 최대 3줄까지만 표시 */
+        line-clamp: 9;
         -webkit-box-orient: vertical; /* 세로 방향으로 박스 정렬 */
         overflow: hidden; /* 넘치는 텍스트 숨김 */
       }
@@ -91,20 +106,42 @@
         line-height: 1.75;
       }
       #todoContent {
-        height: 280px;
+        min-height: 220px;
+        height: clamp(220px, 30vh, 280px);
         display: -webkit-box; /* 웹킷 기반 박스 레이아웃 활성화 */
         -webkit-line-clamp: 3; /* 최대 3줄까지만 표시 */
+        line-clamp: 3;
         overflow: hidden;
         text-overflow: ellipsis;
         -webkit-box-orient: vertical;
         resize: none;
       }
       .mainCardPad {
-        width: 1000px;
-        height: 550px;
+        width: 100%;
+        min-height: 550px;
+        height: auto;
+        padding: clamp(16px, 2vw, 24px);
       }
       .subCardPad {
-        height: 400px;
+        min-height: 400px;
+      }
+      @media (max-width: 1200px) {
+        .subCardPad {
+          min-height: 0;
+        }
+      }
+      @media (max-width: 640px) {
+        .pageHeader {
+          padding: 28px 0 20px;
+          margin-bottom: 24px;
+        }
+        .mainCardPad {
+          min-height: 0;
+        }
+        .row {
+          flex-wrap: wrap;
+          align-items: flex-start;
+        }
       }
     </style>
   </head>
