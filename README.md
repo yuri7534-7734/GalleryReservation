@@ -76,10 +76,12 @@
 
 ### ✅ 회원
 
-- **회원가입 / 로그인**
+- **회원가입**
 > 이메일과 비밀번호로 회원가입 및 로그인할 수 있다.
 
-- **소셜 로그인**
+![회원가입](readme_assets/join.png)
+
+- **로그인 / 소셜 로그인**
 > 카카오, 네이버 OAuth2 소셜 로그인을 지원한다.
 
 ![로그인](readme_assets/login.png)
@@ -91,10 +93,13 @@
 - **갤러리 목록 조회**
 > 전체 갤러리 목록을 커버 이미지, 위치, 수용 인원과 함께 확인할 수 있다.
 
+![갤러리 목록](readme_assets/gallery-list.png)
+
 - **갤러리 상세 조회 및 예약 신청**
 > 갤러리 상세 페이지에서 날짜, 30분 단위 시간 슬롯, 인원, 연락처를 선택해 바로 예약 신청할 수 있다.
 
-![갤러리 목록](readme_assets/gallery-list.png)
+![갤러리 예약 신청](readme_assets/gallery-detail1.png)
+![갤러리 예약 신청](readme_assets/gallery-detail2.png)
 
 ---
 
