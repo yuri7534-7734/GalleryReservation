@@ -26,6 +26,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+    private final HttpSession httpSession;
     private final SnsUserRepository repository;
     private final MemberRepository memberRepository;
 
@@ -44,22 +45,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 oAuth2User.getAttributes()
         );
 
-        // 1. 유저 정보 저장 및 업데이트 (SnsUser & Member 테이블 동기화)
         SnsUser user = saveOrUpdate(attribute);
-
-        // [수정] 여기서 직접 HttpSession에 저장하던 로직을 제거했습니다.
-        // 대신 SecurityConfig의 SuccessHandler가 이 역할을 수행하게 됩니다.
+        httpSession.setAttribute("user", new SessionUser(user));
 
         String nameKey = attribute.getNameAttributeKey();
         Object nameValue = attribute.getAttributes().get(nameKey);
-
         if (nameValue == null) {
             throw new OAuth2AuthenticationException(
                     "Missing OAuth2 name attribute. registrationId=" + registrationId + ", key=" + nameKey
             );
         }
 
-        // 2. 권한 정보와 함께 OAuth2User 반환
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(resolveRoleKey(user))),
                 attribute.getAttributes(),
@@ -88,11 +84,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         SnsUser savedSnsUser = repository.save(snsUser);
 
-        // Member 테이블 동기화: SNS 로그인을 해도 일반 회원 기능을 사용할 수 있도록 함
+        // Member 테이블에도 동기화 (없을 때만 생성, SNS 로그인도 Todo/Reservation 등 기능 사용 가능하도록)
         memberRepository.findByEmail(email).orElseGet(() -> memberRepository.save(
                 Member.builder()
-                        .username(provider + "_" + providerId)   // e.g. kakao_123456
-                        .password("SNS_" + UUID.randomUUID())    // 더미 비밀번호
+                        .username(provider + "_" + providerId)   // e.g. kakao_123456 (unique 보장)
+                        .password("SNS_" + UUID.randomUUID())    // 실제 로그인에 사용하지 않는 더미값
                         .email(email)
                         .role(MemberRole.ROLE_USER)
                         .build()

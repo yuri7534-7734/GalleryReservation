@@ -73,8 +73,7 @@ public class SecurityConfig {
 
         http.oauth2Login(oauth -> oauth
                 .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                // [핵심 수정] OAuth2 성공 시에도 세션에 유저를 저장하는 customSuccessHandler를 사용합니다!
-                .successHandler(customSuccessHandler)
+                .successHandler(oauthSuccessHandler())
                 .failureHandler(oauthFailureHandler())
         );
 
