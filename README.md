@@ -161,15 +161,29 @@ http://3.36.161.179
 
 ---
 
-## 📡 API 명세
-
-![API 명세서](readme_assets/api명세서.png)
-
----
-
 ## 🏗 시스템 아키텍처
 
-![시스템 아키텍처](readme_assets/architecture.svg)
+```mermaid
+graph LR
+    Browser["🌐 브라우저\n(HTML / CSS / JS)"]
+
+    subgraph EC2["AWS EC2 — Docker"]
+        Filter["🔐 SecurityFilterChain\nCSRF · OAuth2 · Role 인가"]
+        Controller["🎮 Controller Layer\nViewController · MemberController\nGalleryController · ReservationController\nAdminController · TodoController"]
+        Service["⚙️ Service Layer\nGalleryService · ReservationService\nMemberService · TodoService\nCustomOAuth2UserService"]
+        Repository["📦 Repository Layer\nSpring Data JPA"]
+    end
+
+    DB[("☁️ PostgreSQL\n(Supabase)")]
+    OAuth["🔑 Kakao / Naver\nOAuth2"]
+
+    Browser -->|"HTTP 요청"| Filter
+    Filter --> Controller
+    Controller --> Service
+    Service --> Repository
+    Repository -->|"JDBC"| DB
+    OAuth -->|"OAuth2 콜백"| Filter
+```
 
 ---
 
