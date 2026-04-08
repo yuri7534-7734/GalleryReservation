@@ -46,7 +46,7 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
-    @PrePersist 
+    @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         if (this.role == null) this.role = MemberRole.ROLE_USER;
