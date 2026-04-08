@@ -73,7 +73,7 @@ public class SecurityConfig {
 
         http.oauth2Login(oauth -> oauth
                 .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                .successHandler(oauthSuccessHandler())
+                .successHandler(customSuccessHandler)
                 .failureHandler(oauthFailureHandler())
         );
 
