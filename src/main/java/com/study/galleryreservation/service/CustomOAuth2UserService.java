@@ -3,12 +3,10 @@ package com.study.galleryreservation.service;
 import com.study.galleryreservation.config.OAuthAttributes;
 import com.study.galleryreservation.domain.member.Member;
 import com.study.galleryreservation.domain.member.MemberRole;
-import com.study.galleryreservation.domain.session.SessionUser;
 import com.study.galleryreservation.domain.session.SnsUser;
 import com.study.galleryreservation.domain.session.UserRole;
 import com.study.galleryreservation.repository.MemberRepository;
 import com.study.galleryreservation.repository.SnsUserRepository;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -26,9 +24,9 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final HttpSession httpSession;
     private final SnsUserRepository repository;
     private final MemberRepository memberRepository;
+    // HttpSession 제거 — 세션 저장은 successHandler에서 처리
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -46,7 +44,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         );
 
         SnsUser user = saveOrUpdate(attribute);
-        httpSession.setAttribute("user", new SessionUser(user));
+        // httpSession.setAttribute 제거
 
         String nameKey = attribute.getNameAttributeKey();
         Object nameValue = attribute.getAttributes().get(nameKey);
@@ -84,11 +82,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         SnsUser savedSnsUser = repository.save(snsUser);
 
-        // Member 테이블에도 동기화 (없을 때만 생성, SNS 로그인도 Todo/Reservation 등 기능 사용 가능하도록)
         memberRepository.findByEmail(email).orElseGet(() -> memberRepository.save(
                 Member.builder()
-                        .username(provider + "_" + providerId)   // e.g. kakao_123456 (unique 보장)
-                        .password("SNS_" + UUID.randomUUID())    // 실제 로그인에 사용하지 않는 더미값
+                        .username(provider + "_" + providerId)
+                        .password("SNS_" + UUID.randomUUID())
                         .email(email)
                         .role(MemberRole.ROLE_USER)
                         .build()
