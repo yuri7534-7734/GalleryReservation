@@ -16,9 +16,9 @@ select {
   display: grid;
   grid-template-columns: 1fr 340px;
   gap: 0;
-  align-items: start;
+  align-items: stretch;
   border: 1px solid var(--stroke);
-  border-top: none;
+  border-top: 1px solid var(--stroke);
 }
 .joinMain {
   padding: 36px 32px;
@@ -137,4 +137,5 @@ select {
   .formGrid {
     grid-template-columns: 1fr;
   }
+
 }
