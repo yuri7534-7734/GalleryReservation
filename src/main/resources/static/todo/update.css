@@ -1,0 +1,98 @@
+/* 할 일 수정 전용 */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-color: var(--text) !important;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  box-shadow: var(--ring);
+}
+.pageHeader {
+  padding: 40px 0 32px;
+  margin-bottom: 40px;
+}
+.contentLayout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 32px;
+  align-items: start;
+  margin-bottom: 80px;
+}
+@media (max-width: 920px) {
+  .contentLayout {
+    grid-template-columns: 1fr;
+  }
+}
+.previewCard {
+  background: var(--bg1);
+  border: 1px solid var(--stroke);
+  padding: 16px;
+  min-width: 290px;
+  height: 460px;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-width: 0;
+}
+.previewCardPad {
+  min-height: 600px;
+}
+.previewCardTitleRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 6px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.previewCardTitleRow .previewCardTitle {
+  margin-bottom: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+.previewCardTitleRow #prevDue {
+  justify-self: end;
+  max-width: 100%;
+}
+.previewCardTitle {
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--text);
+}
+.previewCardContent {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.65;
+  display: -webkit-box; /* 웹킷 기반 박스 레이아웃 활성화 */
+  -webkit-line-clamp: 18; /* 최대 3줄까지만 표시 */
+  -webkit-box-orient: vertical; /* 세로 방향으로 박스 정렬 */
+  overflow: hidden; /* 넘치는 텍스트 숨김 */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: pre-line;
+}
+#todoContent {
+  width: 100%;
+  height: 240px;
+  resize: none;
+}
+.editCardPad {
+  width: 100%;
+  min-height: 600px;
+}
+#prevTitle {
+  display: -webkit-box; /* 웹킷 기반 박스 레이아웃 활성화 */
+  -webkit-line-clamp: 1; /* 최대 3줄까지만 표시 */
+  -webkit-box-orient: vertical; /* 세로 방향으로 박스 정렬 */
+  overflow: hidden; /* 넘치는 텍스트 숨김 */
+  overflow-wrap: anywhere;
+}

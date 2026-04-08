@@ -1,0 +1,29 @@
+HELP.md
+.gradle
+build/
+### Eclipse / VS Code Java / 일부 IDE 컴파일 출력 ###
+bin/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### 올리지 않는 파일 ###
+src/main/resources/db.sql
+src/main/resources/application.yml
+src/main/resources/application-secret.yml
+
