@@ -339,3 +339,40 @@ erDiagram
 | 소셜 로그인 (카카오, 네이버) | 할 일 등록 / 수정 / 삭제 | 예약 기능 구현          | 갤러리 목록 / 상세 |
 | Spring Security 설정 | | 예약 목록 / 상세 / 취소   | |
 | 관리자 페이지 | |                   | |
+
+---
+
+## ⚙️ GitHub Actions 자동 배포 (EC2)
+
+`main` 브랜치에 push 하면 GitHub Actions가 자동으로 EC2에 배포합니다.
+
+워크플로우 파일:
+
+- `.github/workflows/deploy-ec2.yml`
+
+### 1) GitHub Secrets 설정
+
+Repository -> Settings -> Secrets and variables -> Actions 에서 아래 값을 등록합니다.
+
+- `EC2_HOST`: EC2 퍼블릭 IP 또는 도메인
+- `EC2_USERNAME`: SSH 사용자명 (예: `ec2-user`, `ubuntu`)
+- `EC2_SSH_KEY`: EC2 접속용 Private Key 내용
+- `DEPLOY_PATH`: 서버에서 이 프로젝트가 위치한 경로 (예: `/home/ec2-user/GalleryReservation`)
+- `EC2_PORT` (선택): SSH 포트 (기본 `22`)
+- `DOCKER_CONTAINER_NAME` (선택): 컨테이너 이름 (기본 `galleryreservation-app`)
+- `HOST_PORT` (선택): EC2 외부 포트 (기본 `80`)
+- `CONTAINER_PORT` (선택): 컨테이너 내부 포트 (기본 `8080`)
+
+### 2) 서버 준비
+
+- EC2에 `git`, `docker`, `java(21)` 설치
+- 프로젝트 최초 1회 clone
+- `DEPLOY_PATH` 경로가 실제로 존재해야 함
+
+### 3) 배포 흐름
+
+1. `main` 브랜치 push
+2. Actions가 빌드(`bootJar`) 수행
+3. EC2에서 `git pull`
+4. `bootJar` 후 Docker 이미지 빌드
+5. 기존 컨테이너 교체 실행
