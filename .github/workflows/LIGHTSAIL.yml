@@ -39,7 +39,7 @@ jobs:
           port: "22"
           script_stop: true
           command_timeout: 30m
-          envs: DEPLOY_PATH,CONTAINER_NAME,HOST_PORT,CONTAINER_PORT
+          envs: DEPLOY_PATH,CONTAINER_NAME,HOST_PORT,CONTAINER_PORT,APPLICATION_YML,APPLICATION_SECRET_YML
           script: |
             set -e
 
@@ -51,13 +51,8 @@ jobs:
             cd "$DEPLOY_PATH"
             git pull origin main
 
-            cat > src/main/resources/application.yml << 'EOF'
-            ${{ secrets.APPLICATION_YML }}
-            EOF
-
-            cat > src/main/resources/application-secret.yml << 'EOF'
-            ${{ secrets.APPLICATION_SECRET_YML }}
-            EOF
+            echo "$APPLICATION_YML" > src/main/resources/application.yml
+            echo "$APPLICATION_SECRET_YML" > src/main/resources/application-secret.yml
 
             chmod +x gradlew
             ./gradlew bootJar -x test
@@ -71,6 +66,8 @@ jobs:
               "$CONTAINER_NAME:latest"
         env:
           DEPLOY_PATH: ${{ secrets.LIGHTSAIL_PROJECT_PATH }}
+          APPLICATION_YML: ${{ secrets.APPLICATION_YML }}
+          APPLICATION_SECRET_YML: ${{ secrets.APPLICATION_SECRET_YML }}
           CONTAINER_NAME: ${{ secrets.DOCKER_CONTAINER_NAME || 'galleryreservation-app' }}
           HOST_PORT: ${{ secrets.HOST_PORT || '80' }}
           CONTAINER_PORT: ${{ secrets.CONTAINER_PORT || '8080' }}
