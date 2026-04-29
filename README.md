@@ -12,7 +12,7 @@
 
 ### ✅ 배포 주소
 
-http://3.36.161.179
+http://
 
 ### ✅ 기획 배경
 
@@ -44,6 +44,7 @@ http://3.36.161.179
 ## 🛠 기술 스택
 
 ### Backend
+
 <p>
   <img src="https://img.shields.io/badge/Java 21-007396?style=flat-square&logo=OpenJDK&logoColor=white"/>
   <img src="https://img.shields.io/badge/Spring Boot 3-6DB33F?style=flat-square&logo=springboot&logoColor=white"/>
@@ -53,6 +54,7 @@ http://3.36.161.179
 </p>
 
 ### Frontend
+
 <p>
   <img src="https://img.shields.io/badge/Thymeleaf-005F0F?style=flat-square&logo=thymeleaf&logoColor=white"/>
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white"/>
@@ -61,12 +63,14 @@ http://3.36.161.179
 </p>
 
 ### Database
+
 <p>
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white"/>
   <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white"/>
 </p>
 
 ### Build & Deploy
+
 <p>
   <img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=gradle&logoColor=white"/>
   <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white"/>
@@ -74,6 +78,7 @@ http://3.36.161.179
 </p>
 
 ### Collaboration
+
 <p>
   <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white"/>
   <img src="https://img.shields.io/badge/Discord-5865F2?style=flat-square&logo=discord&logoColor=white"/>
@@ -87,20 +92,24 @@ http://3.36.161.179
 ### 👤 일반 사용자 시나리오
 
 #### 1단계 — 회원가입 / 로그인
+
 - 아이디·비밀번호로 직접 회원가입하거나, **카카오 · 네이버 소셜 로그인**으로 간편하게 가입할 수 있습니다.
 - 소셜 로그인 시 최초 1회 자동 회원가입 처리되며, 이후 동일 이메일로 재접속하면 기존 계정과 연동됩니다.
 - 비로그인 사용자도 갤러리 목록·상세 페이지는 자유롭게 조회할 수 있으며, 예약 신청 시점에 로그인 페이지로 안내됩니다.
 
 #### 2단계 — 갤러리 탐색
+
 - 전체 갤러리 목록을 **커버 이미지, 위치, 수용 인원, 운영 상태**와 함께 카드 형태로 탐색합니다.
 - 갤러리명으로 키워드 검색이 가능하며, 운영 중인 갤러리만 예약 신청이 활성화됩니다.
 
 #### 3단계 — 예약 신청
+
 - 갤러리 상세 페이지에서 **날짜, 30분 단위 시간 슬롯, 예약 인원, 연락처**를 선택해 예약을 신청합니다.
 - 갤러리의 수용 인원을 초과하는 예약은 서비스 계층에서 검증하여 차단합니다.
 - 예약 신청 직후 상태는 `PENDING(대기)` 이며, 관리자의 승인을 기다립니다.
 
 #### 4단계 — 예약 내역 확인 · 취소
+
 - 내 예약 목록에서 **예약 상태(대기 / 확정 / 거절 / 취소), 갤러리 정보, 예약 날짜·시간**을 한눈에 확인합니다.
 - `PENDING` 상태의 예약에 한해 직접 취소할 수 있으며, 취소 시 갤러리 수용 인원이 자동으로 복원됩니다.
 
@@ -109,10 +118,12 @@ http://3.36.161.179
 ### 🛠️ 관리자 시나리오
 
 #### 1단계 — 갤러리 관리
+
 - 갤러리를 **등록·수정·삭제**하고, 운영 상태(운영중 / 비활성화)를 관리합니다.
 - 갤러리 등록 시 이름, 위치, 층/구역, 수용 인원, 운영 시간, 커버 이미지 URL, 소개를 입력하며, 중복 이름은 등록이 거부됩니다.
 
 #### 2단계 — 예약 승인 · 거절
+
 - 전체 예약 목록을 조회하고, `PENDING` 상태의 예약을 **승인(APPROVED)** 또는 **거절(REJECTED)** 처리합니다.
 - 승인 시 갤러리 수용 인원이 예약 인원만큼 차감되며, 거절 시에는 차감 없이 상태만 변경됩니다.
 
@@ -124,6 +135,7 @@ PENDING(대기) ──→ APPROVED(확정)
 ```
 
 #### 3단계 — 할 일(Todo) 관리
+
 - 전시 준비, 공간 점검, 공지 작성 등 **운영 업무를 할 일 목록**으로 등록하고 관리합니다.
 - 제목 키워드 검색, 완료/미완료 필터, 마감일 설정을 지원하며 ADMIN 권한 전용 기능입니다.
 
@@ -144,12 +156,12 @@ PENDING(대기) ──→ APPROVED(확정)
 ### ✅ 회원
 
 - **회원가입**
-> 이메일과 비밀번호로 회원가입 및 로그인할 수 있다.
+  > 이메일과 비밀번호로 회원가입 및 로그인할 수 있다.
 
 ![회원가입](readme_assets/join.png)
 
 - **로그인 / 소셜 로그인**
-> 카카오, 네이버 OAuth2 소셜 로그인을 지원한다.
+  > 카카오, 네이버 OAuth2 소셜 로그인을 지원한다.
 
 ![로그인](readme_assets/login.png)
 
@@ -158,13 +170,13 @@ PENDING(대기) ──→ APPROVED(확정)
 ### ✅ 갤러리 조회
 
 - **갤러리 목록 조회**
-> 전체 갤러리 목록을 커버 이미지, 위치, 수용 인원과 함께 확인할 수 있다.
+  > 전체 갤러리 목록을 커버 이미지, 위치, 수용 인원과 함께 확인할 수 있다.
 
 ![갤러리 목록](readme_assets/gallery-list1.png)
 ![갤러리 목록](readme_assets/gallery-list2.png)
 
 - **갤러리 상세 조회 및 예약 신청**
-> 갤러리 상세 페이지에서 날짜, 30분 단위 시간 슬롯, 인원, 연락처를 선택해 바로 예약 신청할 수 있다.
+  > 갤러리 상세 페이지에서 날짜, 30분 단위 시간 슬롯, 인원, 연락처를 선택해 바로 예약 신청할 수 있다.
 
 ![갤러리 예약 신청](readme_assets/gallery-detail1.png)
 ![갤러리 예약 신청](readme_assets/gallery-detail2.png)
@@ -174,14 +186,14 @@ PENDING(대기) ──→ APPROVED(확정)
 ### ✅ 예약 관리
 
 - **내 예약 목록 조회**
-> 신청한 예약 목록을 페이지네이션과 갤러리명 검색으로 조회할 수 있고, 대기 중인 예약을 취소 신청할 수 있다.
+  > 신청한 예약 목록을 페이지네이션과 갤러리명 검색으로 조회할 수 있고, 대기 중인 예약을 취소 신청할 수 있다.
 
 ![예약 조회](readme_assets/reservation-list.png)
 
 > `대기중 → 승인 / 거절 / 취소`
 
 - **예약 상세 조회**
-> 갤러리 커버 이미지와 함께 예약 정보를 상세하게 확인할 수 있다.
+  > 갤러리 커버 이미지와 함께 예약 정보를 상세하게 확인할 수 있다.
 
 ![예약 상세 보기](readme_assets/reservation-detail1.png)
 ![예약 상세 보기](readme_assets/reservation-detail2.png)
@@ -192,22 +204,22 @@ PENDING(대기) ──→ APPROVED(확정)
 ### ✅ 관리자 페이지
 
 - **갤러리 관리**
-> 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
- 
+  > 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
+
 ![관리자 갤러리 관리](readme_assets/admin-gallery.png)
 
 - **갤러리 등록**
-> 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
+  > 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
 
 ![관리자 갤러리 등록](readme_assets/admin-gallery-add.png)
 
 - **갤러리 수정**
-> 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
+  > 갤러리 등록, 수정, 삭제 및 운영 상태(운영중/비활성화)를 관리할 수 있다.
 
 ![관리자 갤러리 수정](readme_assets/admin-gallery-edit.png)
 
 - **예약 승인/거절**
-> 전체 예약 목록을 조회하고 예약을 승인하거나 거절할 수 있다.
+  > 전체 예약 목록을 조회하고 예약을 승인하거나 거절할 수 있다.
 
 ![관리자 예약 관리](readme_assets/admin-reservation.png)
 
@@ -216,7 +228,7 @@ PENDING(대기) ──→ APPROVED(확정)
 ### ✅ 할일 페이지
 
 - **할일 등록/수정**
-> 전체 예약 목록을 조회하고 예약을 승인하거나 거절할 수 있다.
+  > 전체 예약 목록을 조회하고 예약을 승인하거나 거절할 수 있다.
 
 ![할일 리스트](readme_assets/todo-list.png)
 ![할일 등록](readme_assets/todo-add.png)
@@ -527,12 +539,12 @@ public void onCreate() {
 
 ## 💙 팀원 소개
 
-| 김태혁(팀장👑)          | 김민준 | 이유리               | 박준현           |
-|--------------------|---|-------------------|---------------|
-| Back-End / DB      | Back-End | Back-End          | Back-End / DB |
-| 회원가입 / 로그인         | 할 일(Todo) 기능 구현 | Front-End / UX,UI | 갤러리 기능 구현     |
-| 소셜 로그인 (카카오, 네이버)  | 할 일 등록 / 수정 / 삭제 | 예약 기능 구현          | 갤러리 목록 / 상세   |
-| Spring Security 설정 | | 예약 목록 / 상세 / 취소   |               |
-| 관리자 페이지            | |                   |               |
+| 김태혁(팀장👑)               | 김민준                   | 이유리                  | 박준현             |
+| ---------------------------- | ------------------------ | ----------------------- | ------------------ |
+| Back-End / DB                | Back-End                 | Back-End                | Back-End / DB      |
+| 회원가입 / 로그인            | 할 일(Todo) 기능 구현    | Front-End / UX,UI       | 갤러리 기능 구현   |
+| 소셜 로그인 (카카오, 네이버) | 할 일 등록 / 수정 / 삭제 | 예약 기능 구현          | 갤러리 목록 / 상세 |
+| Spring Security 설정         |                          | 예약 목록 / 상세 / 취소 |                    |
+| 관리자 페이지                |                          |                         |                    |
 
 ---
