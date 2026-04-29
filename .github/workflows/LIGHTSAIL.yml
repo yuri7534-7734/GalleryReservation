@@ -51,6 +51,14 @@ jobs:
             cd "$DEPLOY_PATH"
             git pull origin main
 
+            cat > src/main/resources/application.yml << 'EOF'
+            ${{ secrets.APPLICATION_YML }}
+            EOF
+
+            cat > src/main/resources/application-secret.yml << 'EOF'
+            ${{ secrets.APPLICATION_SECRET_YML }}
+            EOF
+
             chmod +x gradlew
             ./gradlew bootJar -x test
 
